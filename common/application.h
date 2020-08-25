@@ -1,0 +1,32 @@
+#ifndef APPLICATION_H
+#define APPLICATION_H
+
+#include <vector>
+
+#include <common/renderer.h>
+#include <common/input.h>
+
+namespace rt {
+
+class Application
+{
+public:
+	Application(uint16_t width, uint16_t height, uint8_t factor = 1);
+	Application(PixelBuffer& pixelbuffer, uint8_t factor = 1);
+	virtual ~Application();
+
+	int run();
+	virtual void update(float deltatime) = 0;
+
+private:
+	uint8_t factor = 1;
+	Renderer renderer;
+
+protected:
+	Input input;
+	std::vector<Canvas*> layers;
+};
+
+#endif // APPLICATION_H
+
+} // namespace rt
