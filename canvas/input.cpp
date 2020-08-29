@@ -1,5 +1,5 @@
 #include <iostream>
-#include <common/input.h>
+#include <canvas/input.h>
 
 namespace rt {
 

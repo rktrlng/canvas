@@ -5,7 +5,7 @@
 
 #include <GL/glew.h>
 
-#include <common/pixelbuffer.h>
+#include <canvas/pixelbuffer.h>
 
 namespace rt {
 

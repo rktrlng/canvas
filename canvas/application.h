@@ -3,8 +3,10 @@
 
 #include <vector>
 
-#include <common/renderer.h>
-#include <common/input.h>
+#include <canvas/renderer.h>
+#include <canvas/input.h>
+#include <canvas/canvas.h>
+#include <canvas/pixelbuffer.h>
 
 namespace rt {
 

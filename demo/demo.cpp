@@ -1,4 +1,4 @@
-#include <common/application.h>
+#include <canvas/application.h>
 
 class MyApp : public rt::Application
 {
@@ -24,8 +24,21 @@ public:
 		layers.clear();
 	}
 
-	virtual void update(float deltatime)
+	void update(float deltatime) override
 	{
+		handleInput();
+
+		static float frametime = 0.0f;
+		float maxtime = 0.016666667f;
+		frametime += deltatime;
+		if (frametime >= maxtime)
+		{
+			random();
+			frametime = 0.0f;
+		}
+	}
+
+	void handleInput() {
 		if (input.getKeyDown(rt::KeyCode::Space)) {
 			std::cout << "spacebar pressed down." << std::endl;
 			layers[0]->pixelbuffer.printInfo();
@@ -38,15 +51,6 @@ public:
 		int scrolly = input.getScrollY();
 		if (scrolly != 0) {
 			std::cout << "scroll: " << scrolly << std::endl;
-		}
-
-		static float frametime = 0.0f;
-		float maxtime = 0.016666667f;
-		frametime += deltatime;
-		if (frametime >= maxtime)
-		{
-			random();
-			frametime = 0.0f;
 		}
 	}
 

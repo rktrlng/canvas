@@ -5,7 +5,7 @@
 #include <fstream>
 #include <vector>
 
-#include <common/color.h>
+#include <canvas/color.h>
 
 namespace rt {
 

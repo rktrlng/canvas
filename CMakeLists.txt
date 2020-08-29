@@ -1,6 +1,6 @@
 # CMake entry point
 cmake_minimum_required (VERSION 2.6)
-project (MyFramework)
+project (Canvas)
 
 if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
 	message( FATAL_ERROR "Please select another Build Directory ! (and give it a clever name, like 'build')" )
@@ -61,35 +61,34 @@ set(ALL_GRAPHICS_LIBS
 	GLEW_190
 )
 
-# Common (libcommon.a)
-add_library(common # ar rcs libcommon.a
-	common/color.h
-	common/color.cpp
-	common/application.h
-	common/application.cpp
-	common/renderer.h
-	common/renderer.cpp
-	common/input.h
-	common/input.cpp
-	common/canvas.h
-	common/canvas.cpp
+# Canvas (libcanvas.a)
+add_library(canvas # ar rcs libcanvas.a
+	canvas/color.h
+	canvas/color.cpp
+	canvas/application.h
+	canvas/application.cpp
+	canvas/renderer.h
+	canvas/renderer.cpp
+	canvas/input.h
+	canvas/input.cpp
+	canvas/canvas.h
+	canvas/canvas.cpp
 )
+file(
+	COPY canvas/shaders
+	DESTINATION ${CMAKE_BINARY_DIR}
+)
+
 
 # Demo
 add_executable(demo # g++ demo/demo.cpp -o demo
 	demo/demo.cpp
 )
-target_link_libraries(demo # g++ -lcommon
-	common
+target_link_libraries(demo # g++ -lcanvas
+	canvas
 	${ALL_GRAPHICS_LIBS}
 )
-# Copy assets and shaders to the build directory
-# (In Visual Studio, copy these directories to either 'Release' or 'Build')
 file(
 	COPY demo/assets
-	DESTINATION ${CMAKE_BINARY_DIR}
-)
-file(
-	COPY common/shaders
 	DESTINATION ${CMAKE_BINARY_DIR}
 )

@@ -9,7 +9,7 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/euler_angles.hpp>
 
-#include <common/canvas.h>
+#include <canvas/canvas.h>
 
 namespace rt {
 
