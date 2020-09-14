@@ -23,7 +23,7 @@ lowheight = pixelbuffer[5]
 bitdepth = pixelbuffer[6]
 # pixelbuffer[7] = ':'
 
-width = ((lowwidth << 8) & 0xFF) |  (highwidth & 0xFF)
+width = ((lowwidth << 8) & 0xFF) | (highwidth & 0xFF)
 height = ((lowheight << 8) & 0xFF) | (highheight & 0xFF)
 
 # The rest of the bytes are the pixels
@@ -64,7 +64,6 @@ for y in range(height):
 			imgpixels[x, y] = color
 
 		start += bitdepth
-
 
 no_extension = os.path.splitext(filename)[0]
 

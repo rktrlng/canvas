@@ -47,7 +47,6 @@ def convert(filename):
                 for b in cpixel:
                     allBytes.append(b)
 
-
     no_extension = os.path.splitext(filename)[0]
 
     saveFile = open(no_extension + ".pbf", "wb")
