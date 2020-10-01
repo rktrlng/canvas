@@ -190,7 +190,7 @@ public:
         char highh = (_header.height & 0xFF); file.write(&highh, 1);
         char lowh = ((_header.height >> 8) & 0xFF); file.write(&lowh, 1); // 0-65535
 
-        char depth = _header.bitdepth; file.write(&depth, 1);  // 1, 3, or 4
+        char depth = _header.bitdepth; file.write(&depth, 1);  // 1, 2, 3, or 4
         char end = _header.end; file.write(&end, 1);  // ':'
 
         // Write pixeldata to the file
@@ -296,6 +296,7 @@ public:
 	}
 
     void fill(RGBAColor color) {
+        // TODO: check if this can be done faster in a double for loop
         for (size_t i = 0; i < _header.height; i++) {
             drawLine(0, i, _header.width, i, color);
         }
@@ -309,7 +310,7 @@ public:
 		struct LocalPos {
 			int x = 0;
 			int y = 0;
-			LocalPos(int _x, int _y) : x(_x), y(_y) {}
+			LocalPos(int x, int y) : x(x), y(y) {}
 		};
 		std::vector<LocalPos> positions;
 
