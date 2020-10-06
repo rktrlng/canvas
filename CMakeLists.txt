@@ -17,7 +17,7 @@ set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
 
 if(UNIX)
-	set(CMAKE_CXX_FLAGS "-Wall -std=c++11 -O2")
+	set(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++11 -O2")
 
 	# For leak-checking and profiling, add '-pg' to CXX flags
 	# set(CMAKE_CXX_FLAGS "-Wall -pg -std=c++11 -O2")
