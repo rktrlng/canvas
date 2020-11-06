@@ -83,6 +83,14 @@ int Renderer::init()
 
 	_projectionMatrix = glm::ortho(0.0f, (float)_window_width, (float)_window_height, 0.0f, 0.1f, 100.0f);
 
+	// View matrix
+	static glm::vec3 position = glm::vec3( 0, 0, 10 ); // Initial position : on +Z
+	_viewMatrix = glm::lookAt(
+			position, /* Camera is at (xpos,ypos,zpos), in World Space */
+			position + glm::vec3(0, 0, -1), /* and looks towards Z */
+			glm::vec3(0, 1, 0)  /* Head is up */
+		);
+
 	// Use our shader
 	glUseProgram(_programID);
 
@@ -166,41 +174,6 @@ void Renderer::renderCanvas(Canvas* canvas, float px, float py, float sx, float 
 	glDisableVertexAttribArray(vertexPositionID);
 	glDisableVertexAttribArray(vertexUVID);
 }
-
-void Renderer::computeViewMatrixFromInputs(float deltaTime)
-{
-	// Right and Up vector
-	glm::vec3 right = glm::vec3(1, 0, 0);
-	glm::vec3 up = glm::vec3(0, -1, 0);
-
-	static glm::vec3 position = glm::vec3( 0, 0, 10 ); // Initial position : on +Z
-	float speed = 300.0f; // units / second
-
-	// Move up
-	if (glfwGetKey( _window, GLFW_KEY_UP ) == GLFW_PRESS){
-		position += up * deltaTime * speed;
-	}
-	// Move down
-	if (glfwGetKey( _window, GLFW_KEY_DOWN ) == GLFW_PRESS){
-		position -= up * deltaTime * speed;
-	}
-	// Strafe right
-	if (glfwGetKey( _window, GLFW_KEY_RIGHT ) == GLFW_PRESS){
-		position += right * deltaTime * speed;
-	}
-	// Strafe left
-	if (glfwGetKey( _window, GLFW_KEY_LEFT ) == GLFW_PRESS){
-		position -= right * deltaTime * speed;
-	}
-
-	// View matrix
-	_viewMatrix = glm::lookAt(
-			position, /* Camera is at (xpos,ypos,zpos), in World Space */
-			position + glm::vec3(0, 0, -1), /* and looks towards Z */
-			glm::vec3(0, 1, 0)  /* Head is up */
-		);
-}
-
 
 GLuint Renderer::loadShaders(const std::string& vertex_file_path, const std::string& fragment_file_path)
 {

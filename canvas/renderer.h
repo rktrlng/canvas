@@ -20,7 +20,6 @@ public:
 	virtual ~Renderer();
 
 	void renderCanvas(rt::Canvas* canvas, float px, float py, float sx, float sy, float rot);
-	void computeViewMatrixFromInputs(float deltaTime);
 	GLFWwindow* window() { return _window; };
 
 	int width() { return _window_width; };

@@ -66,8 +66,6 @@ int Application::run()
 	input.updateInput(cols, rows);
 	// update user application
 	this->update(deltaTime);
-	// Compute the ViewMatrix from keyboard and mouse input
-	renderer.computeViewMatrixFromInputs(deltaTime);
 
 	// Clear the screen
 	glClear(GL_COLOR_BUFFER_BIT);
