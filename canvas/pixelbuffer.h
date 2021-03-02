@@ -231,7 +231,7 @@ public:
 		}
 
         size_t index = (y * _header.width) + x;
-		if (index > _pixels.size()) { // invalid pixels!
+		if (index >= _pixels.size()) { // invalid pixels!
 			return 0;
 		}
 
@@ -248,7 +248,7 @@ public:
 		}
 
         size_t index = (y * _header.width) + x;
-		if (index > _pixels.size()) { // invalid pixels!
+		if (index >= _pixels.size()) { // invalid pixels!
 			return { 0, 0, 0, 0 };
 		}
 

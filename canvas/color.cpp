@@ -8,16 +8,10 @@ namespace rt {
 RGBAColor::RGBAColor() :
 	r(255), g(255), b(255), a(255) { }
 
-RGBAColor::RGBAColor(uint8_t value) :
-	r(value), g(value), b(value), a(255) { }
-
-RGBAColor::RGBAColor(uint8_t value, uint8_t alpha) :
+RGBAColor::RGBAColor(uint8_t value, uint8_t alpha /* 255 */ ) :
 	r(value), g(value), b(value), a(alpha) { }
 
-RGBAColor::RGBAColor(uint8_t red, uint8_t green, uint8_t blue) :
-	r(red), g(green), b(blue), a(255) { }
-
-RGBAColor::RGBAColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha) :
+RGBAColor::RGBAColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha /* 255 */ ) :
 	r(red), g(green), b(blue), a(alpha) { }
 
 RGBAColor::RGBAColor(uint32_t color) {
@@ -26,11 +20,11 @@ RGBAColor::RGBAColor(uint32_t color) {
 	b = color >> 8 & 0xFF;
 	a = color & 0xFF;
 }
+
 uint32_t RGBAColor::asInt() {
 	uint32_t color = (r << 24) + (g << 16) + (b << 8) + (a);
 	return color;
 }
-
 
 
 // ###############################################
@@ -38,7 +32,7 @@ uint32_t RGBAColor::asInt() {
 // ###############################################
 HSVAColor::HSVAColor() :
 	h(0.0f), s(0.0f), v(1.0f), a(1.0f) { }
-HSVAColor::HSVAColor(float hue, float sat, float val, float alpha) :
+HSVAColor::HSVAColor(float hue, float sat, float val, float alpha /* 1.0f */ ) :
 	h(hue), s(sat), v(val), a(alpha) { }
 
 

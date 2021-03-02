@@ -1,4 +1,6 @@
 #include <iostream>
+#include <functional>
+
 #include <canvas/input.h>
 
 namespace rt {

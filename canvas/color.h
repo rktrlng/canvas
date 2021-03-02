@@ -23,24 +23,16 @@ struct RGBAColor
 
 	/// @brief constructor
 	RGBAColor();
-	/// @brief constructor grayscale color
-	/// @param value The gray component of the color
-	RGBAColor(uint8_t value);
 	/// @brief constructor grayscale color with alpha
 	/// @param value The gray component of the color
 	/// @param alpha The alpha component of the color
-	RGBAColor(uint8_t value, uint8_t alpha);
-	/// @brief constructor RGB color
-	/// @param red The red component of the color
-	/// @param green The green component of the color
-	/// @param blue The blue component of the color
-	RGBAColor(uint8_t red, uint8_t green, uint8_t blue);
+	RGBAColor(uint8_t value, uint8_t alpha = 255);
 	/// @brief constructor RGBA color
 	/// @param red The red component of the color
 	/// @param green The green component of the color
 	/// @param blue The blue component of the color
 	/// @param alpha The alpha component of the color
-	RGBAColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha);
+	RGBAColor(uint8_t red, uint8_t green, uint8_t blue, uint8_t alpha = 255);
 	/// @param color constructor for color as 32 bits int
 	RGBAColor(uint32_t color);
 	/// @brief get color as a uint32_t

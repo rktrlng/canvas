@@ -11,23 +11,24 @@ if len(sys.argv) > 1:
 
 # Read .pbf image
 with open(filename, "rb") as binaryfile :
-    pixelbuffer = bytearray(binaryfile.read())
+    pbf = bytearray(binaryfile.read())
 
 # Read header information
-# pixelbuffer[0] = 'p'
-# pixelbuffer[1] = 'b'
-highwidth = pixelbuffer[2]
-lowwidth = pixelbuffer[3]
-highheight = pixelbuffer[4]
-lowheight = pixelbuffer[5]
-bitdepth = pixelbuffer[6]
-# pixelbuffer[7] = ':'
+# pbf[0] = 'p'
+# pbf[1] = 'b'
+lowidth = pbf[2]
+hiwidth = pbf[3]
+loheight = pbf[4]
+hiheight = pbf[5]
+bitdepth = pbf[6]
+# pbf[7] = ':'
 
-width = ((lowwidth << 8) & 0xFF) | (highwidth & 0xFF)
-height = ((lowheight << 8) & 0xFF) | (highheight & 0xFF)
+# Little endian
+width = ((hiwidth << 8) & 0xFF) | (lowidth & 0xFF)
+height = ((hiheight << 8) & 0xFF) | (loheight & 0xFF)
 
 # The rest of the bytes are the pixels
-pixels = pixelbuffer[8:]
+pixels = pbf[8:]
 
 print("width:    ", width)
 print("height:   ", height)

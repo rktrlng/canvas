@@ -22,7 +22,7 @@
 namespace rt {
 
 /// @brief KeyCode used by Input
-enum KeyCode
+enum KeyCode : uint16_t
 {
 	Space = 32,
 	Apostrophe = 39,
@@ -169,7 +169,7 @@ public:
 	/// @return bool key is pressed or not
 	bool getKey(int key) { return getKey((KeyCode)key); }
 	/// @brief Is this key pressed? Only check first press down
-	/// @param key as char (ie: getKey('A') )
+	/// @param key as char (ie: getKey('a') )
 	/// @return bool key is pressed first time or not
 	bool getKey(char key) { return getKey((KeyCode)key); }
 	/// @brief Is this mouse button pressed?
@@ -188,7 +188,7 @@ public:
 	/// @return bool key is pressed first time or not
 	bool getKeyDown(int key) { return getKeyDown((KeyCode)key); }
 	/// @brief Is this key pressed? Only check first press down
-	/// @param key as char (ie: getKeyDown('A') )
+	/// @param key as char (ie: getKeyDown('a') )
 	/// @return bool key is pressed first time or not
 	bool getKeyDown(char key) { return getKeyDown((KeyCode)key); }
 	/// @brief Is this mouse button pressed? Only check first press down
@@ -207,7 +207,7 @@ public:
 	/// @return bool key is released or not
 	bool getKeyUp(int key) { return getKeyUp((KeyCode)key); }
 	/// @brief Is this key pressed? Only check first press down
-	/// @param key as char (ie: getKeyUp('A') )
+	/// @param key as char (ie: getKeyUp('a') )
 	/// @return bool key is pressed first time or not
 	bool getKeyUp(char key) { return getKeyUp((KeyCode)key); }
 	/// @brief Is this mouse button released?

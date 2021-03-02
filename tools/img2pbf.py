@@ -25,12 +25,12 @@ def convert(filename):
 
     print("converting: ", filename, width, height, bitdepth)
 
-    highwidth = ((width >> 8) & 0xFF)
-    lowwidth = (width & 0xFF)
-    highheight = ((height >> 8) & 0xFF)
-    lowheight = (height & 0xFF)
+    hiwidth = ((width >> 8) & 0xFF)
+    lowidth = (width & 0xFF)
+    hiheight = ((height >> 8) & 0xFF)
+    loheight = (height & 0xFF)
 
-    allBytes = bytearray([0x70, 0x62, lowwidth, highwidth, lowheight, highheight, bitdepth, 0x3A])
+    allBytes = bytearray([0x70, 0x62, lowidth, hiwidth, loheight, hiheight, bitdepth, 0x3A])
 
     # grayscale
     if bitdepth == 1:
