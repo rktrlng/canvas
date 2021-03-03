@@ -119,8 +119,7 @@ public:
 
         // Read the file into a bytearray
         int size = file.tellg();
-        char* memblock = new char[size]; // on the heap
-        //char memblock[size]; // on the stack
+        char* memblock = new char[size];
         file.seekg (0, std::fstream::beg);
         file.read (memblock, size);
         file.close();
@@ -129,11 +128,11 @@ public:
         _header.typep = memblock[0];
         _header.typeb = memblock[1];
 
-        // Create one uint16_t from two uint8_t's (Little Endian)
+        // Little Endian
         _header.width  = (memblock[2] & 0xFF) | (memblock[3] << 8);
         _header.height = (memblock[4] & 0xFF) | (memblock[5] << 8);
 
-        // Or if bitshifting is not your thing, maybe you may find this more readable?
+        // Or:
         // _header.width  = *((uint16_t*)&memblock[2]);
         // _header.height  = *((uint16_t*)&memblock[4]);
 
@@ -182,7 +181,7 @@ public:
 
         delete[] memblock;
 
-        return 1;
+        return size;
     }
 
     int write(const std::string& filename)
@@ -195,46 +194,11 @@ public:
             return 0;
         }
 
-        // Start writing the _header
-        char typep = _header.typep; file.write(&typep, 1);  // 'p'
-        char typeb = _header.typeb; file.write(&typeb, 1);  // 'b'
-
-        // Little Endian:
-        char highw = (_header.width & 0xFF); file.write(&highw, 1);
-        char loww = ((_header.width >> 8) & 0xFF); file.write(&loww, 1); // 0-65535
-        char highh = (_header.height & 0xFF); file.write(&highh, 1);
-        char lowh = ((_header.height >> 8) & 0xFF); file.write(&lowh, 1); // 0-65535
-
-        char depth = _header.bitdepth; file.write(&depth, 1);  // 1, 2, 3, or 4
-        char end = _header.end; file.write(&end, 1);  // ':'
-
-        // Write pixeldata to the file
-        for (auto& pixel : _pixels)
-        {
-            if (_header.bitdepth == 1 || _header.bitdepth == 2)
-            {
-                char value = (pixel.r + pixel.b + pixel.g) / 3;
-                file.write(&value, 1);
-            }
-
-            if (_header.bitdepth == 2)
-            {
-                char a = pixel.a; file.write(&a, 1);
-            }
-            else if (_header.bitdepth == 3 || _header.bitdepth == 4)
-            {
-                char r = pixel.r; file.write(&r, 1);
-                char g = pixel.g; file.write(&g, 1);
-                char b = pixel.b; file.write(&b, 1);
-            }
-
-            if (_header.bitdepth == 4)
-            {
-                char a = pixel.a; file.write(&a, 1);
-            }
-        }
+        file.write((char*)&_header, sizeof(_header));
+        file.write((char*)&_pixels[0], _pixels.size()*_header.bitdepth);
 
         file.close();
+
         return 1;
     }
 
