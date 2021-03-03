@@ -53,17 +53,15 @@ start = 0
 for y in range(height):
 	for x in range(width):
 		if bitdepth == 1:
-			imgpixels[x, y] = pixels[start + 0]
+			color = ( pixels[start + 0] )
 		if bitdepth == 2:
 			color = ( pixels[start + 0], pixels[start + 1] )
-			imgpixels[x, y] = color
 		if bitdepth == 3:
 			color = ( pixels[start + 0], pixels[start + 1], pixels[start + 2] )
-			imgpixels[x, y] = color
 		if bitdepth == 4:
 			color = ( pixels[start + 0], pixels[start + 1], pixels[start + 2], pixels[start + 3] )
-			imgpixels[x, y] = color
 
+		imgpixels[x, y] = color
 		start += bitdepth
 
 no_extension = os.path.splitext(filename)[0]

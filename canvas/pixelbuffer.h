@@ -109,39 +109,49 @@ public:
 
     int read(const std::string& filename)
     {
-        // Try to read the file from disk:
+        // Try to open the file from disk
         std::ifstream file(filename, std::fstream::in|std::fstream::binary|std::fstream::ate);
+
         if (!file.is_open()) {
-            std::cout << "Unable to read file: " << filename << std::endl;
+            std::cout << "Unable to open file: " << filename << std::endl;
             return 0;
         }
 
-        file.seekg(0, std::fstream::beg);
+        // Read the file into a bytearray
+        int size = file.tellg();
+        char* memblock = new char[size]; // on the heap
+        //char memblock[size]; // on the stack
+        file.seekg (0, std::fstream::beg);
+        file.read (memblock, size);
+        file.close();
 
-        char p; file.read(&p, 1); _header.typep = p;
-        char b; file.read(&b, 1); _header.typeb = b;
+        // Build the headerfile
+        _header.typep = memblock[0];
+        _header.typeb = memblock[1];
 
-        char highw; file.read(&highw, 1); // width
-        char loww; file.read(&loww, 1);
-        char highh; file.read(&highh, 1); // height
-        char lowh; file.read(&lowh, 1);
+        // Create one uint16_t from two uint8_t's (Little Endian)
+        _header.width  = (memblock[2] & 0xFF) | (memblock[3] << 8);
+        _header.height = (memblock[4] & 0xFF) | (memblock[5] << 8);
 
-        // Little Endian:
-        _header.width = (loww << 8) | (highw & 0xFF);
-        _header.height = (lowh << 8) | (highh & 0xFF);
-        
-        char d; file.read(&d, 1); _header.bitdepth = d;
-        char e; file.read(&e, 1); _header.end = e;
+        // Or if bitshifting is not your thing, maybe you may find this more readable?
+        // _header.width  = *((uint16_t*)&memblock[2]);
+        // _header.height  = *((uint16_t*)&memblock[4]);
 
-        _pixels.clear();
+        _header.bitdepth = memblock[6];
+        _header.end = memblock[7];
+
+        // Build list of pixels
         size_t numpixels = _header.width * _header.height;
+        _pixels.clear();
         _pixels.reserve(numpixels);
+        size_t start = sizeof(_header);
+
         for (size_t i = 0; i < numpixels; i++)
         {
             RGBAColor pixel;
             if (_header.bitdepth == 1 || _header.bitdepth == 2)
             {
-                char val; file.read(&val, 1);
+                char val = memblock[start+0];
                 pixel.r = val;
                 pixel.g = val;
                 pixel.b = val;
@@ -150,23 +160,28 @@ public:
 
             if (_header.bitdepth == 2)
             {
-                char a; file.read(&a, 1); pixel.a = a;
+                pixel.a = memblock[start+1];
             }
             else if (_header.bitdepth == 3 || _header.bitdepth == 4)
             {
-                char r; file.read(&r, 1); pixel.r = r;
-                char g; file.read(&g, 1); pixel.g = g;
-                char b; file.read(&b, 1); pixel.b = b;
+                pixel.r = memblock[start+0];
+                pixel.g = memblock[start+1];
+                pixel.b = memblock[start+2];
                 pixel.a = 255;
             }
 
             if (_header.bitdepth == 4)
             {
-                char a; file.read(&a, 1); pixel.a = a;
+                pixel.a = memblock[start+3];
             }
-            
+
             _pixels.emplace_back(pixel);
+
+            start += _header.bitdepth;
         }
+
+        delete[] memblock;
+
         return 1;
     }
 

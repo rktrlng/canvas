@@ -33,7 +33,7 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
-			random();
+			//random();
 			frametime = 0.0f;
 		}
 	}
@@ -72,14 +72,14 @@ public:
 
 int main( void )
 {
-	// rt::PixelBuffer pixelbuffer("assets/base01.pbf");
+	rt::PixelBuffer pixelbuffer("assets/base01.pbf");
 	// pixelbuffer.fill(rt::WHITE);
 	// pixelbuffer.setPixel(16, 16, rt::RED);
 	// pixelbuffer.read("assets/base01.pbf");
-	// MyApp application(pixelbuffer, 8);
+	MyApp application(pixelbuffer, 8);
 
 
-	MyApp application(80, 45, 8);
+	// MyApp application(80, 45, 8);
 
 	// auto& canvas = application.layers[0];
 	// auto& pixelbuffer = canvas->pixelbuffer;
