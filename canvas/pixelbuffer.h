@@ -124,20 +124,8 @@ public:
         file.read (memblock, size);
         file.close();
 
-        // Build the headerfile
-        _header.typep = memblock[0];
-        _header.typeb = memblock[1];
-
-        // Little Endian
-        _header.width  = (memblock[2] & 0xFF) | (memblock[3] << 8);
-        _header.height = (memblock[4] & 0xFF) | (memblock[5] << 8);
-
-        // Or:
-        // _header.width  = *((uint16_t*)&memblock[2]);
-        // _header.height  = *((uint16_t*)&memblock[4]);
-
-        _header.bitdepth = memblock[6];
-        _header.end = memblock[7];
+        // Build header
+        _header = *((PBHeader*)&memblock[0]);
 
         // Build list of pixels
         size_t numpixels = _header.width * _header.height;
