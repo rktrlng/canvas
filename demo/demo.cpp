@@ -72,7 +72,7 @@ public:
 
 int main( void )
 {
-	rt::PixelBuffer pixelbuffer("assets/base01.pbf");
+	rt::PixelBuffer pixelbuffer("assets/pencils.pbf");
 	// pixelbuffer.fill(rt::WHITE);
 	// pixelbuffer.setPixel(16, 16, rt::RED);
 	// pixelbuffer.read("assets/base01.pbf");
@@ -94,6 +94,7 @@ int main( void )
 		;
 	}
 	
+	pixelbuffer.write("pencilswrite.pbf");
 
 	return 0;
 }

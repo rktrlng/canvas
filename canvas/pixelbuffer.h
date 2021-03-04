@@ -133,11 +133,9 @@ public:
         _pixels.reserve(numpixels);
         size_t start = sizeof(_header);
 
-        for (size_t i = 0; i < numpixels; i++)
-        {
+        for (size_t i = 0; i < numpixels; i++) {
             RGBAColor pixel;
-            if (_header.bitdepth == 1 || _header.bitdepth == 2)
-            {
+            if (_header.bitdepth == 1 || _header.bitdepth == 2) {
                 char val = memblock[start+0];
                 pixel.r = val;
                 pixel.g = val;
@@ -145,20 +143,17 @@ public:
                 pixel.a = 255;
             }
 
-            if (_header.bitdepth == 2)
-            {
+            if (_header.bitdepth == 2) {
                 pixel.a = memblock[start+1];
             }
-            else if (_header.bitdepth == 3 || _header.bitdepth == 4)
-            {
+            else if (_header.bitdepth == 3 || _header.bitdepth == 4) {
                 pixel.r = memblock[start+0];
                 pixel.g = memblock[start+1];
                 pixel.b = memblock[start+2];
                 pixel.a = 255;
             }
 
-            if (_header.bitdepth == 4)
-            {
+            if (_header.bitdepth == 4) {
                 pixel.a = memblock[start+3];
             }
 
@@ -176,8 +171,7 @@ public:
     {
         // Try to write to a file
         std::ofstream file(filename, std::fstream::out|std::fstream::binary|std::fstream::trunc);
-        if (!file.is_open())
-        {
+        if (!file.is_open()) {
             std::cout << "Unable to write to file: " << filename << std::endl;
             return 0;
         }
@@ -263,9 +257,10 @@ public:
 	}
 
     void fill(RGBAColor color) {
-        // TODO: check if this can be done faster in a double for loop
-        for (size_t i = 0; i < _header.height; i++) {
-            drawLine(0, i, _header.width, i, color);
+        for (size_t y = 0; y < _header.height; y++) {
+            for (size_t x = 0; x < _header.width; x++) {
+                setPixel(x, y, color);
+            }
         }
 	}
 
