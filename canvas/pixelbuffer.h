@@ -125,7 +125,7 @@ public:
         file.close();
 
         // Build header
-        _header = *((PBHeader*)&memblock[0]);
+        _header = *((PBHeader*)memblock);
 
         // Build list of pixels
         size_t numpixels = _header.width * _header.height;
@@ -176,32 +176,30 @@ public:
             return 0;
         }
 
+        // Write header
         file.write((char*)&_header, sizeof(_header));
+
+        // Write pixeldata
         // This would work if we only needed to write 4 bytes/pixel files:
         // file.write((char*)&_pixels[0], _pixels.size()*_header.bitdepth);
 
-        // Write pixeldata to the file
-        for (auto& pixel : _pixels)
-        {
-            if (_header.bitdepth == 1 || _header.bitdepth == 2)
-            {
+        // But we also need to handle the bitdepth
+        for (auto& pixel : _pixels) {
+            if (_header.bitdepth == 1 || _header.bitdepth == 2) {
                 char value = (pixel.r + pixel.b + pixel.g) / 3;
                 file.write(&value, 1);
             }
 
-            if (_header.bitdepth == 2)
-            {
+            if (_header.bitdepth == 2) {
                 char a = pixel.a; file.write(&a, 1);
             }
-            else if (_header.bitdepth == 3 || _header.bitdepth == 4)
-            {
+            else if (_header.bitdepth == 3 || _header.bitdepth == 4) {
                 char r = pixel.r; file.write(&r, 1);
                 char g = pixel.g; file.write(&g, 1);
                 char b = pixel.b; file.write(&b, 1);
             }
 
-            if (_header.bitdepth == 4)
-            {
+            if (_header.bitdepth == 4) {
                 char a = pixel.a; file.write(&a, 1);
             }
         }
