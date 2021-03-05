@@ -34,6 +34,7 @@ public:
 		if (frametime >= maxtime)
 		{
 			//random();
+			wireworld();
 			frametime = 0.0f;
 		}
 	}
@@ -64,6 +65,26 @@ public:
 			for (size_t x = 0; x < cols; x++)
 			{
 				pixelbuffer.setPixel(x, y, rt::RGBAColor(rand()%256, rand()%256, rand()%256, 255));
+			}
+		}
+	}
+
+	void wireworld()
+	{
+		auto& pixelbuffer = layers[0]->pixelbuffer;
+		size_t rows = pixelbuffer.header().height;
+		size_t cols = pixelbuffer.header().width;
+
+		// const uint8_t EMPTY = 0;
+		// const uint8_t CONDUCTOR = 1;
+		// const uint8_t HEAD = 2;
+		// const uint8_t TAIL = 3;
+
+		for (size_t y = 0; y < rows; y++)
+		{
+			for (size_t x = 0; x < cols; x++)
+			{
+				//pixelbuffer.setPixel(x, y, rt::RGBAColor(rand()%256, rand()%256, rand()%256, 255));
 			}
 		}
 	}

@@ -9,6 +9,13 @@
 
 namespace rt {
 
+struct vec2i {
+    int x = 0;
+    int y = 0;
+    vec2i(int x, int y) : x(x), y(y) {}
+    vec2i(const vec2i& v) : x(v.x), y(v.y) {}
+};
+
 class PixelBuffer {
 private:
     //   +----------------------- typep (1 byte) 0x70 = 'p'
@@ -62,7 +69,6 @@ public:
         read(filename);
     }
 
-    // Copy constructor
     PixelBuffer(const PixelBuffer& other)
     {
         _header.width = other._header.width;
@@ -275,8 +281,8 @@ public:
 	}
 
 	void drawSquare(int x0, int y0, int x1, int y1, RGBAColor color) {
-		drawLine(x0,    y0   , x0+x1, y0,    color);
-		drawLine(x0+x1, y0   , x0+x1, y0+y1, color);
+		drawLine(x0,    y0,    x0+x1, y0,    color);
+		drawLine(x0+x1, y0,    x0+x1, y0+y1, color);
 		drawLine(x0,    y0+y1, x0+x1, y0+y1, color);
 		drawLine(x0,    y0,    x0,    y0+y1, color);
 	}
@@ -294,12 +300,7 @@ public:
 		int y = 0;
 		int err = 0;
 
-		struct LocalPos {
-			int x = 0;
-			int y = 0;
-			LocalPos(int x, int y) : x(x), y(y) {}
-		};
-		std::vector<LocalPos> positions;
+		std::vector<rt::vec2i> positions;
 
 		while (x >= y) {
 			positions.push_back( {  x,  y } );
@@ -326,7 +327,26 @@ public:
 		}
 	}
 
-};
+    inline vec2i wrap(const vec2i& pos, int cols, int rows) {
+        vec2i wrapped(pos);
+
+        if (pos.x < 0) { wrapped.x = cols-1; }
+        if (pos.x > cols-1) { wrapped.x = 0; }
+        if (pos.y < 0) { wrapped.y = rows-1; }
+        if (pos.y > rows-1) { wrapped.y = 0; }
+
+        return wrapped;
+    }
+
+    inline int idFromPos(int x, int y, int cols) {
+        return (y*cols)+x;
+    }
+
+    inline int idFromPos(const vec2i& pos, int cols) {
+        return idFromPos(pos.x, pos.y, cols);
+    }
+
+}; // PixelBuffer
 
 } // namespace rt
 
