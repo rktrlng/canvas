@@ -14,6 +14,23 @@ public:
 		uint16_t rows = pixelbuffer.header().height;
 		layers.push_back( new rt::Canvas(cols, rows) );
 		layers[0]->pixelbuffer = pixelbuffer;
+		
+		// ================================================
+		// fill field for wireworld
+		int counter = 0;
+		for (size_t y = 0; y < rows; y++) {
+			for (size_t x = 0; x < cols; x++) {
+				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
+				if (color == rt::BLACK) { field[counter] = EMPTY; }
+				if (color == rt::YELLOW) { field[counter] = CONDUCTOR; }
+				if (color == rt::BLUE) { field[counter] = HEAD;}
+				if (color == rt::CYAN) { field[counter] = TAIL; }
+
+				counter++;
+			}
+		}
+		// ================================================
+
 	}
 
 	virtual ~MyApp()
@@ -29,7 +46,7 @@ public:
 		handleInput();
 
 		static float frametime = 0.0f;
-		float maxtime = 0.016666667f;
+		float maxtime = 0.1f;
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
@@ -60,34 +77,80 @@ public:
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		size_t rows = pixelbuffer.header().height;
 		size_t cols = pixelbuffer.header().width;
-		for (size_t y = 0; y < rows; y++)
-		{
-			for (size_t x = 0; x < cols; x++)
-			{
+		for (size_t y = 0; y < rows; y++) {
+			for (size_t x = 0; x < cols; x++) {
 				pixelbuffer.setPixel(x, y, rt::RGBAColor(rand()%256, rand()%256, rand()%256, 255));
 			}
 		}
 	}
 
+	// ================================================
+	const uint8_t EMPTY = 0;
+	const uint8_t CONDUCTOR = 1;
+	const uint8_t HEAD = 2;
+	const uint8_t TAIL = 3;
+	std::vector<uint8_t> field = std::vector<uint8_t>(80*45, 0);
+
 	void wireworld()
 	{
+		// get pixelbuffer, rows and cols
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		size_t rows = pixelbuffer.header().height;
 		size_t cols = pixelbuffer.header().width;
 
-		// const uint8_t EMPTY = 0;
-		// const uint8_t CONDUCTOR = 1;
-		// const uint8_t HEAD = 2;
-		// const uint8_t TAIL = 3;
+		// set the next state
+		std::vector<uint8_t> next = std::vector<uint8_t>(cols*rows, 0);
+		for (size_t y = 0; y < rows; y++) {
+			for (size_t x = 0; x < cols; x++) {
+				// Apply rules for each pixel:
+				//- EMPTY -> EMPTY (do nothing)
+				//- HEAD -> TAIL
+				//- TAIL -> CONDUCTOR
+				//- CONDUCTOR: if 1 or 2 neighbours are HEAD -> HEAD
+				int current = field[rt::idFromPos(x,y,cols)];
+				if (current == HEAD) {
+					current = TAIL;
+				} else if (current == TAIL) {
+					current = CONDUCTOR;
+				} else if (current == CONDUCTOR) {
+					//check 8 neighbours and count the ones that are a HEAD
+					rt::vec2i n(0,0);
+					int nc = 0; // number of neighbour cells
+					for (int r = -1; r < 2; r++) {
+						for (int c = -1; c < 2; c++) {
+							if (r == 0 && c == 0) {
+								// this is us
+							} else {
+								n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
+								if (field[rt::idFromPos(n.x,n.y,cols)] == HEAD) { nc++; }
+							}
+						}
+					}
+					if (nc == 1 || nc == 2) { current = HEAD; }
+				}
+				next[rt::idFromPos(x,y,cols)] = current;
 
-		for (size_t y = 0; y < rows; y++)
-		{
-			for (size_t x = 0; x < cols; x++)
-			{
-				//pixelbuffer.setPixel(x, y, rt::RGBAColor(rand()%256, rand()%256, rand()%256, 255));
+				// update pixelbuffer from (current) field
+				rt::RGBAColor color;
+				int index = rt::idFromPos(x,y,cols);
+				if (field[index] == EMPTY) {
+					color = rt::BLACK;
+				} else if (field[index] == CONDUCTOR) {
+					color = rt::YELLOW;
+				} else if (field[index] == HEAD) {
+					color = rt::BLUE;
+				} else { // TAIL
+					color = rt::CYAN;
+				}
+				pixelbuffer.setPixel(x, y, color);
 			}
 		}
+
+		// update field to next state
+		field = next;
 	}
+	// ================================================
+
 };
 
 

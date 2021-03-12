@@ -9,12 +9,34 @@
 
 namespace rt {
 
+// =========================================================
 struct vec2i {
     int x = 0;
     int y = 0;
     vec2i(int x, int y) : x(x), y(y) {}
     vec2i(const vec2i& v) : x(v.x), y(v.y) {}
 };
+
+inline vec2i wrap(const vec2i& pos, int cols, int rows) {
+    vec2i wrapped(pos);
+
+    if (pos.x < 0) { wrapped.x = cols-1; }
+    if (pos.x > cols-1) { wrapped.x = 0; }
+    if (pos.y < 0) { wrapped.y = rows-1; }
+    if (pos.y > rows-1) { wrapped.y = 0; }
+
+    return wrapped;
+}
+
+inline int idFromPos(int x, int y, int cols) {
+    return (y*cols)+x;
+}
+
+inline int idFromPos(const vec2i& pos, int cols) {
+    return idFromPos(pos.x, pos.y, cols);
+}
+
+// =========================================================
 
 class PixelBuffer {
 private:
@@ -326,25 +348,6 @@ public:
 			setPixel(circlex + local.x, circley + local.y, color);
 		}
 	}
-
-    inline vec2i wrap(const vec2i& pos, int cols, int rows) {
-        vec2i wrapped(pos);
-
-        if (pos.x < 0) { wrapped.x = cols-1; }
-        if (pos.x > cols-1) { wrapped.x = 0; }
-        if (pos.y < 0) { wrapped.y = rows-1; }
-        if (pos.y > rows-1) { wrapped.y = 0; }
-
-        return wrapped;
-    }
-
-    inline int idFromPos(int x, int y, int cols) {
-        return (y*cols)+x;
-    }
-
-    inline int idFromPos(const vec2i& pos, int cols) {
-        return idFromPos(pos.x, pos.y, cols);
-    }
 
 }; // PixelBuffer
 
