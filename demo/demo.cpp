@@ -17,6 +17,7 @@ public:
 		
 		// ================================================
 		// fill field for wireworld
+		field = std::vector<uint8_t>(rows*cols, 0);
 		int counter = 0;
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
@@ -30,7 +31,6 @@ public:
 			}
 		}
 		// ================================================
-
 	}
 
 	virtual ~MyApp()
@@ -46,7 +46,7 @@ public:
 		handleInput();
 
 		static float frametime = 0.0f;
-		float maxtime = 0.1f;
+		float maxtime = 0.25f;
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
@@ -56,40 +56,14 @@ public:
 		}
 	}
 
-	void handleInput() {
-		if (input.getKeyDown(rt::KeyCode::Space)) {
-			std::cout << "spacebar pressed down." << std::endl;
-			layers[0]->pixelbuffer.printInfo();
-		}
+private:
+	const uint8_t EMPTY = 0; // BLACK
+	const uint8_t CONDUCTOR = 1; // YELLOW
+	const uint8_t HEAD = 2; // BLUE
+	const uint8_t TAIL = 3; // CYAN
 
-		if (input.getMouseDown(0)) {
-			std::cout << "click " << (int) input.getMouseX() << "," << (int) input.getMouseY() << std::endl;
-		}
-
-		int scrolly = input.getScrollY();
-		if (scrolly != 0) {
-			std::cout << "scroll: " << scrolly << std::endl;
-		}
-	}
-
-	void random()
-	{
-		auto& pixelbuffer = layers[0]->pixelbuffer;
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
-		for (size_t y = 0; y < rows; y++) {
-			for (size_t x = 0; x < cols; x++) {
-				pixelbuffer.setPixel(x, y, rt::RGBAColor(rand()%256, rand()%256, rand()%256, 255));
-			}
-		}
-	}
-
-	// ================================================
-	const uint8_t EMPTY = 0;
-	const uint8_t CONDUCTOR = 1;
-	const uint8_t HEAD = 2;
-	const uint8_t TAIL = 3;
-	std::vector<uint8_t> field = std::vector<uint8_t>(80*45, 0);
+	// internal data to work with (value are 0,1,2,3)
+	std::vector<uint8_t> field;
 
 	void wireworld()
 	{
@@ -113,7 +87,7 @@ public:
 				} else if (current == TAIL) {
 					current = CONDUCTOR;
 				} else if (current == CONDUCTOR) {
-					//check 8 neighbours and count the ones that are a HEAD
+					// check 8 neighbours and count the ones that are a HEAD
 					rt::vec2i n(0,0);
 					int nc = 0; // number of neighbour cells
 					for (int r = -1; r < 2; r++) {
@@ -149,7 +123,34 @@ public:
 		// update field to next state
 		field = next;
 	}
-	// ================================================
+
+	void handleInput() {
+		if (input.getKeyDown(rt::KeyCode::Space)) {
+			std::cout << "spacebar pressed down." << std::endl;
+			layers[0]->pixelbuffer.printInfo();
+		}
+
+		if (input.getMouseDown(0)) {
+			std::cout << "click " << (int) input.getMouseX() << "," << (int) input.getMouseY() << std::endl;
+		}
+
+		int scrolly = input.getScrollY();
+		if (scrolly != 0) {
+			std::cout << "scroll: " << scrolly << std::endl;
+		}
+	}
+
+	void random()
+	{
+		auto& pixelbuffer = layers[0]->pixelbuffer;
+		size_t rows = pixelbuffer.header().height;
+		size_t cols = pixelbuffer.header().width;
+		for (size_t y = 0; y < rows; y++) {
+			for (size_t x = 0; x < cols; x++) {
+				pixelbuffer.setPixel(x, y, rt::RGBAColor(rand()%256, rand()%256, rand()%256, 255));
+			}
+		}
+	}
 
 };
 

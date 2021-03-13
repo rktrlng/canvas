@@ -148,12 +148,12 @@ public:
         // Read the file into a bytearray
         int size = file.tellg();
         char* memblock = new char[size];
-        file.seekg (0, std::fstream::beg);
-        file.read (memblock, size);
+        file.seekg(0, std::fstream::beg);
+        file.read(memblock, size);
         file.close();
 
         // Build header
-        _header = *((PBHeader*)memblock);
+        _header = *((PBHeader*)&memblock[0]);
 
         // Build list of pixels
         size_t numpixels = _header.width * _header.height;
