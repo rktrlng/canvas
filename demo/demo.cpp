@@ -88,14 +88,13 @@ private:
 					current = CONDUCTOR;
 				} else if (current == CONDUCTOR) {
 					// check 8 neighbours and count the ones that are a HEAD
-					rt::vec2i n(0,0);
 					int nc = 0; // number of neighbour cells
 					for (int r = -1; r < 2; r++) {
 						for (int c = -1; c < 2; c++) {
 							if (r == 0 && c == 0) {
 								// this is us
 							} else {
-								n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
+								rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
 								if (field[rt::idFromPos(n.x,n.y,cols)] == HEAD) { nc++; }
 							}
 						}

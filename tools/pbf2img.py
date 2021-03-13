@@ -24,8 +24,8 @@ bitdepth = pbf[6]
 # pbf[7] = ':'
 
 # Little endian
-width = ((hiwidth << 8) & 0xFF) | (lowidth & 0xFF)
-height = ((hiheight << 8) & 0xFF) | (loheight & 0xFF)
+width = (hiwidth << 8) | (lowidth & 0xFF)
+height = (hiheight << 8) | (loheight & 0xFF)
 
 # The rest of the bytes are the pixels
 pixels = pbf[8:]
