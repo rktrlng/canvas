@@ -82,7 +82,7 @@ public:
         size_t numpixels = width * height;
         _pixels.reserve(numpixels);
         for (size_t i = 0; i < numpixels; i++) {
-            _pixels.emplace_back( 0, 0, 0, 0 );
+            _pixels[i] = RGBAColor(0, 0, 0, 255);
         }
     }
 
@@ -100,7 +100,7 @@ public:
         size_t numpixels = _header.width * _header.height;
         _pixels.reserve(numpixels);
         for (size_t i = 0; i < numpixels; i++) {
-            _pixels.emplace_back( other._pixels[i] );
+            _pixels[i] = other._pixels[i];
         }
     }
 
@@ -146,14 +146,14 @@ public:
         }
 
         // Read the file into a bytearray
-        int size = file.tellg();
+        const int size = file.tellg();
         char* memblock = new char[size];
         file.seekg(0, std::fstream::beg);
         file.read(memblock, size);
         file.close();
 
         // Build header
-        _header = *((PBHeader*)&memblock[0]);
+        _header = *(PBHeader*)&memblock[0];
 
         // Build list of pixels
         size_t numpixels = _header.width * _header.height;
@@ -219,16 +219,16 @@ public:
             }
 
             if (_header.bitdepth == 2) {
-                char a = pixel.a; file.write(&a, 1);
+                file.write((char*)&pixel.a, 1);
             }
             else if (_header.bitdepth == 3 || _header.bitdepth == 4) {
-                char r = pixel.r; file.write(&r, 1);
-                char g = pixel.g; file.write(&g, 1);
-                char b = pixel.b; file.write(&b, 1);
+                file.write((char*)&pixel.r, 1);
+                file.write((char*)&pixel.g, 1);
+                file.write((char*)&pixel.b, 1);
             }
 
             if (_header.bitdepth == 4) {
-                char a = pixel.a; file.write(&a, 1);
+                file.write((char*)&pixel.a, 1);
             }
         }
 
