@@ -13,13 +13,13 @@ def convert(filename):
 
     bitdepth = 0
     if im.mode == 'L':
-        bitdepth = 1
+        bitdepth = 8
     elif im.mode == 'LA':
-        bitdepth = 2
+        bitdepth = 16
     elif im.mode == 'RGB':
-        bitdepth = 3
+        bitdepth = 24
     elif im.mode == 'RGBA':
-        bitdepth = 4
+        bitdepth = 32
     else:
         bitdepth = 0
 
@@ -30,27 +30,27 @@ def convert(filename):
     hiheight = ((height >> 8) & 0xFF)
     loheight = (height & 0xFF)
 
-    allBytes = bytearray([0x70, 0x62, lowidth, hiwidth, loheight, hiheight, bitdepth, 0x3A])
+    memblock = bytearray([0x70, 0x62, lowidth, hiwidth, loheight, hiheight, bitdepth, 0x3A])
 
     # grayscale
-    if bitdepth == 1:
+    if bitdepth == 8:
         for y in range(height):
             for x in range(width):
                 cpixel = pixels[x, y]
-                allBytes.append(cpixel)
+                memblock.append(cpixel)
 
     # 2, 3, or 4
-    if bitdepth > 1:
+    if bitdepth > 8:
         for y in range(height):
             for x in range(width):
                 cpixel = pixels[x, y]
                 for b in cpixel:
-                    allBytes.append(b)
+                    memblock.append(b)
 
     no_extension = os.path.splitext(filename)[0]
 
     saveFile = open(no_extension + ".pbf", "wb")
-    saveFile.write(allBytes)
+    saveFile.write(memblock)
 
 
 # main

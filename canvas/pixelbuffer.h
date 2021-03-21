@@ -44,7 +44,7 @@ private:
     //   |  +-------------------- typeb (1 byte) 0x62 = 'b'
     //   |  |   +---------------- width (2 bytes) 0-65535
     //   |  |   |     +---------- height (2 bytes) 0-65535
-    //   |  |   |     |    +----- bitdepth (1 byte) 1, 2, 3, 4
+    //   |  |   |     |    +----- bitdepth (1 byte) 8, 16, 24, 32
     //   |  |   |     |    |  +-- end (1 byte) 0x3A = ':'
     //   v  v   v     v    v  v
     // |  |  |  .  |  .  |  |  |
@@ -54,11 +54,11 @@ private:
         uint8_t typeb = 0x62;
         uint16_t width = 0x0000;
         uint16_t height = 0x0000;
-        uint8_t bitdepth = 0x04;
+        uint8_t bitdepth = 0x00;
         uint8_t end = 0x3A;
     };
-    // uint64_t imghdr = 0x706200080004013A; // 8x4 pixels, bitdepth 1, Big Endian
-    // uint64_t imghdr = 0x706208000400013A; // 8x4 pixels, bitdepth 1, Little Endian
+    // uint64_t imghdr = 0x706200080004203A; // 8x4 pixels, bitdepth 32, Big Endian
+    // uint64_t imghdr = 0x706208000400203A; // 8x4 pixels, bitdepth 32, Little Endian
 
     PBHeader _header;
     std::vector<RGBAColor> _pixels;
@@ -116,21 +116,22 @@ public:
         uint16_t width = _header.width;
         uint16_t height = _header.height;
         uint8_t bitdepth = _header.bitdepth;
+        uint8_t bytedepth = _header.bitdepth / 8;
 
         std::cout << "sizeof(header): " << sizeof(_header) << " B" << std::endl;
         std::cout << "width: " << width << " pixels" << std::endl;
         std::cout << "height: " << height << " pixels" << std::endl;
         std::cout << "bitdepth: " << (int) bitdepth << " B/pixel" << std::endl;
         std::cout << "#number of pixels: " << (int) _pixels.size() << std::endl;
-        std::cout << "memsize of pixels: " << (width * height * bitdepth) << " B";
-        std::cout << " | " << (width * height * bitdepth) / 1024.0f << " KiB";
-        std::cout << " | " << (width * height * bitdepth) / 1024 / 1024.0f << " MiB" << std::endl;
+        std::cout << "memsize of pixels: " << (width * height * bytedepth) << " B";
+        std::cout << " | " << (width * height * bytedepth) / 1024.0f << " KiB";
+        std::cout << " | " << (width * height * bytedepth) / 1024 / 1024.0f << " MiB" << std::endl;
     }
 
     bool valid() {
         return _header.typep == 0x70 &&
             _header.typeb == 0x62 &&
-            (_header.bitdepth > 0 && _header.bitdepth < 5) &&
+            (_header.bitdepth > 0 && _header.bitdepth < 33) &&
             _header.end == 0x3A &&
             _header.width * _header.height == _pixels.size();
     }
@@ -163,7 +164,7 @@ public:
 
         for (size_t i = 0; i < numpixels; i++) {
             RGBAColor pixel;
-            if (_header.bitdepth == 1 || _header.bitdepth == 2) {
+            if (_header.bitdepth == 8 || _header.bitdepth == 16) {
                 char val = memblock[start+0];
                 pixel.r = val;
                 pixel.g = val;
@@ -171,23 +172,23 @@ public:
                 pixel.a = 255;
             }
 
-            if (_header.bitdepth == 2) {
+            if (_header.bitdepth == 16) {
                 pixel.a = memblock[start+1];
             }
-            else if (_header.bitdepth == 3 || _header.bitdepth == 4) {
+            else if (_header.bitdepth == 24 || _header.bitdepth == 32) {
                 pixel.r = memblock[start+0];
                 pixel.g = memblock[start+1];
                 pixel.b = memblock[start+2];
                 pixel.a = 255;
             }
 
-            if (_header.bitdepth == 4) {
+            if (_header.bitdepth == 32) {
                 pixel.a = memblock[start+3];
             }
 
             _pixels.emplace_back(pixel);
 
-            start += _header.bitdepth;
+            start += _header.bitdepth / 8;
         }
 
         delete[] memblock;
@@ -213,21 +214,21 @@ public:
 
         // But we also need to handle the bitdepth
         for (auto& pixel : _pixels) {
-            if (_header.bitdepth == 1 || _header.bitdepth == 2) {
+            if (_header.bitdepth == 8 || _header.bitdepth == 16) {
                 char value = (pixel.r + pixel.b + pixel.g) / 3;
                 file.write(&value, 1);
             }
 
-            if (_header.bitdepth == 2) {
+            if (_header.bitdepth == 16) {
                 file.write((char*)&pixel.a, 1);
             }
-            else if (_header.bitdepth == 3 || _header.bitdepth == 4) {
+            else if (_header.bitdepth == 24 || _header.bitdepth == 32) {
                 file.write((char*)&pixel.r, 1);
                 file.write((char*)&pixel.g, 1);
                 file.write((char*)&pixel.b, 1);
             }
 
-            if (_header.bitdepth == 4) {
+            if (_header.bitdepth == 32) {
                 file.write((char*)&pixel.a, 1);
             }
         }

@@ -35,16 +35,16 @@ print("height:   ", height)
 print("bitdepth: ", bitdepth)
 # print(pixels)
 
-if bitdepth == 1:
+if bitdepth == 8:
 	mode = 'L'
-if bitdepth == 2:
+if bitdepth == 16:
 	mode = 'LA'
-if bitdepth == 3:
+if bitdepth == 24:
 	mode = 'RGB'
-if bitdepth == 4:
+if bitdepth == 32:
 	mode = 'RGBA'
 
-print("#pixels:  ", int(len(pixels) / bitdepth))
+print("#pixels:  ", int( len(pixels) / (bitdepth/8)) )
 
 img = Image.new(mode, (width, height), color = 'white')
 imgpixels = img.load()
@@ -52,17 +52,17 @@ imgpixels = img.load()
 start = 0
 for y in range(height):
 	for x in range(width):
-		if bitdepth == 1:
+		if bitdepth == 8:
 			color = ( pixels[start + 0] )
-		if bitdepth == 2:
+		if bitdepth == 16:
 			color = ( pixels[start + 0], pixels[start + 1] )
-		if bitdepth == 3:
+		if bitdepth == 24:
 			color = ( pixels[start + 0], pixels[start + 1], pixels[start + 2] )
-		if bitdepth == 4:
+		if bitdepth == 32:
 			color = ( pixels[start + 0], pixels[start + 1], pixels[start + 2], pixels[start + 3] )
 
 		imgpixels[x, y] = color
-		start += bitdepth
+		start += int(bitdepth / 8)
 
 no_extension = os.path.splitext(filename)[0]
 
