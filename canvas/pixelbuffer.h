@@ -116,16 +116,15 @@ public:
         uint16_t width = _header.width;
         uint16_t height = _header.height;
         uint8_t bitdepth = _header.bitdepth;
-        uint8_t bytedepth = _header.bitdepth / 8;
 
-        std::cout << "sizeof(header): " << sizeof(_header) << " B" << std::endl;
+        // std::cout << "sizeof(header): " << sizeof(_header) << " B" << std::endl;
         std::cout << "width: " << width << " pixels" << std::endl;
         std::cout << "height: " << height << " pixels" << std::endl;
-        std::cout << "bitdepth: " << (int) bitdepth << " B/pixel" << std::endl;
+        std::cout << "bitdepth: " << (int) bitdepth << " b/pixel" << std::endl;
         std::cout << "#number of pixels: " << (int) _pixels.size() << std::endl;
-        std::cout << "memsize of pixels: " << (width * height * bytedepth) << " B";
-        std::cout << " | " << (width * height * bytedepth) / 1024.0f << " KiB";
-        std::cout << " | " << (width * height * bytedepth) / 1024 / 1024.0f << " MiB" << std::endl;
+        std::cout << "memsize of pixels: " << (width * height * (bitdepth/8)) << " B";
+        std::cout << " | " << (width * height * (bitdepth/8)) / 1024.0f << " KiB";
+        std::cout << " | " << (width * height * (bitdepth/8)) / 1024 / 1024.0f << " MiB" << std::endl;
     }
 
     bool valid() {
