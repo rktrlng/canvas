@@ -370,18 +370,27 @@ public:
 
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				// check 8 neighbours + self and average values
-				int total = 0; // total of color values
+				// check surrounding colors and average values
+				int totalr = 0; // total red
+				int totalg = 0; // total green
+				int totalb = 0; // total blue
+				int totala = 0; // total alpha
 				for (int r = -1; r < 2; r++) {
 					for (int c = -1; c < 2; c++) {
 						rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
-						total += getPixel(n.x, n.y).r;
+                        rt::RGBAColor color = getPixel(n.x, n.y);
+						totalr += color.r;
+						totalg += color.g;
+						totalb += color.b;
+						totala += color.a;
 					}
 				}
-				uint8_t avg = total / 9;
-
-				// update pixelbuffer from (averaged) value
-				setPixel(x, y, {avg, avg, avg, 255});
+                uint8_t r = totalr / 9;
+                uint8_t g = totalg / 9;
+                uint8_t b = totalb / 9;
+                uint8_t a = totala / 9;
+                rt::RGBAColor avg = { r, g, b, a };
+				setPixel(x, y, avg);
 			}
 		}
 	}

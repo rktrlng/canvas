@@ -5,17 +5,29 @@
 class MyApp : public rt::Application
 {
 public:
-	MyApp(uint16_t width, uint16_t height, uint8_t factor) : rt::Application(width, height, factor) 
-	{
-		layers.push_back( new rt::Canvas(width, height) );
-	}
+	// MyApp(uint16_t width, uint16_t height, uint8_t factor) : rt::Application(width, height, factor) 
+	// {
+	// 	init();
+	// }
 
 	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	{
+		init();
+	}
+
+	virtual ~MyApp()
+	{
+		for (auto canvas : layers) {
+			delete canvas;
+		}
+		layers.clear();
+	}
+
+	void init()
+	{
+		auto& pixelbuffer = layers[0]->pixelbuffer;
 		uint16_t cols = pixelbuffer.header().width;
 		uint16_t rows = pixelbuffer.header().height;
-		layers.push_back( new rt::Canvas(cols, rows) );
-		layers[0]->pixelbuffer = pixelbuffer;
 		
 		// fill field for wireworld
 		field = std::vector<uint8_t>(rows*cols, 0);
@@ -33,13 +45,6 @@ public:
 		}
 	}
 
-	virtual ~MyApp()
-	{
-		for (auto canvas : layers) {
-			delete canvas;
-		}
-		layers.clear();
-	}
 
 	void update(float deltatime) override
 	{

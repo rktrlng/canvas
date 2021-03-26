@@ -5,32 +5,14 @@
 class MyApp : public rt::Application
 {
 public:
-	MyApp(uint16_t width, uint16_t height, uint8_t factor) : rt::Application(width, height, factor) 
-	{
-		layers.push_back( new rt::Canvas(width, height) );
-	}
+	// MyApp(uint16_t width, uint16_t height, uint8_t factor) : rt::Application(width, height, factor) 
+	// {
+	// 	init();
+	// }
 
 	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	{
-		uint16_t cols = pixelbuffer.header().width;
-		uint16_t rows = pixelbuffer.header().height;
-		layers.push_back( new rt::Canvas(cols, rows) );
-		layers[0]->pixelbuffer = pixelbuffer;
-
-		std::srand(std::time(nullptr));
-		layers[0]->pixelbuffer.random(60);
-		// fill field for cave
-		field = std::vector<uint8_t>(rows*cols, 0);
-		int counter = 0;
-		for (size_t y = 0; y < rows; y++) {
-			for (size_t x = 0; x < cols; x++) {
-				rt::RGBAColor color = layers[0]->pixelbuffer.getPixel(x, y);
-				if (color == rt::BLACK) { field[counter] = 0; }
-				if (color == rt::WHITE) { field[counter] = 1; }
-
-				counter++;
-			}
-		}
+		init();
 	}
 
 	virtual ~MyApp()
@@ -39,6 +21,28 @@ public:
 			delete canvas;
 		}
 		layers.clear();
+	}
+
+	void init()
+	{
+		auto& pixelbuffer = layers[0]->pixelbuffer;
+		uint16_t cols = pixelbuffer.header().width;
+		uint16_t rows = pixelbuffer.header().height;
+
+		std::srand(std::time(nullptr));
+		layers[0]->pixelbuffer.random(60);
+		// fill field for cave
+		field = std::vector<uint8_t>(rows*cols, 0);
+		int counter = 0;
+		for (size_t y = 0; y < rows; y++) {
+			for (size_t x = 0; x < cols; x++) {
+				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
+				if (color == rt::BLACK) { field[counter] = 0; }
+				if (color == rt::WHITE) { field[counter] = 1; }
+
+				counter++;
+			}
+		}
 	}
 
 	void update(float deltatime) override
