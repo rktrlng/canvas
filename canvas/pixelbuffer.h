@@ -349,6 +349,43 @@ public:
 		}
 	}
 
+    void random(int percentage = 50) {
+		size_t rows = _header.height;
+		size_t cols = _header.width;
+		for (size_t y = 0; y < rows; y++) {
+			for (size_t x = 0; x < cols; x++) {
+				rt::RGBAColor color = rt::BLACK;
+				int value = rand()%100;
+				if (value < percentage) {
+					color = rt::WHITE;
+				}
+				setPixel(x, y, color);
+			}
+		}
+	}
+
+	void blur() {
+		size_t rows = _header.height;
+		size_t cols = _header.width;
+
+		for (size_t y = 0; y < rows; y++) {
+			for (size_t x = 0; x < cols; x++) {
+				// check 8 neighbours + self and average values
+				int total = 0; // total of color values
+				for (int r = -1; r < 2; r++) {
+					for (int c = -1; c < 2; c++) {
+						rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
+						total += getPixel(n.x, n.y).r;
+					}
+				}
+				uint8_t avg = total / 9;
+
+				// update pixelbuffer from (averaged) value
+				setPixel(x, y, {avg, avg, avg, 255});
+			}
+		}
+	}
+
 }; // PixelBuffer
 
 } // namespace rt

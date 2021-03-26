@@ -92,3 +92,26 @@ file(
 	COPY demo/assets
 	DESTINATION ${CMAKE_BINARY_DIR}
 )
+
+# Wireworld
+add_executable(wireworld # g++ demo/wireworld.cpp -o wireworld
+	demo/wireworld.cpp
+)
+target_link_libraries(wireworld # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
+file(
+	COPY demo/assets
+	DESTINATION ${CMAKE_BINARY_DIR}
+)
+
+
+# Cave
+add_executable(cave # g++ demo/demo.cpp -o demo
+	demo/cave.cpp
+)
+target_link_libraries(cave # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
