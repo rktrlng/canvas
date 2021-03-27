@@ -1,4 +1,6 @@
 #include <ctime>
+#include <string>
+#include <sstream>
 
 #include <canvas/application.h>
 
@@ -30,7 +32,7 @@ public:
 		uint16_t rows = pixelbuffer.header().height;
 
 		std::srand(std::time(nullptr));
-		layers[0]->pixelbuffer.random(60);
+		pixelbuffer.random(60);
 		// fill field for cave
 		field = std::vector<uint8_t>(rows*cols, 0);
 		int counter = 0;
@@ -50,7 +52,7 @@ public:
 		handleInput();
 
 		static float frametime = 0.0f;
-		float maxtime = 0.25f;
+		float maxtime = 0.1f;
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
@@ -79,6 +81,20 @@ private:
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		size_t rows = pixelbuffer.header().height;
 		size_t cols = pixelbuffer.header().width;
+
+		{
+			static int counter = 0;
+			std::stringstream filename;
+			filename <<  "caves/cave";
+			const int leadingzeros = 4;
+			for (int i = 1; i < leadingzeros+1; i++) {
+				if (counter < pow(10, i)) { filename << "0"; }
+			}
+			filename << counter << ".pbf";
+			counter++;
+			pixelbuffer.write(filename.str());
+			std::cout << filename.str() << std::endl;
+		}
 
 		// set the next state
 		std::vector<uint8_t> next = std::vector<uint8_t>(cols*rows, 0);
@@ -137,13 +153,13 @@ private:
 
 int main( void )
 {
-	rt::PixelBuffer pixelbuffer("assets/base01.pbf");
+	rt::PixelBuffer pixelbuffer(160, 90, 8);
 
 	MyApp application(pixelbuffer, 4);
 
-	while (application.run())
+	while (!application.quit())
 	{
-		;
+		application.run();
 	}
 
 	return 0;

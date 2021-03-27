@@ -17,6 +17,7 @@ public:
 	Application(PixelBuffer& pixelbuffer, uint8_t factor = 1);
 	virtual ~Application();
 
+	int quit();
 	int run();
 	virtual void update(float deltatime) = 0;
 

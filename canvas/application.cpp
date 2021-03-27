@@ -26,15 +26,20 @@ Application::~Application()
 	std::cout << "Application done. Thank you." << std::endl;
 }
 
-int Application::run()
+int Application::quit()
 {
 	if (glfwGetKey(renderer.window(), GLFW_KEY_ESCAPE ) == GLFW_PRESS ||
 		glfwWindowShouldClose(renderer.window()) )
 	{
 		glfwTerminate();
-		return 0;
+		return 1;
 	}
 
+	return 0;
+}
+
+int Application::run()
+{
 	// Update deltaTime
 	float deltaTime = renderer.updateDeltaTime();
 

@@ -65,9 +65,9 @@ int main( void )
 
 	MyApp application(pixelbuffer, 4);
 
-	while (application.run())
+	while (!application.quit())
 	{
-		;
+		application.run();
 	}
 
 	return 0;

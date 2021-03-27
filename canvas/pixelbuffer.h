@@ -80,9 +80,8 @@ public:
         _header.height = height;
         _header.bitdepth = bitdepth;
         size_t numpixels = width * height;
-        _pixels.reserve(numpixels);
         for (size_t i = 0; i < numpixels; i++) {
-            _pixels[i] = RGBAColor(0, 0, 0, 255);
+            _pixels.push_back(RGBAColor(0, 0, 0, 255));
         }
     }
 
@@ -98,9 +97,8 @@ public:
         _header.bitdepth = other._header.bitdepth;
 
         size_t numpixels = _header.width * _header.height;
-        _pixels.reserve(numpixels);
         for (size_t i = 0; i < numpixels; i++) {
-            _pixels[i] = other._pixels[i];
+            _pixels.push_back(other._pixels[i]);
         }
     }
 

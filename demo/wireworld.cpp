@@ -151,9 +151,9 @@ int main( void )
 	rt::PixelBuffer pixelbuffer("assets/base01.pbf");
 	MyApp application(pixelbuffer, 8);
 
-	while (application.run())
+	while (!application.quit())
 	{
-		;
+		application.run();
 	}
 
 	return 0;
