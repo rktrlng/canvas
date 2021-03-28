@@ -13,9 +13,33 @@ namespace rt {
 struct vec2i {
     int x = 0;
     int y = 0;
+    vec2i() : x(0), y(0) {}
     vec2i(int x, int y) : x(x), y(y) {}
     vec2i(const vec2i& v) : x(v.x), y(v.y) {}
+
+    inline vec2i operator+(const vec2i& rhs) const { return vec2i(x+rhs.x, y+rhs.y); }
+    inline vec2i& operator+=(const vec2i& rhs) { x += rhs.x; y += rhs.y; return *this; }
+    inline vec2i operator-(const vec2i& rhs) const { return vec2i(x-rhs.x, y-rhs.y); }
+    inline vec2i& operator-=(const vec2i& rhs) { x -= rhs.x; y -= rhs.y; return *this; }
+    inline vec2i operator*(const vec2i& rhs) const { return vec2i(x*rhs.x, y*rhs.y); }
+    inline vec2i& operator*=(const vec2i& rhs) { x *= rhs.x; y *= rhs.y; return *this; }
+    inline vec2i operator/(const vec2i& rhs) const { if (rhs.x != 0 && rhs.y != 0) { return vec2i(x/rhs.x, y/rhs.y); } else { return *this; } }
+    inline vec2i& operator/=(const vec2i& rhs) { if(rhs.x != 0 && rhs.y != 0) {x /= rhs.x; y /= rhs.y; } return *this; }
+
+    inline vec2i operator+(const int rhs) const { return vec2i(x+rhs, y+rhs); }
+    inline vec2i& operator+=(const int rhs) { x += rhs; y += rhs; return *this; }
+    inline vec2i operator-(const int rhs) const { return vec2i(x-rhs, y-rhs); }
+    inline vec2i& operator-=(const int rhs) { x -= rhs; y -= rhs; return *this; }
+    inline vec2i operator*(const int rhs) const { return vec2i(x*rhs, y*rhs); }
+    inline vec2i& operator*=(const int rhs) { x *= rhs; y *= rhs; return *this; }
+    inline vec2i operator/(const int rhs) const { if (rhs != 0) { return vec2i(x/rhs, y/rhs); } else { return *this; } }
+    inline vec2i& operator/=(const int rhs) { if(rhs != 0) {x /= rhs; y /= rhs; } return *this; }
+
+    inline bool operator==(const vec2i& rhs){ return (x==rhs.x && y==rhs.y); }
+    inline bool operator!=(const vec2i& rhs){ return !(*this == rhs); }
 };
+inline std::ostream& operator<<(std::ostream& os, const vec2i& obj) { return os << "(" << obj.x << ", " << obj.y << ")"; }
+
 
 inline vec2i wrap(const vec2i& pos, int cols, int rows) {
     vec2i wrapped(pos);
@@ -344,21 +368,6 @@ public:
 
 		for (auto local : positions) {
 			setPixel(circlex + local.x, circley + local.y, color);
-		}
-	}
-
-    void random(int percentage = 50) {
-		size_t rows = _header.height;
-		size_t cols = _header.width;
-		for (size_t y = 0; y < rows; y++) {
-			for (size_t x = 0; x < cols; x++) {
-				rt::RGBAColor color = rt::BLACK;
-				int value = rand()%100;
-				if (value < percentage) {
-					color = rt::WHITE;
-				}
-				setPixel(x, y, color);
-			}
 		}
 	}
 

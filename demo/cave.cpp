@@ -32,7 +32,7 @@ public:
 		uint16_t rows = pixelbuffer.header().height;
 
 		std::srand(std::time(nullptr));
-		pixelbuffer.random(60);
+		random(60);
 		// fill field for cave
 		field = std::vector<uint8_t>(rows*cols, 0);
 		int counter = 0;
@@ -145,6 +145,24 @@ private:
 		int scrolly = input.getScrollY();
 		if (scrolly != 0) {
 			std::cout << "scroll: " << scrolly << std::endl;
+		}
+	}
+
+	void random(int percentage = 50) {
+		// get pixelbuffer, rows and cols
+		auto& pixelbuffer = layers[0]->pixelbuffer;
+		size_t rows = pixelbuffer.header().height;
+		size_t cols = pixelbuffer.header().width;
+
+		for (size_t y = 0; y < rows; y++) {
+			for (size_t x = 0; x < cols; x++) {
+				rt::RGBAColor color = rt::BLACK;
+				int value = rand()%100;
+				if (value < percentage) {
+					color = rt::WHITE;
+				}
+				pixelbuffer.setPixel(x, y, color);
+			}
 		}
 	}
 
