@@ -17,26 +17,34 @@ struct vec2i {
     vec2i(int x, int y) : x(x), y(y) {}
     vec2i(const vec2i& v) : x(v.x), y(v.y) {}
 
-    inline vec2i operator+(const vec2i& rhs) const { return vec2i(x+rhs.x, y+rhs.y); }
+    inline vec2i  operator+ (const vec2i& rhs) const { return vec2i(x+rhs.x, y+rhs.y); }
     inline vec2i& operator+=(const vec2i& rhs) { x += rhs.x; y += rhs.y; return *this; }
-    inline vec2i operator-(const vec2i& rhs) const { return vec2i(x-rhs.x, y-rhs.y); }
+    inline vec2i  operator- (const vec2i& rhs) const { return vec2i(x-rhs.x, y-rhs.y); }
     inline vec2i& operator-=(const vec2i& rhs) { x -= rhs.x; y -= rhs.y; return *this; }
-    inline vec2i operator*(const vec2i& rhs) const { return vec2i(x*rhs.x, y*rhs.y); }
+    inline vec2i  operator* (const vec2i& rhs) const { return vec2i(x*rhs.x, y*rhs.y); }
     inline vec2i& operator*=(const vec2i& rhs) { x *= rhs.x; y *= rhs.y; return *this; }
-    inline vec2i operator/(const vec2i& rhs) const { if (rhs.x != 0 && rhs.y != 0) { return vec2i(x/rhs.x, y/rhs.y); } else { return *this; } }
+    inline vec2i  operator/ (const vec2i& rhs) const { if (rhs.x != 0 && rhs.y != 0) { return vec2i(x/rhs.x, y/rhs.y); } else { return *this; } }
     inline vec2i& operator/=(const vec2i& rhs) { if(rhs.x != 0 && rhs.y != 0) {x /= rhs.x; y /= rhs.y; } return *this; }
 
-    inline vec2i operator+(const int rhs) const { return vec2i(x+rhs, y+rhs); }
+    inline vec2i  operator+ (const int rhs) const { return vec2i(x+rhs, y+rhs); }
     inline vec2i& operator+=(const int rhs) { x += rhs; y += rhs; return *this; }
-    inline vec2i operator-(const int rhs) const { return vec2i(x-rhs, y-rhs); }
+    inline vec2i  operator- (const int rhs) const { return vec2i(x-rhs, y-rhs); }
     inline vec2i& operator-=(const int rhs) { x -= rhs; y -= rhs; return *this; }
-    inline vec2i operator*(const int rhs) const { return vec2i(x*rhs, y*rhs); }
+    inline vec2i  operator* (const int rhs) const { return vec2i(x*rhs, y*rhs); }
     inline vec2i& operator*=(const int rhs) { x *= rhs; y *= rhs; return *this; }
-    inline vec2i operator/(const int rhs) const { if (rhs != 0) { return vec2i(x/rhs, y/rhs); } else { return *this; } }
+    inline vec2i  operator/ (const int rhs) const { if (rhs != 0) { return vec2i(x/rhs, y/rhs); } else { return *this; } }
     inline vec2i& operator/=(const int rhs) { if(rhs != 0) {x /= rhs; y /= rhs; } return *this; }
 
-    inline bool operator==(const vec2i& rhs){ return (x==rhs.x && y==rhs.y); }
-    inline bool operator!=(const vec2i& rhs){ return !(*this == rhs); }
+    inline bool operator==(const vec2i& rhs) const { return (x==rhs.x && y==rhs.y); }
+    inline bool operator!=(const vec2i& rhs) const { return !(*this == rhs); }
+
+    inline bool operator< (const vec2i& rhs) const { return (this->magSQ() < rhs.magSQ()); }
+    inline bool operator> (const vec2i& rhs) const { return rhs < *this; }
+    inline bool operator<=(const vec2i& rhs) const { return !(*this > rhs); }
+    inline bool operator>=(const vec2i& rhs) const { return !(*this < rhs); }
+
+    inline int magSQ() const { return ((x*x) + (y*y)); }
+    inline int mag()   const { return sqrt(magSQ()); }
 };
 inline std::ostream& operator<<(std::ostream& os, const vec2i& obj) { return os << "(" << obj.x << ", " << obj.y << ")"; }
 
