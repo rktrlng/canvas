@@ -86,8 +86,10 @@ private:
 				//- HEAD -> TAIL
 				//- TAIL -> CONDUCTOR
 				//- CONDUCTOR: if 1 or 2 neighbours are HEAD -> HEAD
-				int current = field[rt::idFromPos(x,y,cols)];
-				if (current == HEAD) {
+				uint8_t current = field[rt::idFromPos(x,y,cols)];
+				if (current == EMPTY) {
+					continue; // nothing to do, continue to next pixel
+				} else if (current == HEAD) {
 					current = TAIL;
 				} else if (current == TAIL) {
 					current = CONDUCTOR;
@@ -111,9 +113,7 @@ private:
 				// update pixelbuffer from (current) field
 				rt::RGBAColor color;
 				int index = rt::idFromPos(x,y,cols);
-				if (field[index] == EMPTY) {
-					color = rt::BLACK;
-				} else if (field[index] == CONDUCTOR) {
+				if (field[index] == CONDUCTOR) {
 					color = rt::YELLOW;
 				} else if (field[index] == HEAD) {
 					color = rt::BLUE;
@@ -132,6 +132,7 @@ private:
 		if (input.getKeyDown(rt::KeyCode::Space)) {
 			std::cout << "spacebar pressed down." << std::endl;
 			layers[0]->pixelbuffer.printInfo();
+			layers[0]->pixelbuffer.write("wire.pbf");
 		}
 
 		if (input.getMouseDown(0)) {
