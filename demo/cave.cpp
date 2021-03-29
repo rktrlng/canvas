@@ -52,7 +52,7 @@ public:
 		handleInput();
 
 		static float frametime = 0.0f;
-		float maxtime = 0.1f;
+		float maxtime = 0.25f;
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
@@ -84,16 +84,10 @@ private:
 
 		{
 			static int counter = 0;
-			std::stringstream filename;
-			filename <<  "caves/cave";
-			const int leadingzeros = 4;
-			for (int i = 1; i < leadingzeros+1; i++) {
-				if (counter < pow(10, i)) { filename << "0"; }
-			}
-			filename << counter << ".pbf";
+			std::string filename = createFilename("caves/cave", counter, "pbf", 3);
+			pixelbuffer.write(filename);
+			std::cout << filename << std::endl;
 			counter++;
-			pixelbuffer.write(filename.str());
-			std::cout << filename.str() << std::endl;
 		}
 
 		// set the next state
@@ -103,7 +97,7 @@ private:
 				// Apply rules for each pixel:
 				int current = field[rt::idFromPos(x,y,cols)];
 
-				// check 8 neighbours and count the ones that are a HEAD
+				// check 8 neighbours and count the ones that are a WALL (black)
 				int nc = 0; // number of neighbour cells
 				for (int r = -1; r < 2; r++) {
 					for (int c = -1; c < 2; c++) {
@@ -111,8 +105,8 @@ private:
 						if (field[rt::idFromPos(n.x,n.y,cols)] == 0) { nc++; }
 					}
 				}
-				if (nc < 4){ current = 1; }
-				if (nc > 4){ current = 0; }
+				if (nc < 4) { current = 1; }
+				if (nc > 4) { current = 0; }
 				next[rt::idFromPos(x,y,cols)] = current;
 
 				// update pixelbuffer from (current) field
@@ -129,6 +123,16 @@ private:
 
 		// update field to next state
 		field = next;
+	}
+
+	std::string createFilename(const std::string& prefix, uint32_t counter, const std::string& ext, uint8_t leading0=4) {
+		std::stringstream filename;
+		filename << prefix;
+		for (int i = 1; i < leading0+1; i++) {
+			if (counter < pow(10, i)) { filename << "0"; }
+		}
+		filename << counter << "." << ext;
+		return filename.str();
 	}
 
 	void handleInput() {
