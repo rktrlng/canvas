@@ -13,6 +13,7 @@ namespace rt {
 struct vec2i {
     int x = 0;
     int y = 0;
+
     vec2i() : x(0), y(0) {}
     vec2i(int x, int y) : x(x), y(y) {}
     vec2i(const vec2i& v) : x(v.x), y(v.y) {}
@@ -26,14 +27,14 @@ struct vec2i {
     inline vec2i  operator/ (const vec2i& rhs) const { if (rhs.x != 0 && rhs.y != 0) { return vec2i(x/rhs.x, y/rhs.y); } else { return *this; } }
     inline vec2i& operator/=(const vec2i& rhs) { if(rhs.x != 0 && rhs.y != 0) {x /= rhs.x; y /= rhs.y; } return *this; }
 
-    inline vec2i  operator+ (const int rhs) const { return vec2i(x+rhs, y+rhs); }
-    inline vec2i& operator+=(const int rhs) { x += rhs; y += rhs; return *this; }
-    inline vec2i  operator- (const int rhs) const { return vec2i(x-rhs, y-rhs); }
-    inline vec2i& operator-=(const int rhs) { x -= rhs; y -= rhs; return *this; }
-    inline vec2i  operator* (const int rhs) const { return vec2i(x*rhs, y*rhs); }
-    inline vec2i& operator*=(const int rhs) { x *= rhs; y *= rhs; return *this; }
-    inline vec2i  operator/ (const int rhs) const { if (rhs != 0) { return vec2i(x/rhs, y/rhs); } else { return *this; } }
-    inline vec2i& operator/=(const int rhs) { if(rhs != 0) {x /= rhs; y /= rhs; } return *this; }
+    inline vec2i  operator+ (int rhs) const { return vec2i(x+rhs, y+rhs); }
+    inline vec2i& operator+=(int rhs) { x += rhs; y += rhs; return *this; }
+    inline vec2i  operator- (int rhs) const { return vec2i(x-rhs, y-rhs); }
+    inline vec2i& operator-=(int rhs) { x -= rhs; y -= rhs; return *this; }
+    inline vec2i  operator* (int rhs) const { return vec2i(x*rhs, y*rhs); }
+    inline vec2i& operator*=(int rhs) { x *= rhs; y *= rhs; return *this; }
+    inline vec2i  operator/ (int rhs) const { if (rhs != 0) { return vec2i(x/rhs, y/rhs); } else { return *this; } }
+    inline vec2i& operator/=(int rhs) { if(rhs != 0) {x /= rhs; y /= rhs; } return *this; }
 
     inline bool operator==(const vec2i& rhs) const { return (x==rhs.x && y==rhs.y); }
     inline bool operator!=(const vec2i& rhs) const { return !(*this == rhs); }
@@ -72,25 +73,16 @@ inline int idFromPos(const vec2i& pos, int cols) {
 
 class PixelBuffer {
 private:
-    //   +----------------------- typep (1 byte) 0x70 = 'p'
-    //   |  +-------------------- typeb (1 byte) 0x62 = 'b'
-    //   |  |   +---------------- width (2 bytes) 0-65535
-    //   |  |   |     +---------- height (2 bytes) 0-65535
-    //   |  |   |     |    +----- bitdepth (1 byte) 8, 16, 24, 32
-    //   |  |   |     |    |  +-- end (1 byte) 0x3A = ':'
-    //   v  v   v     v    v  v
-    // |  |  |  .  |  .  |  |  |
-    //  -- -- -- -- -- -- -- --
     struct PBHeader {
-        uint8_t typep = 0x70;
-        uint8_t typeb = 0x62;
-        uint16_t width = 0x0000;
-        uint16_t height = 0x0000;
-        uint8_t bitdepth = 0x00;
-        uint8_t end = 0x3A;
-    };
-    // uint64_t imghdr = 0x706200080004203A; // 8x4 pixels, bitdepth 32, Big Endian
-    // uint64_t imghdr = 0x706208000400203A; // 8x4 pixels, bitdepth 32, Little Endian
+        uint8_t typep = 0x70;      // 1 byte: 0x70 = 'p'
+        uint8_t typeb = 0x62;      // 1 byte: 0x62 = 'b'
+        uint16_t width = 0x0000;   // 2 bytes: 0-65535
+        uint16_t height = 0x0000;  // 2 bytes: 0-65535
+        uint8_t bitdepth = 0x00;   // 1 byte: 8, 16, 24, 32
+        uint8_t end = 0x3A;        // 1 byte: 0x3A = ':'
+    };                             // sizeof(PBHeader) = 8 bytes
+    // uint64_t header = 0x706208000400203A; // 8x4 pixels, bitdepth 32, Little Endian
+    // uint64_t header = 0x706200080004203A; // 8x4 pixels, bitdepth 32, Big Endian
 
     PBHeader _header;
     std::vector<RGBAColor> _pixels;
@@ -112,8 +104,9 @@ public:
         _header.height = height;
         _header.bitdepth = bitdepth;
         size_t numpixels = width * height;
+        _pixels.reserve(width*height);
         for (size_t i = 0; i < numpixels; i++) {
-            _pixels.push_back(RGBAColor(0, 0, 0, 255));
+            _pixels.emplace_back(0, 0, 0, 255);
         }
     }
 
