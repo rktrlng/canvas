@@ -108,10 +108,19 @@ file(
 
 
 # Cave
-add_executable(cave # g++ demo/demo.cpp -o demo
+add_executable(cave # g++ demo/cave.cpp -o cave
 	demo/cave.cpp
 )
 target_link_libraries(cave # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
+
+# gameoflife
+add_executable(gameoflife # g++ demo/gameoflife.cpp -o gameoflife
+	demo/gameoflife.cpp
+)
+target_link_libraries(gameoflife # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
