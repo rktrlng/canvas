@@ -134,7 +134,7 @@ public:
         _pixels.clear();
     }
 
-    void printInfo()
+    void printInfo() const
     {
         uint16_t width = _header.width;
         uint16_t height = _header.height;
@@ -150,7 +150,8 @@ public:
         std::cout << " | " << (width * height * (bitdepth/8)) / 1024 / 1024.0f << " MiB" << std::endl;
     }
 
-    bool valid() {
+    bool valid() const
+	{
         return _header.typep == 0x70 &&
             _header.typeb == 0x62 &&
             (_header.bitdepth > 0 && _header.bitdepth < 33) &&
@@ -218,7 +219,7 @@ public:
         return size;
     }
 
-    int write(const std::string& filename)
+    int write(const std::string& filename) const
     {
         // Try to write to a file
         std::ofstream file(filename, std::fstream::out|std::fstream::binary|std::fstream::trunc);
@@ -260,6 +261,38 @@ public:
         return 1;
     }
 
+	PixelBuffer copy(uint16_t src_x, uint16_t src_y, uint16_t src_width, uint16_t src_height) const
+	{
+		PixelBuffer buffer = PixelBuffer(src_width, src_height, header().bitdepth);
+
+		size_t maxheight = src_height + src_y;
+		size_t maxwidth = src_width + src_x;
+		for (size_t y = src_y; y < maxheight; y++) {
+			for (size_t x = src_x; x < maxwidth; x++) {
+				RGBAColor pixel = getPixel(x, y);
+				buffer.setPixel(x-src_x, y-src_y, pixel);
+			}
+		}
+
+		return buffer;
+	}
+
+	int paste(const PixelBuffer& brush, short pos_x, short pos_y)
+	{
+		size_t height = brush.header().height;
+		size_t width = brush.header().width;
+		for (size_t y = 0; y < height; y++) {
+			for (size_t x = 0; x < width; x++) {
+				RGBAColor color = brush.getPixel(x, y);
+				// TODO handle alpha
+				// if (brush.header().bitdepth == 24) { }
+				setPixel(x+pos_x, y+pos_y, color);
+			}
+		}
+
+		return 1;
+	}
+
     int setPixel(int x, int y, RGBAColor color)
     {
 		// Sanity check
@@ -277,7 +310,7 @@ public:
 		return 1;
     }
 
-    RGBAColor getPixel(int x, int y)
+    RGBAColor getPixel(int x, int y) const
     {
 		// Sanity check
 		if ( (x < 0) || (x >_header.width) || (y < 0) || (y > _header.height) ) {
