@@ -261,16 +261,16 @@ public:
         return 1;
     }
 
-	PixelBuffer copy(uint16_t src_x, uint16_t src_y, uint16_t src_width, uint16_t src_height) const
+	PixelBuffer copy(uint16_t x, uint16_t y, uint16_t width, uint16_t height) const
 	{
-		PixelBuffer buffer = PixelBuffer(src_width, src_height, header().bitdepth);
+		PixelBuffer buffer = PixelBuffer(width, height, header().bitdepth);
 
-		size_t maxheight = src_height + src_y;
-		size_t maxwidth = src_width + src_x;
-		for (size_t y = src_y; y < maxheight; y++) {
-			for (size_t x = src_x; x < maxwidth; x++) {
-				RGBAColor pixel = getPixel(x, y);
-				buffer.setPixel(x-src_x, y-src_y, pixel);
+		size_t maxheight = height + y;
+		size_t maxwidth = width + x;
+		for (size_t ny = y; ny < maxheight; ny++) {
+			for (size_t nx = x; nx < maxwidth; nx++) {
+				RGBAColor pixel = getPixel(nx, ny);
+				buffer.setPixel(nx-x, ny-y, pixel);
 			}
 		}
 
@@ -281,11 +281,12 @@ public:
 	{
 		size_t height = brush.header().height;
 		size_t width = brush.header().width;
+		// size_t bitdepth = brush.header().bitdepth;
 		for (size_t y = 0; y < height; y++) {
 			for (size_t x = 0; x < width; x++) {
 				RGBAColor color = brush.getPixel(x, y);
 				// TODO handle alpha
-				// if (brush.header().bitdepth == 24) { }
+				// if (bitdepth == 24 || bitdepth == 16) { }
 				setPixel(x+pos_x, y+pos_y, color);
 			}
 		}
