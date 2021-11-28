@@ -69,6 +69,12 @@ inline int idFromPos(const vec2i& pos, int cols) {
     return idFromPos(pos.x, pos.y, cols);
 }
 
+// map(973, 0, 1023, 0, 255); // returns: 242
+inline double map(double x, double in_min, double in_max, double out_min, double out_max)
+{
+	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
+}
+
 // =========================================================
 
 class PixelBuffer {

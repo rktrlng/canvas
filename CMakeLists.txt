@@ -124,3 +124,12 @@ target_link_libraries(gameoflife # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# voronoi
+add_executable(voronoi # g++ demo/voronoi.cpp -o voronoi
+	demo/voronoi.cpp
+)
+target_link_libraries(voronoi # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
