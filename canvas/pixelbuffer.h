@@ -61,6 +61,17 @@ inline vec2i wrap(const vec2i& pos, int cols, int rows) {
     return wrapped;
 }
 
+inline vec2i clamp(const vec2i& pos, int cols, int rows) {
+    vec2i clamped(pos);
+
+    if (pos.x < 0) { clamped.x = 0; }
+    if (pos.x > cols-1) { clamped.x = cols-1; }
+    if (pos.y < 0) { clamped.y = 0; }
+    if (pos.y > rows-1) { clamped.y = rows-1; }
+
+    return clamped;
+}
+
 inline int idFromPos(int x, int y, int cols) {
     return (y*cols)+x;
 }
@@ -425,7 +436,7 @@ public:
 				int totala = 0; // total alpha
 				for (int r = -1; r < 2; r++) {
 					for (int c = -1; c < 2; c++) {
-						rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
+						rt::vec2i n = rt::clamp(rt::vec2i(x+c, y+r), cols, rows);
                         rt::RGBAColor color = getPixel(n.x, n.y);
 						totalr += color.r;
 						totalg += color.g;
