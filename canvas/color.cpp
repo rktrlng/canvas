@@ -111,11 +111,32 @@ RGBAColor Color::HSVA2RGBA(HSVAColor hsva) {
 // https://stackoverflow.com/questions/28900598/how-to-combine-two-colors-with-varying-alpha-values
 // https://stackoverflow.com/questions/2030471/alpha-blending-a-red-blue-and-green-image-to-produce-an-image-tinted-to-any-rg/2030560#2030560
 // https://en.wikipedia.org/wiki/Alpha_compositing#Alpha_blending
-RGBAColor Color::alphaBlend(RGBAColor a, RGBAColor b) {
-	RGBAColor out;
-	/// TODO implement
+RGBAColor Color::alphaBlend(RGBAColor top, RGBAColor bottom) {
+	// if we want to overlay c0 over c1 both with some alpha then:
 
-	return out;
+	// uint8_t to float 0.0f - 1.0f
+	float r0 = top.r / 255.0f;
+	float g0 = top.g / 255.0f;
+	float b0 = top.b / 255.0f;
+	float a0 = top.a / 255.0f;
+
+	float r1 = bottom.r / 255.0f;
+	float g1 = bottom.g / 255.0f;
+	float b1 = bottom.b / 255.0f;
+	float a1 = bottom.a / 255.0f;
+
+	// Note the division by a01 in the formulas for the components of color. It's important.
+	float a01 =  (1 - a0) * a1 + a0;
+	float r01 = ((1 - a0) * a1 * r1 + a0 * r0) / a01;
+	float g01 = ((1 - a0) * a1 * g1 + a0 * g0) / a01;
+	float b01 = ((1 - a0) * a1 * b1 + a0 * b0) / a01;
+
+	uint8_t r = r01 * 255;
+	uint8_t g = g01 * 255;
+	uint8_t b = b01 * 255;
+	uint8_t a = a01 * 255;
+
+	return rt::RGBAColor(r, g, b, a);
 }
 
 RGBAColor Color::rotate(RGBAColor rgba, float step) {

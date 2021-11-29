@@ -80,26 +80,26 @@ struct HSVAColor
 struct Color {
 	// http://www.easyrgb.com/index.php?X=MATH&H=20#text20
 	/// @brief RGBA to HSV conversion
-	HSVAColor RGBA2HSVA(RGBAColor rgba);
+	static HSVAColor RGBA2HSVA(RGBAColor rgba);
 
 	// http://www.easyrgb.com/index.php?X=MATH&H=21#text21
 	/// @brief HSV to RGBA conversion
-	RGBAColor HSVA2RGBA(HSVAColor hsva);
+	static RGBAColor HSVA2RGBA(HSVAColor hsva);
 
 	/// @brief Rotate RGBA color (use HSVA)
-	RGBAColor rotate(RGBAColor rgba, float step);
+	static RGBAColor rotate(RGBAColor rgba, float step);
 
 	// https://stackoverflow.com/questions/28900598/how-to-combine-two-colors-with-varying-alpha-values
 	// https://stackoverflow.com/questions/2030471/alpha-blending-a-red-blue-and-green-image-to-produce-an-image-tinted-to-any-rg/2030560#2030560
 	// https://en.wikipedia.org/wiki/Alpha_compositing#Alpha_blending
-	RGBAColor alphaBlend(RGBAColor a, RGBAColor b);
+	static RGBAColor alphaBlend(RGBAColor a, RGBAColor b);
 
 	/// @brief lerp from color to another color
 	/// @param c1 first RGBAColor
 	/// @param c2 second RGBAColor
 	/// @param amount between 0 and 1
 	/// @brief return RGBAColor lerped color
-	RGBAColor lerpColor(RGBAColor c1, RGBAColor c2, float amount);
+	static RGBAColor lerpColor(RGBAColor c1, RGBAColor c2, float amount);
 };
 
 #define BLACK   RGBAColor(0,   0,   0,   255) ///< @brief color black

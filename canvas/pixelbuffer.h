@@ -298,13 +298,19 @@ public:
 	{
 		size_t height = brush.header().height;
 		size_t width = brush.header().width;
-		// size_t bitdepth = brush.header().bitdepth;
+		size_t bitdepth = brush.header().bitdepth;
 		for (size_t y = 0; y < height; y++) {
 			for (size_t x = 0; x < width; x++) {
 				RGBAColor color = brush.getPixel(x, y);
-				// TODO handle alpha
-				// if (bitdepth == 24 || bitdepth == 16) { }
-				setPixel(x+pos_x, y+pos_y, color);
+				// handle alpha
+				if (bitdepth == 32 || bitdepth == 16) {
+					RGBAColor bottom_color = getPixel(x+pos_x, y+pos_y);
+					RGBAColor blend_color = Color::alphaBlend(color, bottom_color);
+					setPixel(x+pos_x, y+pos_y, blend_color);
+				}
+				else {
+					setPixel(x+pos_x, y+pos_y, color);
+				}
 			}
 		}
 

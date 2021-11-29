@@ -54,6 +54,7 @@ private:
 int main( void )
 {
 	rt::PixelBuffer pixelbuffer("assets/pencils.pbf");
+	rt::PixelBuffer letter_f("assets/letter_f.pbf");
 
 	rt::PixelBuffer brush0 = pixelbuffer.copy(32, 32, 64, 48);
 	rt::PixelBuffer brush1 = pixelbuffer.copy(32, 32, 24, 64);
@@ -67,6 +68,7 @@ int main( void )
 	pixelbuffer.blur();
 
 	pixelbuffer.paste(brush0, 8, 8);
+	pixelbuffer.paste(letter_f, 8, 64);
 
 	pixelbuffer.write("assets/pencils_blurred.pbf");
 
