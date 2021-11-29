@@ -73,6 +73,8 @@ add_library(canvas # ar rcs libcanvas.a
 	canvas/input.cpp
 	canvas/canvas.h
 	canvas/canvas.cpp
+	canvas/noise.h
+	canvas/noise.cpp
 )
 file(
 	COPY canvas/shaders
@@ -130,6 +132,15 @@ add_executable(voronoi # g++ demo/voronoi.cpp -o voronoi
 	demo/voronoi.cpp
 )
 target_link_libraries(voronoi # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
+
+# noise
+add_executable(noisedemo # g++ demo/noisedemo.cpp -o noisedemo
+	demo/noisedemo.cpp
+)
+target_link_libraries(noisedemo # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
