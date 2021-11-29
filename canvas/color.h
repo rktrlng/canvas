@@ -61,7 +61,7 @@ struct HSVAColor
 	float h = 0.0f;
 	/// @brief The Saturation component of the color
 	float s = 0.0f;
-	/// @brief The Lightness/Brightness/Value component of the color
+	/// @brief The Luminance/Brightness/Value component of the color
 	float v = 1.0f;
 	/// @brief The alpha component of the color
 	float a = 1.0f;
@@ -71,7 +71,7 @@ struct HSVAColor
 	/// @brief constructor
 	/// @param hue The hue component of the color
 	/// @param sat The saturation component of the color
-	/// @param val The brightness/lightness/value component of the color
+	/// @param val The brightness/luminance/value component of the color
 	/// @param alpha The alpha component of the color
 	HSVAColor(float hue, float sat, float val, float alpha = 1.0f);
 };
