@@ -36,6 +36,8 @@ private:
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t factor) : rt::Application(width, height, factor) 
 	{
+		std::srand(std::time(nullptr));
+
 		// layers.push_back( new rt::Canvas(width, height) );
 		for (size_t i = 0; i < 25; i++)
 		{
@@ -43,13 +45,13 @@ public:
 		}
 	}
 
-	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
-	{
-		// uint16_t cols = pixelbuffer.header().width;
-		// uint16_t rows = pixelbuffer.header().height;
-		// layers.push_back( new rt::Canvas(cols, rows) );
-		// layers[0]->pixelbuffer = pixelbuffer;
-	}
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	// {
+	// 	uint16_t cols = pixelbuffer.header().width;
+	// 	uint16_t rows = pixelbuffer.header().height;
+	// 	layers.push_back( new rt::Canvas(cols, rows) );
+	// 	layers[0]->pixelbuffer = pixelbuffer;
+	// }
 
 	virtual ~MyApp()
 	{
