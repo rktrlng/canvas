@@ -64,12 +64,11 @@ private:
 
 				// find a nice noise for our purpose
 				// pn.noise(xsize, ysize, zsize) * multiplier;
-				double a = pn.noise(1*x, 1*y, 1*z) * 2;
-				double b = pn.noise(5*x, 5*y, 5*z) * 3;
-				double c = pn.noise(9*x, 9*y, 9*z) * 1;
+				double a = pn.noise( 5*x,  5*y,  5*z) * 4;
+				double b = pn.noise(13*x, 13*y, 13*z) * 1;
 
 				// average of noises ("octaves")
-				double n = (a+b+c) / 6;
+				double n = (a+b) / 5;
 
 				// make an uint8_t in range 0-255 from n
 				uint8_t p = floor(255 * n);
@@ -79,6 +78,13 @@ private:
 					int numcolors = 9;
 					p = rt::map(p, 0, 255, 0, numcolors); // narrow down
 					p = rt::map(p, 0, numcolors, 0, 255); // stretch back
+				}
+
+				// Wood like structure
+				if (false) {
+					n = 20 * pn.noise(x, y, z);
+					n = n - floor(n);
+					p = floor(255*n);
 				}
 
 				rt::RGBAColor color = rt::RGBAColor(p, p, p, 255);
