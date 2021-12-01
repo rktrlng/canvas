@@ -13,7 +13,7 @@ public:
 
 		for (size_t i = 0; i < 256; i++)
 		{
-			rule(i, true);
+			rule(i, false);
 		}
 
 		// layers.push_back( new rt::Canvas(width, height) );
