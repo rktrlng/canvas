@@ -10,7 +10,7 @@
 
 namespace rt {
 
-Canvas::Canvas(uint16_t width, uint16_t height, uint8_t bitdepth /* = 4 */)
+Canvas::Canvas(uint16_t width, uint16_t height, uint8_t bitdepth /* = 24 */)
 {
 	pixelbuffer = { width, height, bitdepth };
 	generateGeometry(width, height); // _vertexbuffer & _uvbuffer

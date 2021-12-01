@@ -12,7 +12,7 @@ namespace rt {
 class Canvas
 {
 	public:
-		Canvas(uint16_t width, uint16_t height, uint8_t bitdepth = 4);
+		Canvas(uint16_t width, uint16_t height, uint8_t bitdepth = 24);
 		Canvas(const std::string& imagepath);
 		virtual ~Canvas();
 
