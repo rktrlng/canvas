@@ -144,3 +144,12 @@ target_link_libraries(noisedemo # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# automata
+add_executable(automata # g++ demo/automata.cpp -o automata
+	demo/automata.cpp
+)
+target_link_libraries(automata # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
