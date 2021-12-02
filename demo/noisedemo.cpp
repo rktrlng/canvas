@@ -88,9 +88,12 @@ private:
 				// double z = 0.0f;
 
 				std::vector<Octave> octaves; // { frequency, multiplier }
+				// octaves.push_back( { 1, 32} );
+				octaves.push_back( { 2, 16} );
 				octaves.push_back( { 4, 8} );
-				octaves.push_back( { 8, 2} );
-				octaves.push_back( {16, 1} );
+				octaves.push_back( { 8, 4} );
+				octaves.push_back( {16, 2} );
+				// octaves.push_back( {32, 1} );
 				double n = coherentNoise(x, y, z, octaves);
 
 				// make an uint8_t in range 0-255 from n
