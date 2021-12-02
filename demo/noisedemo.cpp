@@ -47,6 +47,31 @@ public:
 	}
 
 private:
+	struct Octave
+	{
+		int freq = 1;
+		int multiplier = 1;
+		Octave(int f, int m) : freq(f), multiplier(m) { }
+	};
+
+	double coherentNoise(double x, double y, double z, const std::vector<Octave>& octaves)
+	{
+		double n = 0.0;
+		double div = 0.0;
+
+		for (size_t i = 0; i < octaves.size(); i++)
+		{
+			int freq = octaves[i].freq;
+			int mult = octaves[i].multiplier;
+			double a = pn.noise(x*freq, y*freq, z*freq) * mult;
+			n += a;
+			div += mult;
+		}
+		n /= div;
+
+		return n;
+	}
+
 	void noise()
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
@@ -62,13 +87,11 @@ private:
 				double y = (double)i/((double)rows);
 				// double z = 0.0f;
 
-				// find a nice noise for our purpose
-				// pn.noise(xsize, ysize, zsize) * multiplier;
-				double a = pn.noise( 5*x,  5*y,  5*z) * 4;
-				double b = pn.noise(13*x, 13*y, 13*z) * 1;
-
-				// average of noises ("octaves")
-				double n = (a+b) / 5;
+				std::vector<Octave> octaves; // { frequency, multiplier }
+				octaves.push_back( { 4, 8} );
+				octaves.push_back( { 8, 2} );
+				octaves.push_back( {16, 1} );
+				double n = coherentNoise(x, y, z, octaves);
 
 				// make an uint8_t in range 0-255 from n
 				uint8_t p = floor(255 * n);
