@@ -23,7 +23,7 @@ public:
 	// {
 	// 	uint16_t cols = pixelbuffer.header().width;
 	// 	uint16_t rows = pixelbuffer.header().height;
-	// 	layers.push_back( new rt::Canvas(cols, rows) );
+	// 	layers.push_back( new rt::Canvas(cols, rows, pixelbuffer.header().bitdepth) );
 	// 	layers[0]->pixelbuffer = pixelbuffer;
 	// }
 

@@ -15,7 +15,7 @@ class Application
 {
 public:
 	Application(uint16_t width, uint16_t height, uint8_t bitdepth = 24, uint8_t factor = 1);
-	Application(PixelBuffer& pixelbuffer, uint8_t bitdepth = 24, uint8_t factor = 1);
+	Application(PixelBuffer& pixelbuffer, uint8_t factor = 1);
 	virtual ~Application();
 
 	int quit();

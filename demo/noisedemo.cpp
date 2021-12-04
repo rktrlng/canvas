@@ -16,11 +16,11 @@ public:
 		pn = rt::PerlinNoise(seed);
 	}
 
-	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t bitdepth, uint8_t factor) : rt::Application(pixelbuffer, bitdepth, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	// {
 	// 	uint16_t cols = pixelbuffer.header().width;
 	// 	uint16_t rows = pixelbuffer.header().height;
-	// 	layers.push_back( new rt::Canvas(cols, rows) );
+	// 	layers.push_back( new rt::Canvas(cols, rows, pixelbuffer.header().bitdepth) );
 	// 	layers[0]->pixelbuffer = pixelbuffer;
 	// }
 

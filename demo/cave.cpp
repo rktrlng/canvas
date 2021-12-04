@@ -12,7 +12,7 @@ public:
 	// 	init();
 	// }
 
-	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t bitdepth, uint8_t factor) : rt::Application(pixelbuffer, bitdepth, factor)
+	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	{
 		init();
 	}
@@ -177,7 +177,7 @@ int main( void )
 {
 	rt::PixelBuffer pixelbuffer(160, 90, 8);
 
-	MyApp application(pixelbuffer, pixelbuffer.header().bitdepth, 4);
+	MyApp application(pixelbuffer, 4);
 
 	while (!application.quit())
 	{

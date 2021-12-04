@@ -10,7 +10,7 @@ public:
 	// 	init();
 	// }
 
-	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t bitdepth, uint8_t factor) : rt::Application(pixelbuffer, bitdepth, factor)
+	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	{
 		init();
 	}
@@ -138,7 +138,7 @@ private:
 int main( void )
 {
 	rt::PixelBuffer pixelbuffer("assets/gameoflife01.pbf");
-	MyApp application(pixelbuffer, pixelbuffer.header().bitdepth, 8);
+	MyApp application(pixelbuffer, 8);
 
 	while (!application.quit())
 	{
