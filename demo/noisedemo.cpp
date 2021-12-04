@@ -96,8 +96,7 @@ private:
 				// octaves.push_back( {32, 1} );
 				double n = coherentNoise(x, y, z, octaves);
 
-				// make an uint8_t in range 0-255 from n
-				uint8_t p = floor(255 * n);
+				uint8_t p = 255 * n;
 
 				// posterize
 				if (false) {
@@ -110,7 +109,7 @@ private:
 				if (false) {
 					n = 20 * pn.noise(x, y, z);
 					n = n - floor(n);
-					p = floor(255*n);
+					p = 255 * n;
 				}
 
 				rt::RGBAColor color = rt::RGBAColor(p, p, p, 255);
