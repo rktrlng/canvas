@@ -5,12 +5,12 @@
 class MyApp : public rt::Application
 {
 public:
-	// MyApp(uint16_t width, uint16_t height, uint8_t factor) : rt::Application(width, height, factor) 
+	// MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	// {
 	// 	init();
 	// }
 
-	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t bitdepth, uint8_t factor) : rt::Application(pixelbuffer, bitdepth, factor)
 	{
 		init();
 	}
@@ -150,7 +150,7 @@ private:
 int main( void )
 {
 	rt::PixelBuffer pixelbuffer("assets/wire01.pbf");
-	MyApp application(pixelbuffer, 8);
+	MyApp application(pixelbuffer, pixelbuffer.header().bitdepth, 8);
 
 	while (!application.quit())
 	{

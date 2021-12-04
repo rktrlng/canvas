@@ -34,7 +34,7 @@ private:
 	std::vector<Agent*> agents;
 
 public:
-	MyApp(uint16_t width, uint16_t height, uint8_t factor) : rt::Application(width, height, factor) 
+	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
 		std::srand(std::time(nullptr));
 
@@ -45,11 +45,11 @@ public:
 		}
 	}
 
-	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t bitdepth, uint8_t factor) : rt::Application(pixelbuffer, bitdepth, factor)
 	// {
 	// 	uint16_t cols = pixelbuffer.header().width;
 	// 	uint16_t rows = pixelbuffer.header().height;
-	// 	layers.push_back( new rt::Canvas(cols, rows) );
+	// 	layers.push_back( new rt::Canvas(cols, rows, bitdepth) );
 	// 	layers[0]->pixelbuffer = pixelbuffer;
 	// }
 
@@ -159,7 +159,7 @@ private:
 
 int main( void )
 {
-	MyApp application(320, 180, 4);
+	MyApp application(320, 180, 24, 4);
 
 	while (!application.quit())
 	{

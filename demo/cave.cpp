@@ -7,12 +7,12 @@
 class MyApp : public rt::Application
 {
 public:
-	// MyApp(uint16_t width, uint16_t height, uint8_t factor) : rt::Application(width, height, factor) 
+	// MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor) 
 	// {
 	// 	init();
 	// }
 
-	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t bitdepth, uint8_t factor) : rt::Application(pixelbuffer, bitdepth, factor)
 	{
 		init();
 	}
@@ -177,7 +177,7 @@ int main( void )
 {
 	rt::PixelBuffer pixelbuffer(160, 90, 8);
 
-	MyApp application(pixelbuffer, 4);
+	MyApp application(pixelbuffer, pixelbuffer.header().bitdepth, 4);
 
 	while (!application.quit())
 	{

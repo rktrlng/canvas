@@ -7,7 +7,7 @@ class MyApp : public rt::Application
 private:
 	rt::PerlinNoise pn;
 public:
-	MyApp(uint16_t width, uint16_t height, uint8_t factor) : rt::Application(width, height, factor) 
+	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
 		srand((unsigned)time(nullptr));
 
@@ -16,7 +16,7 @@ public:
 		pn = rt::PerlinNoise(seed);
 	}
 
-	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t bitdepth, uint8_t factor) : rt::Application(pixelbuffer, bitdepth, factor)
 	// {
 	// 	uint16_t cols = pixelbuffer.header().width;
 	// 	uint16_t rows = pixelbuffer.header().height;
@@ -140,7 +140,7 @@ private:
 
 int main( void )
 {
-	MyApp application(128, 128, 4);
+	MyApp application(128, 128, 8, 4); // width, height, bitdepth, factor
 
 	while (!application.quit())
 	{

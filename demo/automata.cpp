@@ -7,7 +7,7 @@
 class MyApp : public rt::Application
 {
 public:
-	MyApp(uint16_t width, uint16_t height, uint8_t factor) : rt::Application(width, height, factor) 
+	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor) 
 	{
 		std::srand(std::time(nullptr));
 
@@ -148,7 +148,7 @@ private:
 
 int main( void )
 {
-	MyApp application(128, 128, 7);
+	MyApp application(128, 128, 8, 7);
 
 	while (!application.quit())
 	{

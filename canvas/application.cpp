@@ -2,22 +2,22 @@
 
 namespace rt {
 
-Application::Application(uint16_t width, uint16_t height, uint8_t factor) :
+Application::Application(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) :
 	factor(factor),
 	renderer(width*factor, height*factor),
 	input(renderer.window())
 {
-	layers.push_back( new rt::Canvas(width, height) );
+	layers.push_back( new rt::Canvas(width, height, bitdepth) );
 }
 
-Application::Application(PixelBuffer& pixelbuffer, uint8_t factor) :
+Application::Application(PixelBuffer& pixelbuffer, uint8_t bitdepth, uint8_t factor) :
 	factor(factor),
 	renderer(pixelbuffer.header().width * factor, pixelbuffer.header().height * factor),
 	input(renderer.window())
 {
 	uint16_t cols = pixelbuffer.header().width;
 	uint16_t rows = pixelbuffer.header().height;
-	layers.push_back( new rt::Canvas(cols, rows) );
+	layers.push_back( new rt::Canvas(cols, rows, bitdepth) );
 	layers[0]->pixelbuffer = pixelbuffer;
 }
 
