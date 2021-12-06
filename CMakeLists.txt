@@ -153,3 +153,12 @@ target_link_libraries(automata # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# font
+add_executable(font # g++ demo/font.cpp -o font
+	demo/font.cpp
+)
+target_link_libraries(font # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
