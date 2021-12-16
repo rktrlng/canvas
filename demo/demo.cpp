@@ -10,7 +10,7 @@ public:
 		// layers.push_back( new rt::Canvas(width, height) );
 	}
 
-	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor, bool locked) : rt::Application(pixelbuffer, factor, locked)
 	{
 		// uint16_t cols = pixelbuffer.header().width;
 		// uint16_t rows = pixelbuffer.header().height;
@@ -72,7 +72,7 @@ int main( void )
 
 	pixelbuffer.write("assets/pencils_blurred.pbf");
 
-	MyApp application(pixelbuffer, 4);
+	MyApp application(pixelbuffer, 4, true);
 
 	while (!application.quit())
 	{

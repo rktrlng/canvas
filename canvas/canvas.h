@@ -27,12 +27,17 @@ class Canvas
 		int generateGeometry(int width, int height);
 
 		rt::PixelBuffer pixelbuffer;
-		bool dynamic = true;
+
+		void lock() { locked = true; }
+		void unlock() { locked = true; generateTexture(); /* generateGeometry(width(), height()); */ }
+		bool isLocked() { return locked; }
 
 	private:
 		GLuint _texture;
 		GLuint _vertexbuffer;
 		GLuint _uvbuffer;
+
+		bool locked = false;
 };
 
 } // namespace rt

@@ -53,7 +53,9 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
+			layers[0]->unlock();
 			gameoflife();
+			layers[0]->lock();
 
 			frametime = 0.0f;
 		}

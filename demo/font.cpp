@@ -36,9 +36,11 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
+			layers[0]->unlock();
 			auto& pixelbuffer = layers[0]->pixelbuffer;
 			pixelbuffer.fill(rt::BLACK);
 			font();
+			layers[0]->lock();
 
 			frametime = 0.0f;
 		}
