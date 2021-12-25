@@ -7,15 +7,12 @@ class MyApp : public rt::Application
 public:
 	// MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor) 
 	// {
-	// 	// layers.push_back( new rt::Canvas(width, height) );
+	// 
 	// }
 
 	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor, bool locked) : rt::Application(pixelbuffer, factor, locked)
 	{
-		// uint16_t cols = pixelbuffer.header().width;
-		// uint16_t rows = pixelbuffer.header().height;
-		// layers.push_back( new rt::Canvas(cols, rows, pixelbuffer.header().bitdepth) );
-		// layers[0]->pixelbuffer = pixelbuffer;
+
 	}
 
 	virtual ~MyApp()
@@ -61,9 +58,9 @@ int main( void )
 
 	pixelbuffer.blur();
 	pixelbuffer.blur();
-	pixelbuffer.blur();
-	pixelbuffer.blur();
 	pixelbuffer.paste(brush0, 55, 64);
+	pixelbuffer.blur();
+	pixelbuffer.blur();
 	pixelbuffer.paste(brush1, 85, 8);
 	pixelbuffer.blur();
 

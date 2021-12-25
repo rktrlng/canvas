@@ -38,7 +38,6 @@ public:
 	{
 		std::srand(std::time(nullptr));
 
-		// layers.push_back( new rt::Canvas(width, height) );
 		for (size_t i = 0; i < 25; i++)
 		{
 			agents.push_back(new Agent(width, height));
@@ -47,10 +46,7 @@ public:
 
 	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	// {
-	// 	uint16_t cols = pixelbuffer.header().width;
-	// 	uint16_t rows = pixelbuffer.header().height;
-	// 	layers.push_back( new rt::Canvas(cols, rows, pixelbuffer.header().bitdepth) );
-	// 	layers[0]->pixelbuffer = pixelbuffer;
+	// 
 	// }
 
 	virtual ~MyApp()

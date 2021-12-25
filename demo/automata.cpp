@@ -11,20 +11,15 @@ public:
 	{
 		std::srand(std::time(nullptr));
 
-		for (size_t i = 0; i < 256; i++)
-		{
-			rule(i, false);
-		}
-
-		// layers.push_back( new rt::Canvas(width, height) );
+		// for (size_t i = 0; i < 256; i++)
+		// {
+		// 	rule(i, true);
+		// }
 	}
 
 	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	// {
-	// 	uint16_t cols = pixelbuffer.header().width;
-	// 	uint16_t rows = pixelbuffer.header().height;
-	// 	layers.push_back( new rt::Canvas(cols, rows, pixelbuffer.header().bitdepth) );
-	// 	layers[0]->pixelbuffer = pixelbuffer;
+	//
 	// }
 
 	virtual ~MyApp()
@@ -39,8 +34,8 @@ public:
 	{
 		handleInput();
 		
-		static float frametime = 0.0f;
 		float maxtime = 1.5f;
+		static float frametime = maxtime;
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
