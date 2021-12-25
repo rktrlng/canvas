@@ -44,7 +44,6 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
-			layers[0]->unlock();
 			static int r = 0;
 			std::cout << "rule set: " << r << std::endl;
 			rule(r);

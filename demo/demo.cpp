@@ -5,10 +5,10 @@
 class MyApp : public rt::Application
 {
 public:
-	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor) 
-	{
-		// layers.push_back( new rt::Canvas(width, height) );
-	}
+	// MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor) 
+	// {
+	// 	// layers.push_back( new rt::Canvas(width, height) );
+	// }
 
 	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor, bool locked) : rt::Application(pixelbuffer, factor, locked)
 	{

@@ -70,7 +70,6 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
-			layers[0]->unlock();
 			handleAgents();
 			voronoi();
 			layers[0]->pixelbuffer.blur();
@@ -119,23 +118,6 @@ private:
 				// color.b = value;
 
 				pixelbuffer.setPixel(x, y, color);
-			}
-		}
-	}
-
-	void darken(int amount)
-	{
-		auto& pixelbuffer = layers[0]->pixelbuffer;
-
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
-		for (size_t y = 0; y < rows; y++) {
-			for (size_t x = 0; x < cols; x++) {
-				rt::RGBAColor current = pixelbuffer.getPixel(x, y);
-				if (current.r > amount) {current.r -= amount; }
-				if (current.g > amount) {current.g -= amount; }
-				if (current.b > amount) {current.b -= amount; }
-				pixelbuffer.setPixel(x, y, current);
 			}
 		}
 	}

@@ -129,7 +129,7 @@ void Renderer::renderCanvas(Canvas* canvas, float px, float py, float sx, float 
 
 	// pixelbuffer to opengl texture
 	// also regenerate mesh in case of pb->read("file.pbf");
-	if (!canvas->isLocked())
+	if (!canvas->locked())
 	{
 		canvas->generateTexture();
 		canvas->generateGeometry(canvas->width(), canvas->height());

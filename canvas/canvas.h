@@ -28,16 +28,16 @@ class Canvas
 
 		rt::PixelBuffer pixelbuffer;
 
-		void lock() { locked = true; }
-		void unlock() { locked = true; generateTexture(); /* generateGeometry(width(), height()); */ }
-		bool isLocked() { return locked; }
+		// lock regenerates the texture after you're done with the pixels for the renderer to keep drawing
+		void lock() { _locked = true; generateTexture(); generateGeometry(width(), height()); }
+		bool locked() { return _locked; }
 
 	private:
 		GLuint _texture;
 		GLuint _vertexbuffer;
 		GLuint _uvbuffer;
 
-		bool locked = false;
+		bool _locked = false;
 };
 
 } // namespace rt

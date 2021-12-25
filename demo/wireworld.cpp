@@ -55,7 +55,6 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
-			layers[0]->unlock();
 			wireworld();
 			layers[0]->lock();
 

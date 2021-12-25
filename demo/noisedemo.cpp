@@ -41,7 +41,6 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
-			layers[0]->unlock();
 			noise();
 			layers[0]->lock();
 

@@ -56,7 +56,6 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime)
 		{
-			layers[0]->unlock();
 			const int iterations = 30;
 			static int count = 0;
 			if (count < iterations) {
