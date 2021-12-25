@@ -1,6 +1,7 @@
 #include <ctime>
 
 #include <canvas/application.h>
+#include <canvas/noise.h>
 
 class MyApp : public rt::Application
 {

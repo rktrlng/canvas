@@ -6,8 +6,6 @@
 #include <canvas/renderer.h>
 #include <canvas/input.h>
 #include <canvas/canvas.h>
-#include <canvas/pixelbuffer.h>
-#include <canvas/noise.h>
 
 namespace rt {
 

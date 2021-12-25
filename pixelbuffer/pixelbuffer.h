@@ -5,49 +5,10 @@
 #include <fstream>
 #include <vector>
 
-#include <canvas/color.h>
-#include <canvas/vec2.h>
+#include <pixelbuffer/color.h>
+#include <pixelbuffer/vec2.h>
 
 namespace rt {
-
-// helper functions
-inline vec2i wrap(const vec2i& pos, int cols, int rows) {
-    vec2i wrapped(pos);
-
-    if (pos.x < 0) { wrapped.x = cols-1; }
-    if (pos.x > cols-1) { wrapped.x = 0; }
-    if (pos.y < 0) { wrapped.y = rows-1; }
-    if (pos.y > rows-1) { wrapped.y = 0; }
-
-    return wrapped;
-}
-
-inline vec2i clamp(const vec2i& pos, int cols, int rows) {
-    vec2i clamped(pos);
-
-    if (pos.x < 0) { clamped.x = 0; }
-    if (pos.x > cols-1) { clamped.x = cols-1; }
-    if (pos.y < 0) { clamped.y = 0; }
-    if (pos.y > rows-1) { clamped.y = rows-1; }
-
-    return clamped;
-}
-
-inline int idFromPos(int x, int y, int cols) {
-    return (y*cols)+x;
-}
-
-inline int idFromPos(const vec2i& pos, int cols) {
-    return idFromPos(pos.x, pos.y, cols);
-}
-
-// map(973, 0, 1023, 0, 255); // returns: 242
-inline double map(double x, double in_min, double in_max, double out_min, double out_max)
-{
-	return (x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min;
-}
-// =========================================================
-
 
 class PixelBuffer {
 private:

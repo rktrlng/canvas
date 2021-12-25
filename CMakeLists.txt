@@ -63,8 +63,6 @@ set(ALL_GRAPHICS_LIBS
 
 # Canvas (libcanvas.a)
 add_library(canvas # ar rcs libcanvas.a
-	canvas/color.h
-	canvas/color.cpp
 	canvas/application.h
 	canvas/application.cpp
 	canvas/renderer.h
