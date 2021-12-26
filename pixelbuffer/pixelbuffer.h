@@ -26,6 +26,15 @@ private:
     PBHeader _header;
     std::vector<RGBAColor> _pixels;
 
+	bool validBitDepth(uint8_t b) const {
+		return (
+			b == 8 ||
+			b == 16 ||
+			b == 24 ||
+			b == 32
+		);
+	}
+
 public:
     const PBHeader header() const { return _header; }
     std::vector<RGBAColor>& pixels() { return _pixels; }
@@ -73,6 +82,15 @@ public:
         _pixels.clear();
     }
 
+    bool valid() const
+	{
+        return _header.typep == 0x70 &&
+            _header.typeb == 0x62 &&
+            ( validBitDepth(_header.bitdepth) ) &&
+            _header.end == 0x3A &&
+            _header.width * _header.height == _pixels.size();
+    }
+
     void printInfo() const
     {
         uint16_t width = _header.width;
@@ -89,14 +107,15 @@ public:
         std::cout << " | " << (width * height * (bitdepth/8)) / 1024 / 1024.0f << " MiB" << std::endl;
     }
 
-    bool valid() const
-	{
-        return _header.typep == 0x70 &&
-            _header.typeb == 0x62 &&
-            (_header.bitdepth > 0 && _header.bitdepth < 33) &&
-            _header.end == 0x3A &&
-            _header.width * _header.height == _pixels.size();
-    }
+	uint8_t width() const { return _header.width; }
+	uint8_t height() const { return _header.height; }
+	uint8_t bitdepth() const { return _header.bitdepth; }
+	uint8_t bitdepth(uint8_t b) {
+		if ( validBitDepth(b) ) {
+			_header.bitdepth = b;
+		}
+		return _header.bitdepth;
+	}
 
     int read(const std::string& filename)
     {

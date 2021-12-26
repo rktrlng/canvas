@@ -106,7 +106,6 @@ file(
 	DESTINATION ${CMAKE_BINARY_DIR}
 )
 
-
 # Cave
 add_executable(cave # g++ demo/cave.cpp -o cave
 	demo/cave.cpp
@@ -123,6 +122,10 @@ add_executable(gameoflife # g++ demo/gameoflife.cpp -o gameoflife
 target_link_libraries(gameoflife # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
+)
+file(
+	COPY demo/assets
+	DESTINATION ${CMAKE_BINARY_DIR}
 )
 
 # voronoi
@@ -159,4 +162,8 @@ add_executable(font # g++ demo/font.cpp -o font
 target_link_libraries(font # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
+)
+file(
+	COPY demo/assets
+	DESTINATION ${CMAKE_BINARY_DIR}
 )
