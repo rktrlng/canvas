@@ -48,6 +48,7 @@ public:
 
     inline T angle() const { return atan2(y, x); }
 	inline vec2_t<T>& angle(T angle) { T m = mag(); x = cos(angle) * m; y = sin(angle) * m; return *this; }
+	inline vec2_t<T>& rotate(T a) { T aa = angle(); angle(aa + a); return *this; }
 
 	inline static vec2_t<T> fromAngle(T angle) { return rt::vec2_t<T>(cos(angle), sin(angle)); }
 };
