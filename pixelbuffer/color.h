@@ -223,12 +223,11 @@ struct Color
 	}
 
 	// https://stackoverflow.com/questions/28900598/how-to-combine-two-colors-with-varying-alpha-values
-	// https://stackoverflow.com/questions/2030471/alpha-blending-a-red-blue-and-green-image-to-produce-an-image-tinted-to-any-rg/2030560#2030560
 	// https://en.wikipedia.org/wiki/Alpha_compositing#Alpha_blending
 	static RGBAColor alphaBlend(RGBAColor top, RGBAColor bottom) {
 		// if we want to overlay top(0) over bottom(1) both with some alpha then:
 
-		// uint8_t to float 0.0f - 1.0f
+		// uint8_t 0-255 to float 0.0-1.0
 		float r0 = top.r / 255.0f;
 		float g0 = top.g / 255.0f;
 		float b0 = top.b / 255.0f;
