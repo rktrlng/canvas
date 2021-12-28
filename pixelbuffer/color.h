@@ -126,6 +126,8 @@ struct Color
 {
 	// http://www.easyrgb.com/index.php?X=MATH&H=20#text20
 	/// @brief RGBA to HSV conversion
+	/// @param rgba the RGBAColor to convert
+	/// @brief return converted HSVColor color
 	static HSVColor RGBA2HSV(RGBAColor rgba) {
 		float var_R = (float) rgba.r / 255; //RGB from 0 to 255
 		float var_G = (float) rgba.g / 255;
@@ -163,6 +165,8 @@ struct Color
 
 	// http://www.easyrgb.com/index.php?X=MATH&H=21#text21
 	/// @brief HSV to RGBA conversion
+	/// @param hsv the HSVColor to convert
+	/// @brief return converted RGBAColor color
 	static RGBAColor HSV2RGBA(HSVColor hsv) {
 		uint8_t R = 0;
 		uint8_t G = 0;
@@ -197,6 +201,9 @@ struct Color
 	}
 
 	/// @brief Rotate RGBA color (use HSV)
+	/// @param rgba the RGBAColor to rotate
+	/// @param step amount to rotate
+	/// @brief return RGBAColor rotated color
 	static RGBAColor rotate(RGBAColor rgba, float step) {
 		HSVColor hsv = RGBA2HSV(rgba);
 		hsv.h += step;
@@ -224,6 +231,10 @@ struct Color
 
 	// https://stackoverflow.com/questions/28900598/how-to-combine-two-colors-with-varying-alpha-values
 	// https://en.wikipedia.org/wiki/Alpha_compositing#Alpha_blending
+	/// @brief blend an alpha color over an alpha color
+	/// @param top top RGBAColor
+	/// @param bottom bottom RGBAColor
+	/// @brief return RGBAColor blended color
 	static RGBAColor alphaBlend(RGBAColor top, RGBAColor bottom) {
 		// if we want to overlay top(0) over bottom(1) both with some alpha then:
 
