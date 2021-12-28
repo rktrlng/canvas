@@ -11,7 +11,7 @@ public:
 		font();
 	}
 
-	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -34,7 +34,7 @@ public:
 		if (frametime >= maxtime)
 		{
 			auto& pixelbuffer = layers[0]->pixelbuffer;
-			pixelbuffer.fill(rt::BLACK);
+			pixelbuffer.fill(BLACK);
 			font();
 			layers[0]->lock();
 
@@ -43,7 +43,7 @@ public:
 	}
 
 private:
-	std::vector<rt::PixelBuffer> glyphs;
+	std::vector<pb::PixelBuffer> glyphs;
 	void font()
 	{
 		static bool cursor = true;
@@ -83,10 +83,10 @@ private:
 
 	void fillGlyphs()
 	{
-		rt::PixelBuffer font = rt::PixelBuffer("assets/applefont.pbf");
+		pb::PixelBuffer font = pb::PixelBuffer("assets/applefont.pbf");
 		for (size_t i = 0; i < 512; i += 6)
 		{
-			rt::PixelBuffer character = font.copy(i,0,6,8);
+			pb::PixelBuffer character = font.copy(i,0,6,8);
 			glyphs.push_back(character);
 		}
 		

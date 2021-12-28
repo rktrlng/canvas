@@ -14,7 +14,7 @@
 #include <algorithm>
 #include <cmath>
 
-namespace rt {
+namespace pb {
 
 /// @brief A 24 bit HSV color.
 ///
@@ -249,7 +249,7 @@ struct Color
 		float b1 = bottom.b / 255.0f;
 		float a1 = bottom.a / 255.0f;
 
-		// Note the division by a01 in the formulas for the components of color. It's important.
+		// Note the division by a01 in the formulas for the components of color. It's impopbant.
 		float a01 =  (1 - a0) * a1 + a0;
 		float r01 = ((1 - a0) * a1 * r1 + a0 * r0) / a01;
 		float g01 = ((1 - a0) * a1 * g1 + a0 * g0) / a01;
@@ -260,23 +260,23 @@ struct Color
 		uint8_t b = b01 * 255;
 		uint8_t a = a01 * 255;
 
-		return rt::RGBAColor(r, g, b, a);
+		return pb::RGBAColor(r, g, b, a);
 	}
 
 };
 
-} // namespace rt
+} // namespace pb
 
-#define BLACK   RGBAColor(0,   0,   0,   255) ///< @brief color black
-#define GRAY    RGBAColor(127, 127, 127, 255) ///< @brief color gray
-#define RED     RGBAColor(255, 0,   0,   255) ///< @brief color red
-#define ORANGE  RGBAColor(255, 127, 0,   255) ///< @brief color orange
-#define YELLOW  RGBAColor(255, 255, 0,   255) ///< @brief color yellow
-#define GREEN   RGBAColor(0,   255, 0,   255) ///< @brief color green
-#define CYAN    RGBAColor(0,   255, 255, 255) ///< @brief color cyan
-#define BLUE    RGBAColor(0,   0,   255, 255) ///< @brief color blue
-#define MAGENTA RGBAColor(255, 0,   255, 255) ///< @brief color magenta
-#define PINK    RGBAColor(255, 127, 255, 255) ///< @brief color pink
-#define WHITE   RGBAColor(255, 255, 255, 255) ///< @brief color white
+#define BLACK   pb::RGBAColor(0,   0,   0,   255) ///< @brief color black
+#define GRAY    pb::RGBAColor(127, 127, 127, 255) ///< @brief color gray
+#define RED     pb::RGBAColor(255, 0,   0,   255) ///< @brief color red
+#define ORANGE  pb::RGBAColor(255, 127, 0,   255) ///< @brief color orange
+#define YELLOW  pb::RGBAColor(255, 255, 0,   255) ///< @brief color yellow
+#define GREEN   pb::RGBAColor(0,   255, 0,   255) ///< @brief color green
+#define CYAN    pb::RGBAColor(0,   255, 255, 255) ///< @brief color cyan
+#define BLUE    pb::RGBAColor(0,   0,   255, 255) ///< @brief color blue
+#define MAGENTA pb::RGBAColor(255, 0,   255, 255) ///< @brief color magenta
+#define PINK    pb::RGBAColor(255, 127, 255, 255) ///< @brief color pink
+#define WHITE   pb::RGBAColor(255, 255, 255, 255) ///< @brief color white
 
 #endif /* COLOR_H_ */

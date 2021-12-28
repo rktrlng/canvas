@@ -8,7 +8,7 @@
 #include <pixelbuffer/color.h>
 #include <pixelbuffer/vec2.h>
 
-namespace rt {
+namespace pb {
 
 class PixelBuffer {
 private:
@@ -343,7 +343,7 @@ public:
 		int y = 0;
 		int err = 0;
 
-		std::vector<rt::vec2i> positions;
+		std::vector<vec2i> positions;
 
 		while (x >= y) {
 			positions.push_back( {  x,  y } );
@@ -383,8 +383,8 @@ public:
 				int totala = 0; // total alpha
 				for (int r = -1; r < 2; r++) {
 					for (int c = -1; c < 2; c++) {
-						rt::vec2i n = rt::clamp(rt::vec2i(x+c, y+r), cols, rows);
-                        rt::RGBAColor color = getPixel(n.x, n.y);
+						vec2i n = clamp(vec2i(x+c, y+r), cols, rows);
+                        RGBAColor color = getPixel(n.x, n.y);
 						totalr += color.r;
 						totalg += color.g;
 						totalb += color.b;
@@ -395,7 +395,7 @@ public:
                 uint8_t g = totalg / 9;
                 uint8_t b = totalb / 9;
                 uint8_t a = totala / 9;
-                rt::RGBAColor avg = { r, g, b, a };
+                RGBAColor avg = { r, g, b, a };
 				setPixel(x, y, avg);
 			}
 		}
@@ -403,6 +403,6 @@ public:
 
 }; // PixelBuffer
 
-} // namespace rt
+} // namespace pb
 
 #endif // PIXELBUFFER_H

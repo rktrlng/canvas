@@ -10,7 +10,7 @@ public:
 	// 	init();
 	// }
 
-	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	{
 		init();
 	}
@@ -34,9 +34,9 @@ public:
 		int counter = 0;
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
-				if (color == rt::BLACK) { field[counter] = DEAD; }
-				if (color == rt::WHITE) { field[counter] = ALIVE; }
+				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
+				if (color == BLACK) { field[counter] = DEAD; }
+				if (color == WHITE) { field[counter] = ALIVE; }
 
 				counter++;
 			}
@@ -78,7 +78,7 @@ private:
 		std::vector<uint8_t> next = std::vector<uint8_t>(cols*rows, 0);
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				int index = rt::idFromPos(x,y,cols);
+				int index = pb::idFromPos(x,y,cols);
 				uint8_t current = field[index];
 
 				// check 8 neighbours and count the ones that are a ALIVE
@@ -88,8 +88,8 @@ private:
 						if (r == 0 && c == 0) {
 							// this is us
 						} else {
-							rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
-							if (field[rt::idFromPos(n.x,n.y,cols)] == ALIVE) { nc++; }
+							pb::vec2i n = pb::wrap(pb::vec2i(x+c, y+r), cols, rows);
+							if (field[pb::idFromPos(n.x,n.y,cols)] == ALIVE) { nc++; }
 						}
 					}
 				}
@@ -103,11 +103,11 @@ private:
 				next[index] = current;
 
 				// update pixelbuffer from (current) field
-				rt::RGBAColor color;
+				pb::RGBAColor color;
 				if (field[index] == ALIVE) {
-					color = rt::WHITE;
+					color = WHITE;
 				} else {
-					color = rt::BLACK;
+					color = BLACK;
 				}
 				pixelbuffer.setPixel(x, y, color);
 			}
@@ -138,7 +138,7 @@ private:
 
 int main( void )
 {
-	rt::PixelBuffer pixelbuffer("assets/gameoflife01.pbf");
+	pb::PixelBuffer pixelbuffer("assets/gameoflife01.pbf");
 	MyApp application(pixelbuffer, 8);
 
 	while (!application.quit())

@@ -4,7 +4,7 @@
 #include <iostream>
 #include <cmath>
 
-namespace rt {
+namespace pb {
 
 // vec2 definition
 template <class T>
@@ -50,7 +50,7 @@ public:
 	inline vec2_t<T>& angle(T angle) { T m = mag(); x = cos(angle) * m; y = sin(angle) * m; return *this; }
 	inline vec2_t<T>& rotate(T a) { T aa = angle(); angle(aa + a); return *this; }
 
-	inline static vec2_t<T> fromAngle(T angle) { return rt::vec2_t<T>(cos(angle), sin(angle)); }
+	inline static vec2_t<T> fromAngle(T angle) { return pb::vec2_t<T>(cos(angle), sin(angle)); }
 };
 // implementations
 template <class T>
@@ -104,6 +104,6 @@ inline double map(double x, double in_min, double in_max, double out_min, double
 // =========================================================
 
 
-} // namespace rt
+} // namespace pb
 
 #endif // VEC2_H

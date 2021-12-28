@@ -26,7 +26,7 @@ class Canvas
 		GLuint generateTexture();
 		int generateGeometry(int width, int height);
 
-		rt::PixelBuffer pixelbuffer;
+		pb::PixelBuffer pixelbuffer;
 
 		// lock regenerates the texture after you're done with the pixels for the renderer to keep drawing
 		void lock() { _locked = true; generateTexture(); generateGeometry(width(), height()); }

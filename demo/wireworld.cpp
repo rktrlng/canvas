@@ -10,7 +10,7 @@ public:
 	// 	init();
 	// }
 
-	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	{
 		init();
 	}
@@ -34,11 +34,11 @@ public:
 		int counter = 0;
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
-				if (color == rt::BLACK) { field[counter] = EMPTY; }
-				if (color == rt::YELLOW) { field[counter] = CONDUCTOR; }
-				if (color == rt::BLUE) { field[counter] = HEAD;}
-				if (color == rt::CYAN) { field[counter] = TAIL; }
+				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
+				if (color == BLACK) { field[counter] = EMPTY; }
+				if (color == YELLOW) { field[counter] = CONDUCTOR; }
+				if (color == BLUE) { field[counter] = HEAD;}
+				if (color == CYAN) { field[counter] = TAIL; }
 
 				counter++;
 			}
@@ -87,7 +87,7 @@ private:
 				//- HEAD -> TAIL
 				//- TAIL -> CONDUCTOR
 				//- CONDUCTOR: if 1 or 2 neighbours are HEAD -> HEAD
-				uint8_t current = field[rt::idFromPos(x,y,cols)];
+				uint8_t current = field[pb::idFromPos(x,y,cols)];
 				if (current == EMPTY) {
 					continue; // nothing to do, continue to next pixel
 				} else if (current == HEAD) {
@@ -102,24 +102,24 @@ private:
 							if (r == 0 && c == 0) {
 								// this is us
 							} else {
-								rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
-								if (field[rt::idFromPos(n.x,n.y,cols)] == HEAD) { nc++; }
+								pb::vec2i n = pb::wrap(pb::vec2i(x+c, y+r), cols, rows);
+								if (field[pb::idFromPos(n.x,n.y,cols)] == HEAD) { nc++; }
 							}
 						}
 					}
 					if (nc == 1 || nc == 2) { current = HEAD; }
 				}
-				next[rt::idFromPos(x,y,cols)] = current;
+				next[pb::idFromPos(x,y,cols)] = current;
 
 				// update pixelbuffer from (current) field
-				rt::RGBAColor color;
-				int index = rt::idFromPos(x,y,cols);
+				pb::RGBAColor color;
+				int index = pb::idFromPos(x,y,cols);
 				if (field[index] == CONDUCTOR) {
-					color = rt::YELLOW;
+					color = YELLOW;
 				} else if (field[index] == HEAD) {
-					color = rt::BLUE;
+					color = BLUE;
 				} else { // TAIL
-					color = rt::CYAN;
+					color = CYAN;
 				}
 				pixelbuffer.setPixel(x, y, color);
 			}
@@ -150,7 +150,7 @@ private:
 
 int main( void )
 {
-	rt::PixelBuffer pixelbuffer("assets/wire01.pbf");
+	pb::PixelBuffer pixelbuffer("assets/wire01.pbf");
 	MyApp application(pixelbuffer, 8);
 
 	while (!application.quit())

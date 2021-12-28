@@ -77,9 +77,9 @@ private:
 
 		// draw first row
 		for (size_t x = 1; x < cols-1; x++) {
-			rt::RGBAColor color = rt::WHITE;
+			pb::RGBAColor color = WHITE;
 			if (row[x] == 1) {
-				color = rt::BLACK;
+				color = BLACK;
 			}
 			pixelbuffer.setPixel(x, 0, color);
 		}
@@ -96,9 +96,9 @@ private:
 				uint8_t result = ruleset[index];
 				next[x] = result;
 
-				rt::RGBAColor color = rt::WHITE;
+				pb::RGBAColor color = WHITE;
 				if (result) {
-					color = rt::BLACK;
+					color = BLACK;
 				}
 				pixelbuffer.setPixel(x, y, color);
 			}

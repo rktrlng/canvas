@@ -10,7 +10,7 @@ Application::Application(uint16_t width, uint16_t height, uint8_t bitdepth, uint
 	layers.push_back( new rt::Canvas(width, height, bitdepth) );
 }
 
-Application::Application(PixelBuffer& pixelbuffer, uint8_t factor, bool locked /* false */) :
+Application::Application(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool locked /* false */) :
 	factor(factor),
 	renderer(pixelbuffer.header().width * factor, pixelbuffer.header().height * factor),
 	input(renderer.window())

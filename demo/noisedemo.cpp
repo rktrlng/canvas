@@ -101,8 +101,8 @@ private:
 				// posterize
 				if (false) {
 					int numcolors = 9;
-					p = rt::map(p, 0, 255, 0, numcolors); // narrow down
-					p = rt::map(p, 0, numcolors, 0, 255); // stretch back
+					p = pb::map(p, 0, 255, 0, numcolors); // narrow down
+					p = pb::map(p, 0, numcolors, 0, 255); // stretch back
 				}
 
 				// Wood like structure
@@ -112,7 +112,7 @@ private:
 					p = 255 * n;
 				}
 
-				rt::RGBAColor color = rt::RGBAColor(p, p, p, 255);
+				pb::RGBAColor color = pb::RGBAColor(p, p, p, 255);
 				pixelbuffer.setPixel(j, i, color);
 			}
 		}

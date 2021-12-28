@@ -10,7 +10,7 @@ public:
 	// 
 	// }
 
-	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor, bool locked) : rt::Application(pixelbuffer, factor, locked)
+	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool locked) : rt::Application(pixelbuffer, factor, locked)
 	{
 
 	}
@@ -50,11 +50,11 @@ private:
 
 int main( void )
 {
-	rt::PixelBuffer pixelbuffer("assets/pencils.pbf");
-	rt::PixelBuffer letter_f("assets/letter_f.pbf");
+	pb::PixelBuffer pixelbuffer("assets/pencils.pbf");
+	pb::PixelBuffer letter_f("assets/letter_f.pbf");
 
-	rt::PixelBuffer brush0 = pixelbuffer.copy(32, 32, 64, 48);
-	rt::PixelBuffer brush1 = pixelbuffer.copy(32, 32, 24, 64);
+	pb::PixelBuffer brush0 = pixelbuffer.copy(32, 32, 64, 48);
+	pb::PixelBuffer brush1 = pixelbuffer.copy(32, 32, 24, 64);
 
 	pixelbuffer.blur();
 	pixelbuffer.blur();

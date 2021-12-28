@@ -12,7 +12,7 @@ public:
 	// 	init();
 	// }
 
-	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	{
 		init();
 	}
@@ -38,9 +38,9 @@ public:
 		int counter = 0;
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
-				if (color == rt::BLACK) { field[counter] = 0; }
-				if (color == rt::WHITE) { field[counter] = 1; }
+				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
+				if (color == BLACK) { field[counter] = 0; }
+				if (color == WHITE) { field[counter] = 1; }
 
 				counter++;
 			}
@@ -96,27 +96,27 @@ private:
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
 				// Apply rules for each pixel:
-				int current = field[rt::idFromPos(x,y,cols)];
+				int current = field[pb::idFromPos(x,y,cols)];
 
 				// check 8 neighbours and count the ones that are a WALL (black)
 				int nc = 0; // number of neighbour cells
 				for (int r = -1; r < 2; r++) {
 					for (int c = -1; c < 2; c++) {
-						rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
-						if (field[rt::idFromPos(n.x,n.y,cols)] == 0) { nc++; }
+						pb::vec2i n = pb::wrap(pb::vec2i(x+c, y+r), cols, rows);
+						if (field[pb::idFromPos(n.x,n.y,cols)] == 0) { nc++; }
 					}
 				}
 				if (nc < 4) { current = 1; }
 				if (nc > 4) { current = 0; }
-				next[rt::idFromPos(x,y,cols)] = current;
+				next[pb::idFromPos(x,y,cols)] = current;
 
 				// update pixelbuffer from (current) field
-				rt::RGBAColor color;
-				int index = rt::idFromPos(x,y,cols);
+				pb::RGBAColor color;
+				int index = pb::idFromPos(x,y,cols);
 				if (field[index] == 0) {
-					color = rt::BLACK;
+					color = BLACK;
 				} else {
-					color = rt::WHITE;
+					color = WHITE;
 				}
 				pixelbuffer.setPixel(x, y, color);
 			}
@@ -161,10 +161,10 @@ private:
 
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				rt::RGBAColor color = rt::BLACK;
+				pb::RGBAColor color = BLACK;
 				int value = rand()%100;
 				if (value < percentage) {
-					color = rt::WHITE;
+					color = WHITE;
 				}
 				pixelbuffer.setPixel(x, y, color);
 			}
@@ -176,7 +176,7 @@ private:
 
 int main( void )
 {
-	rt::PixelBuffer pixelbuffer(160, 90, 8);
+	pb::PixelBuffer pixelbuffer(160, 90, 8);
 
 	MyApp application(pixelbuffer, 4);
 
