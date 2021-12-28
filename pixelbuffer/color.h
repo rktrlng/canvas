@@ -27,21 +27,25 @@ struct HSVColor
 	float s = 0.0f;
 	/// @brief The Lightness/Brightness/Value component of the color
 	float v = 1.0f;
+	/// @brief The Alpha component of the color
+	float a = 1.0f;
 
 	/// @brief constructor
 	HSVColor() {
 		h = 0.0f;
 		s = 0.0f;
 		v = 1.0f;
+		a = 1.0f;
 	}
 	/// @brief constructor
 	/// @param hue The hue component of the color
 	/// @param sat The saturation component of the color
 	/// @param val The brightness/lightness/value component of the color
-	HSVColor(float hue, float sat, float val) {
+	HSVColor(float hue, float sat, float val, float alpha = 1.0f) {
 		h = hue;
 		s = sat;
 		v = val;
+		a = alpha;
 	}
 };
 
@@ -126,6 +130,7 @@ struct Color
 		float var_R = (float) rgba.r / 255; //RGB from 0 to 255
 		float var_G = (float) rgba.g / 255;
 		float var_B = (float) rgba.b / 255;
+		float var_A = (float) rgba.a / 255;
 
 		float var_Min = std::min( std::min( var_R, var_G), var_B ); // Min. value of RGB
 		float var_Max = std::max( std::max( var_R, var_G), var_B ); // Max. value of RGB
@@ -134,6 +139,7 @@ struct Color
 		float H = 0.0f;
 		float S = 0.0f;
 		float V = var_Max;
+		float A = var_A;
 
 		if ( del_Max == 0 ) { //This is a gray, no chroma...
 			H = 0; // HSV results from 0 to 1
@@ -152,7 +158,7 @@ struct Color
 			if ( H < 0.0f ) H += 1.0f;
 			if ( H > 1.0f ) H -= 1.0f;
 		}
-		return HSVColor(H, S, V);
+		return HSVColor(H, S, V, A);
 	}
 
 	// http://www.easyrgb.com/index.php?X=MATH&H=21#text21
@@ -161,6 +167,7 @@ struct Color
 		uint8_t R = 0;
 		uint8_t G = 0;
 		uint8_t B = 0;
+		uint8_t A = hsv.a * 255;
 		if ( hsv.s == 0 ) { //HSV from 0 to 1
 			R = hsv.v * 255;
 			G = hsv.v * 255;
@@ -186,7 +193,7 @@ struct Color
 			G = var_g * 255;
 			B = var_b * 255;
 		}
-		return RGBAColor(R, G, B, 255);
+		return RGBAColor(R, G, B, A);
 	}
 
 	/// @brief Rotate RGBA color (use HSV)
