@@ -5,10 +5,10 @@
 class MyApp : public rt::Application
 {
 public:
-	// MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor) 
-	// {
-	// 	init();
-	// }
+	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor) 
+	{
+		init();
+	}
 
 	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	{
@@ -41,6 +41,14 @@ public:
 				counter++;
 			}
 		}
+
+		for (int i = 0; i < cols*rows; i++){
+			field[i] = DEAD;
+		}
+
+		pentomino(pb::vec2i(cols / 4, rows / 2));
+		pentomino(pb::vec2i(cols / 4 * 3, rows / 2), 1);
+		agitator(pb::vec2i(cols / 2, rows / 2));
 	}
 
 
@@ -54,6 +62,7 @@ public:
 		if (frametime >= maxtime)
 		{
 			gameoflife();
+			agitator(pb::vec2i(0, 0));
 			layers[0]->lock();
 
 			frametime = 0.0f;
@@ -66,6 +75,49 @@ private:
 
 	// internal data to work with (value are 0,1)
 	std::vector<uint8_t> field;
+
+	void pentomino(const pb::vec2i& pos, int dir = 0)
+	{
+		auto& pixelbuffer = layers[0]->pixelbuffer;
+		int cols = pixelbuffer.header().width;
+		// int rows = pixelbuffer.header().height;
+
+		int id = pb::idFromPos(pos, cols);
+		if (dir) {
+			field[id-1] = ALIVE;
+			field[id+0] = ALIVE;
+			field[id+1] = ALIVE;
+			field[id+0-cols] = ALIVE;
+			field[id-1+cols] = ALIVE;
+		} else {
+			field[id+0] = ALIVE;
+			field[id+0+cols] = ALIVE;
+			field[id+0-cols] = ALIVE;
+			field[id+0-1] = ALIVE;
+			field[id+cols+1] = ALIVE;
+		}
+	}
+
+	void agitator(const pb::vec2i& p)
+	{
+		auto& pixelbuffer = layers[0]->pixelbuffer;
+		int cols = pixelbuffer.header().width;
+		int rows = pixelbuffer.header().height;
+		static pb::vec2i pos;
+		if (p != pb::vec2i(0, 0)) {
+			pos = p;
+		}
+
+		pixelbuffer.setPixel(pos.x, pos.y, BLACK);
+		int id = pb::idFromPos(pos, cols);
+		field[id] = ALIVE;
+
+		pos.x += (random()%3) - 1;
+		pos.y += (random()%3) - 1;
+		pos = pb::wrap(pos, cols, rows);
+
+		pixelbuffer.setPixel(pos.x, pos.y, RED);
+	}
 
 	void gameoflife()
 	{
@@ -121,6 +173,7 @@ private:
 		if (input.getKeyDown(rt::KeyCode::Space)) {
 			std::cout << "spacebar pressed down." << std::endl;
 			layers[0]->pixelbuffer.printInfo();
+			init();
 			// layers[0]->pixelbuffer.write("gameoflife.pbf");
 		}
 
@@ -138,7 +191,8 @@ private:
 
 int main( void )
 {
-	pb::PixelBuffer pixelbuffer("assets/gameoflife01.pbf");
+	// pb::PixelBuffer pixelbuffer("assets/gameoflife01.pbf");
+	pb::PixelBuffer pixelbuffer(160, 90, 24);
 	MyApp application(pixelbuffer, 8);
 
 	while (!application.quit())
