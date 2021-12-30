@@ -5,10 +5,10 @@
 class MyApp : public rt::Application
 {
 public:
-	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor) 
-	{
-		init();
-	}
+	// MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor) 
+	// {
+	// 	init();
+	// }
 
 	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	{
@@ -147,7 +147,7 @@ private:
 				}
 
 				// Apply rules for each pixel:
-				if ((nc == 2 || nc == 3) && current == ALIVE) { current = ALIVE; } // ALIVE on
+				// if ((nc == 2 || nc == 3) && current == ALIVE) { current = ALIVE; } // ALIVE on
 				if (nc < 2) { current = DEAD; } // lonely
 				if (nc > 3) { current = DEAD; } // overpopulation
 				if (nc == 3) { current = ALIVE; } // reproduction
@@ -191,7 +191,6 @@ private:
 
 int main( void )
 {
-	// pb::PixelBuffer pixelbuffer("assets/gameoflife01.pbf");
 	pb::PixelBuffer pixelbuffer(160, 90, 24);
 	MyApp application(pixelbuffer, 8);
 
