@@ -20,10 +20,11 @@ public:
 	{
 		std::srand(std::time(nullptr));
 
-		// for (size_t i = 0; i < 256; i++)
-		// {
-		// 	rule(i, true);
-		// }
+		// write to rules/rule000.pbf
+		for (size_t i = 0; i < 256; i++)
+		{
+			rule(i, true);
+		}
 	}
 
 	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
@@ -116,7 +117,7 @@ private:
 
 		if (wr)
 		{
-			std::string name = createFilename("rules/", num, "pbf");
+			std::string name = createFilename("rules/rule", num, "pbf", 2);
 			std::cout << "writing: " << name << std::endl;
 			pixelbuffer.write(name);
 		}
