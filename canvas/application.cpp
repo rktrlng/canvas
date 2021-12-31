@@ -10,7 +10,7 @@ Application::Application(uint16_t width, uint16_t height, uint8_t bitdepth, uint
 	layers.push_back( new rt::Canvas(width, height, bitdepth) );
 }
 
-Application::Application(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool locked /* false */) :
+Application::Application(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool setlocked /* false */) :
 	factor(factor),
 	renderer(pixelbuffer.header().width * factor, pixelbuffer.header().height * factor),
 	input(renderer.window())
@@ -19,9 +19,8 @@ Application::Application(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool lock
 	uint16_t rows = pixelbuffer.header().height;
 	layers.push_back( new rt::Canvas(cols, rows, pixelbuffer.header().bitdepth) );
 	layers[0]->pixelbuffer = pixelbuffer;
-	if (locked)
+	if (setlocked)
 	{
-		layers[0]->generateTexture();
 		layers[0]->lock();
 	}
 }

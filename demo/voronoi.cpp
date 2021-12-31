@@ -5,14 +5,10 @@
 struct Agent
 {
 	pb::vec2i position;
-	int fieldx;
-	int fieldy;
 	pb::RGBAColor color;
 
 	Agent(int width, int height)
 	{
-		fieldx = width;
-		fieldy = height;
 		position.x = rand()%width;
 		position.y = rand()%height;
 		color.r = rand()%255;
@@ -24,7 +20,6 @@ struct Agent
 	{
 		pb::vec2i delta((rand()%3)-1, (rand()%3)-1);
 		position += delta;
-		// position = rt::wrap(position, fieldx, fieldy);
 	}
 };
 
