@@ -1,3 +1,12 @@
+/**
+ * @file canvas.h
+ *
+ * @brief rt::Canvas header
+ *
+ * Copyright 2021-2022 @rktrlng
+ * https://github.com/rktrlng/canvas
+ */
+
 #ifndef CANVAS_H
 #define CANVAS_H
 

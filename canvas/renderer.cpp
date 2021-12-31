@@ -1,3 +1,12 @@
+/**
+ * @file renderer.cpp
+ *
+ * @brief rt::Renderer implementation
+ *
+ * Copyright 2015-2022 @rktrlng
+ * https://github.com/rktrlng/canvas
+ */
+
 #include <cstdio>
 #include <cstdlib>
 #include <string>

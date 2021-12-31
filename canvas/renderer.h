@@ -1,3 +1,12 @@
+/**
+ * @file renderer.h
+ *
+ * @brief rt::Renderer header
+ *
+ * Copyright 2015-2022 @rktrlng
+ * https://github.com/rktrlng/canvas
+ */
+
 #ifndef RENDERER_H
 #define RENDERER_H
 

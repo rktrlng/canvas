@@ -1,3 +1,12 @@
+/**
+ * @file input.h
+ *
+ * @brief rt::Input header
+ *
+ * Copyright 2015-2022 @rktrlng
+ * https://github.com/rktrlng/canvas
+ */
+
 #ifndef INPUT_H
 #define INPUT_H
 

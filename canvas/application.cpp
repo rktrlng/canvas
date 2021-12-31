@@ -1,3 +1,12 @@
+/**
+ * @file application.cpp
+ *
+ * @brief rt::Application implementation
+ *
+ * Copyright 2021-2022 @rktrlng
+ * https://github.com/rktrlng/canvas
+ */
+
 #include <canvas/application.h>
 
 namespace rt {

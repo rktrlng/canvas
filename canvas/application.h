@@ -1,3 +1,12 @@
+/**
+ * @file application.h
+ *
+ * @brief rt::Application header
+ *
+ * Copyright 2021-2022 @rktrlng
+ * https://github.com/rktrlng/canvas
+ */
+
 #ifndef APPLICATION_H
 #define APPLICATION_H
 

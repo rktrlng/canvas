@@ -1,3 +1,12 @@
+/**
+ * @file automata.cpp
+ *
+ * @brief Wolfram Elementary Cellular Automaton implementation
+ *
+ * Copyright 2021-2022 @rktrlng
+ * https://github.com/rktrlng/canvas
+ */
+
 #include <ctime>
 #include <string>
 #include <sstream>

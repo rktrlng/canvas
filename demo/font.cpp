@@ -1,3 +1,12 @@
+/**
+ * @file font.cpp
+ *
+ * @brief Apple ][ Font Demo
+ *
+ * Copyright 2021-2022 @rktrlng
+ * https://github.com/rktrlng/canvas
+ */
+
 #include <ctime>
 
 #include <canvas/application.h>

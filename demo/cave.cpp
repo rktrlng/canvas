@@ -1,3 +1,12 @@
+/**
+ * @file cave.cpp
+ *
+ * @brief Cave Generation Algorithm
+ *
+ * Copyright 2021-2022 @rktrlng
+ * https://github.com/rktrlng/canvas
+ */
+
 #include <ctime>
 #include <string>
 #include <sstream>

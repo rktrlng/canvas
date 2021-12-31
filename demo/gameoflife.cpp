@@ -1,3 +1,12 @@
+/**
+ * @file gameoflife.cpp
+ *
+ * @brief Game Of Life implementation
+ *
+ * Copyright 2021-2022 @rktrlng
+ * https://github.com/rktrlng/canvas
+ */
+
 #include <ctime>
 
 #include <canvas/application.h>

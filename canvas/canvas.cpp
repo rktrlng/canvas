@@ -1,3 +1,12 @@
+/**
+ * @file canvas.cpp
+ *
+ * @brief rt::Canvas implementation
+ *
+ * Copyright 2021-2022 @rktrlng
+ * https://github.com/rktrlng/canvas
+ */
+
 #include <iostream>
 #include <cstdio>
 
