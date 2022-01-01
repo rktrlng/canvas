@@ -42,20 +42,6 @@ public:
 		
 		// fill field for wireworld
 		field = std::vector<uint8_t>(rows*cols, 0);
-		int counter = 0;
-		for (size_t y = 0; y < rows; y++) {
-			for (size_t x = 0; x < cols; x++) {
-				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
-				if (color == BLACK) { field[counter] = DEAD; }
-				if (color == WHITE) { field[counter] = ALIVE; }
-
-				counter++;
-			}
-		}
-
-		for (int i = 0; i < cols*rows; i++){
-			field[i] = DEAD;
-		}
 
 		pentomino(pb::vec2i(cols / 4, rows / 2));
 		pentomino(pb::vec2i(cols / 4 * 3, rows / 2), 1);
