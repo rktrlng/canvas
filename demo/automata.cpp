@@ -60,58 +60,63 @@ public:
 	}
 
 private:
-	void rule(int num, bool wr = false)
+	const std::vector<bool> nextRow(const std::vector<bool>& in_row, int rule_num) const
+	{
+		std::vector<bool> out_row(in_row.size(), 0);
+		std::vector<bool> ruleset = ruleBits(rule_num);
+
+		for (size_t x = 1; x < in_row.size()-1; x++) {
+			int index = 0;
+			if (in_row[x-1] == 1) { index += 4; }
+			if (in_row[x+0] == 1) { index += 2; }
+			if (in_row[x+1] == 1) { index += 1; }
+
+			uint8_t result = ruleset[index];
+			out_row[x] = result;
+		}
+
+		return out_row;
+	}
+
+	const std::vector<bool> ruleBits(uint8_t rule_num) const
+	{
+		// the number as an array of bits
+		std::vector<bool> ruleset(8, 0);
+		int counter = 0;
+		while (rule_num > 0)
+		{
+			ruleset[counter] = rule_num & 1;
+			rule_num >>= 1;
+			counter++;
+		}
+		return ruleset;
+	}
+
+	void rule(uint8_t num, bool wr = false)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-
 		const size_t rows = pixelbuffer.header().height;
 		const size_t cols = pixelbuffer.header().width;
 
-		std::vector<uint8_t> ruleset(8, 0);
-		int counter = 0;
-		int rn = num;
-		while (rn > 0)
-		{
-			ruleset[counter] = rn & 1;
-			rn >>= 1;
-			counter++;
-		}
-
-		std::vector<uint8_t> row(cols, 0);
+		// initialize first row
+		std::vector<bool> row(cols, 0);
 		row[cols/2-1] = 1; // first pixel half way
 		for (size_t i = 0; i < cols; i++)
 		{
 			row[i] = rand()%2; // random pixels on first row
 		}
 
-		// draw first row
-		for (size_t x = 1; x < cols-1; x++) {
-			pb::RGBAColor color = WHITE;
-			if (row[x] == 1) {
-				color = BLACK;
-			}
-			pixelbuffer.setPixel(x, 0, color);
-		}
-
-		// draw the rest of the owl
-		for (size_t y = 1; y < rows; y++) {
-			std::vector<uint8_t> next(cols, 0);
-			for (size_t x = 1; x < cols-1; x++) {
-				int index = 0;
-				if (row[x-1] == 1) { index += 4; }
-				if (row[x+0] == 1) { index += 2; }
-				if (row[x+1] == 1) { index += 1; }
-
-				uint8_t result = ruleset[index];
-				next[x] = result;
-
+		// draw all the rows
+		for (size_t y = 0; y < rows; y++) {
+			for (size_t x = 0; x < cols; x++) {
 				pb::RGBAColor color = WHITE;
-				if (result) {
+				if (row[x]) {
 					color = BLACK;
 				}
 				pixelbuffer.setPixel(x, y, color);
 			}
-			row = next;
+			// update row
+			row = nextRow(row, num);
 		}
 
 		if (wr)
