@@ -9,7 +9,6 @@
 
 #include <ctime>
 #include <string>
-#include <sstream>
 
 #include <canvas/application.h>
 
@@ -117,20 +116,10 @@ private:
 
 		if (wr)
 		{
-			std::string name = createFilename("rules/rule", num, "pbf", 2);
+			std::string name = pixelbuffer.createFilename("rules/rule", num, 2);
 			std::cout << "writing: " << name << std::endl;
 			pixelbuffer.write(name);
 		}
-	}
-
-	std::string createFilename(const std::string& prefix, uint32_t counter, const std::string& ext, uint8_t leading0=4) {
-		std::stringstream filename;
-		filename << prefix;
-		for (int i = 1; i < leading0+1; i++) {
-			if (counter < pow(10, i)) { filename << "0"; }
-		}
-		filename << counter << "." << ext;
-		return filename.str();
 	}
 
 	void handleInput() {

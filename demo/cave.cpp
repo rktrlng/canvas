@@ -9,7 +9,6 @@
 
 #include <ctime>
 #include <string>
-#include <sstream>
 
 #include <canvas/application.h>
 
@@ -94,7 +93,7 @@ private:
 
 		{
 			static int counter = 0;
-			std::string filename = createFilename("caves/cave", counter, "pbf", 3);
+			std::string filename = pixelbuffer.createFilename("caves/cave", counter, 3);
 			pixelbuffer.write(filename);
 			std::cout << filename << std::endl;
 			counter++;
@@ -133,16 +132,6 @@ private:
 
 		// update field to next state
 		field = next;
-	}
-
-	std::string createFilename(const std::string& prefix, uint32_t counter, const std::string& ext, uint8_t leading0=4) {
-		std::stringstream filename;
-		filename << prefix;
-		for (int i = 1; i < leading0+1; i++) {
-			if (counter < pow(10, i)) { filename << "0"; }
-		}
-		filename << counter << "." << ext;
-		return filename.str();
 	}
 
 	void handleInput() {
