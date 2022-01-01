@@ -121,8 +121,8 @@ private:
 		int id = pb::idFromPos(pos, cols);
 		field[id] = ALIVE;
 
-		pos.x += (random()%3) - 1;
-		pos.y += (random()%3) - 1;
+		pos.x += (rand()%3) - 1;
+		pos.y += (rand()%3) - 1;
 		pos = pb::wrap(pos, cols, rows);
 
 		pixelbuffer.setPixel(pos.x, pos.y, RED);
