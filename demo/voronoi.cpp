@@ -42,7 +42,7 @@ public:
 	{
 		std::srand(std::time(nullptr));
 
-		for (size_t i = 0; i < 25; i++)
+		for (size_t i = 0; i < 50; i++)
 		{
 			agents.push_back(new Agent(width, height));
 		}
@@ -112,7 +112,7 @@ private:
 				
 				// map min_distance to color
 				pb::RGBAColor color = agent->color;
-				// int value = rt::map(min_distance, 0, max_distance, 0, 255);
+				// int value = pb::map(min_distance, 0, max_distance, 0, 255);
 				// color.r = value;
 				// color.g = value;
 				// color.b = value;

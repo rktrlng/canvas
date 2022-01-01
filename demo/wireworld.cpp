@@ -121,7 +121,7 @@ private:
 				next[pb::idFromPos(x,y,cols)] = current;
 
 				// update pixelbuffer from (current) field
-				pb::RGBAColor color;
+				pb::RGBAColor color = BLACK;
 				int index = pb::idFromPos(x,y,cols);
 				if (field[index] == CONDUCTOR) {
 					color = YELLOW;

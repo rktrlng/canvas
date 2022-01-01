@@ -81,7 +81,7 @@ private:
 		row[cols/2-1] = 1; // first pixel half way
 		for (size_t i = 0; i < cols; i++)
 		{
-			row[i] = rand()%2;
+			row[i] = rand()%2; // random pixels on first row
 		}
 
 		// draw first row
