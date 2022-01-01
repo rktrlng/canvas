@@ -34,6 +34,8 @@ public:
 
 	void init()
 	{
+		srand((unsigned)time(nullptr));
+
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		uint16_t cols = pixelbuffer.header().width;
 		uint16_t rows = pixelbuffer.header().height;
