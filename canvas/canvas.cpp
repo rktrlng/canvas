@@ -26,6 +26,13 @@ Canvas::Canvas(uint16_t width, uint16_t height, uint8_t bitdepth /* = 24 */)
 	generateTexture(); // _texture
 }
 
+Canvas::Canvas(const pb::PixelBuffer& pb)
+{
+	pixelbuffer = pb;
+	generateGeometry(pixelbuffer.header().width, pixelbuffer.header().height); // _vertexbuffer & _uvbuffer
+	generateTexture(); // _texture
+}
+
 Canvas::Canvas(const std::string& imagepath)
 {
 	pixelbuffer.read(imagepath);

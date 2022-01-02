@@ -14,20 +14,20 @@
 
 int main(void)
 {
-	int width = 768;
-	int height = 768;
+	pb::PixelBuffer pixelbuffer;
+	pixelbuffer.read("rules/rule105.pbf");
 
-	rt::Renderer renderer = rt::Renderer(width, height);
-	rt::Canvas canvas = rt::Canvas("rules/rule105.pbf");
+	int width = pixelbuffer.header().width;
+	int height = pixelbuffer.header().height;
 
-	int cols = canvas.pixelbuffer.header().width;
-	int rows = canvas.pixelbuffer.header().height;
-	float fx = (float) width / cols;
-	float fy = (float) height / rows;
+	int factor = 4;
+
+	rt::Renderer renderer = rt::Renderer(width*factor, height*factor);
+	rt::Canvas canvas = rt::Canvas(pixelbuffer);
 
 	float timer = 0.0f;
 	int frames = 0;
-	while (renderer.displayCanvas(&canvas, width/2, height/2, fx, fy, 0.0f)) {
+	while (renderer.displayCanvas(&canvas, (width*factor)/2, (width*factor)/2, factor, factor, 0.0f)) {
 		timer += renderer.updateDeltaTime();
 		frames++;
 		if (timer > 5.0f) {

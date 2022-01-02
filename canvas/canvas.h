@@ -22,6 +22,7 @@ class Canvas
 {
 	public:
 		Canvas(uint16_t width, uint16_t height, uint8_t bitdepth = 24);
+		Canvas(const pb::PixelBuffer& pb);
 		Canvas(const std::string& imagepath);
 		virtual ~Canvas();
 
