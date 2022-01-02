@@ -12,15 +12,28 @@
 
 #include <canvas/renderer.h>
 
-int main(void)
+int main(int argc, char *argv[])
 {
+	std::string filename;
+	int factor = 1;
+
+	if (argc == 1) {
+		std::cout << "Usage: pbfviewer [path] [factor]" << std::endl;
+		return 0;
+	}
+	if (argc == 2) {
+		filename = argv[1];
+	}
+	if (argc == 3) {
+		filename = argv[1];
+		factor = atoi(argv[2]);
+	}
+
 	pb::PixelBuffer pixelbuffer;
-	pixelbuffer.read("rules/rule105.pbf");
+	pixelbuffer.read(filename);
 
 	int width = pixelbuffer.header().width;
 	int height = pixelbuffer.header().height;
-
-	int factor = 4;
 
 	rt::Renderer renderer = rt::Renderer(width*factor, height*factor);
 	rt::Canvas canvas = rt::Canvas(pixelbuffer);
