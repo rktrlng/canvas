@@ -168,3 +168,12 @@ file(
 	COPY demo/assets
 	DESTINATION ${CMAKE_BINARY_DIR}
 )
+
+# pbfviewer
+add_executable(pbfviewer # g++ demo/pbfviewer.cpp -o pbfviewer
+	demo/pbfviewer.cpp
+)
+target_link_libraries(pbfviewer # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)

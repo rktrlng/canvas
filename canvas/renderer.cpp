@@ -120,6 +120,24 @@ float Renderer::updateDeltaTime() {
 	return deltaTime;
 }
 
+bool Renderer::displayCanvas(Canvas* canvas, float px, float py, float sx, float sy, float rot)
+{
+	// Clear the screen
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	renderCanvas(canvas, px, py, sx, sy, rot);
+
+	// Swap buffers
+	glfwSwapBuffers(_window);
+
+	glfwPollEvents();
+	if (glfwGetKey(_window, GLFW_KEY_ESCAPE) == GLFW_PRESS || glfwWindowShouldClose(_window)) {
+		return false;
+	}
+
+	return true;
+}
+
 void Renderer::renderCanvas(Canvas* canvas, float px, float py, float sx, float sy, float rot)
 {
 	// Build the Model matrix
