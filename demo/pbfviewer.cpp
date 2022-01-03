@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 		if (timer > display) {
 			std::string str = "";
 			str = filename + "  |  " + std::to_string(width) + "x" + std::to_string(height) + " pixels  |  ";
-			str += std::to_string(factor) + "x  |  " + std::to_string(frames) + " FPS";
+			str += std::to_string(factor) + "x  |  " + std::to_string(frames/display) + " FPS";
 			glfwSetWindowTitle(renderer.window(), str.c_str());
 
 			timer = 0.0f;
