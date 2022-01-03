@@ -113,7 +113,7 @@ private:
 				pixelbuffer.setPixel(particles[i]->position.x, particles[i]->position.y, BLACK);
 				particles[i]->addForce(pb::vec2(0.0f, GRAVITY));
 				particles[i]->move(frametime);
-				particles[i]->velocity.y *= FRICTION;
+				particles[i]->velocity *= FRICTION;
 				particles[i]->color = pb::Color::rotate(particles[i]->color, ROT_SPEED);
 				borders(particles[i], cols, rows);
 				pixelbuffer.setPixel(particles[i]->position.x, particles[i]->position.y, particles[i]->color);
