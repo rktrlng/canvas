@@ -26,10 +26,7 @@ public:
 
 	virtual ~MyApp()
 	{
-		for (auto canvas : layers) {
-			delete canvas;
-		}
-		layers.clear();
+
 	}
 
 	void init()

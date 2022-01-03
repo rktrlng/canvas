@@ -36,6 +36,11 @@ Application::Application(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool setl
 
 Application::~Application()
 {
+	for (auto canvas : layers) {
+		delete canvas;
+	}
+	layers.clear();
+
 	std::cout << "Application done. Thank you." << std::endl;
 }
 

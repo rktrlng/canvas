@@ -33,10 +33,7 @@ public:
 
 	virtual ~MyApp()
 	{
-		for (auto canvas : layers) {
-			delete canvas;
-		}
-		layers.clear();
+
 	}
 
 	void update(float deltatime) override
