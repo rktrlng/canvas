@@ -23,7 +23,7 @@ struct Particle
 	Particle(float x, float y)
 	{
 		position = pb::vec2(x, y);
-		velocity = pb::vec2((rand()%200) - 100, (rand()%200) - 200);
+		velocity = pb::vec2((rand()%150) - 75, (rand()%200) - 200);
 		acceleration = pb::vec2(0.0f, 0.0f);
 		mass = 1.0f;
 		color = RED;
@@ -121,6 +121,7 @@ private:
 			}
 
 			frametime = 0.0f;
+			pixelbuffer.blur();
 			layers[0]->lock();
 		}
 	}
