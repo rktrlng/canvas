@@ -12,6 +12,14 @@
 
 #include <canvas/application.h>
 
+const int MAX_PARTICLES = 210;
+const int HOR_SPREAD = 150;
+const int VER_SPREAD = 200;
+const float GRAVITY = 500.0f;
+const float FRICTION = 0.992f;
+const float ROT_SPEED = 0.0025f;
+const bool BLUR = true;
+
 struct Particle
 {
 	pb::vec2 position;
@@ -23,7 +31,7 @@ struct Particle
 	Particle(float x, float y)
 	{
 		position = pb::vec2(x, y);
-		velocity = pb::vec2((rand()%150) - 75, (rand()%200) - 200);
+		velocity = pb::vec2((rand()%HOR_SPREAD) - (HOR_SPREAD/2), -(rand()%VER_SPREAD));
 		acceleration = pb::vec2(0.0f, 0.0f);
 		mass = 1.0f;
 		color = RED;
@@ -103,15 +111,15 @@ private:
 
 			for (size_t i = 0; i < particles.size(); i++) {
 				pixelbuffer.setPixel(particles[i]->position.x, particles[i]->position.y, BLACK);
-				particles[i]->addForce(pb::vec2(0.0f, 800.0f)); // gravity
+				particles[i]->addForce(pb::vec2(0.0f, GRAVITY));
 				particles[i]->move(frametime);
-				particles[i]->velocity.y *= 0.992f; // friction
-				particles[i]->color = pb::Color::rotate(particles[i]->color, 0.0025f);
+				particles[i]->velocity.y *= FRICTION;
+				particles[i]->color = pb::Color::rotate(particles[i]->color, ROT_SPEED);
 				borders(particles[i], cols, rows);
 				pixelbuffer.setPixel(particles[i]->position.x, particles[i]->position.y, particles[i]->color);
 			}
 
-			if (particles.size() < 200) {
+			if (particles.size() < MAX_PARTICLES) {
 				Particle* p = new Particle(cols/2, rows/4);
 				particles.push_back(p);
 			}
@@ -121,7 +129,9 @@ private:
 			}
 
 			frametime = 0.0f;
-			pixelbuffer.blur();
+			if (BLUR) {
+				pixelbuffer.blur();
+			}
 			layers[0]->lock();
 		}
 	}
