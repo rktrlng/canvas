@@ -81,6 +81,15 @@ file(
 )
 
 
+# Start
+add_executable(start # g++ demo/start.cpp -o start
+	demo/start.cpp
+)
+target_link_libraries(start # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
+
 # Demo
 add_executable(demo # g++ demo/demo.cpp -o demo
 	demo/demo.cpp
