@@ -202,3 +202,12 @@ target_link_libraries(particles # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# blur
+add_executable(blur # g++ demo/blur.cpp -o blur
+	demo/blur.cpp
+)
+target_link_libraries(blur # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
