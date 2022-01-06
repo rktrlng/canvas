@@ -32,6 +32,7 @@ const int HEIGHT = 32;
 
 std::vector<MCell*> field;
 std::vector<MCell*> stack;
+MCell* current = nullptr;
 
 class MyApp : public rt::Application
 {
@@ -62,16 +63,7 @@ public:
 				field.push_back(cell);
 			}
 		}
-
-		// test
-		int index = 5;
-		field[index]->visited = true;
-		field[index+HEIGHT]->visited = true;
-		removeWalls(field[index], field[index+HEIGHT]);
-		field[index+1]->visited = true;
-		removeWalls(field[index], field[index+1]);
-		field[index-1]->visited = true;
-		removeWalls(field[index], field[index-1]);
+		current = field[0];
 	}
 
 	void update(float deltatime) override
@@ -79,7 +71,7 @@ public:
 		handleInput();
 
 		static float frametime = 0.0f;
-		float maxtime = 0.05f - deltatime;
+		float maxtime = 0.0025f - deltatime;
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			step();
@@ -99,28 +91,28 @@ private:
 
 		// look right
 		index = pb::idFromPos(x+1,y,WIDTH);
-		if( index != -1 ) {
+		if( index < WIDTH*HEIGHT && index >= 0 && x < WIDTH-1) {
 			if (!field[index]->visited) {
 				neighbours.push_back(field[index]);
 			}
 		}
 		// look left
 		index = pb::idFromPos(x-1,y,WIDTH);
-		if( index != -1 ) {
+		if( index < WIDTH*HEIGHT && index >= 0 && x > 0 ) {
 			if (!field[index]->visited) {
 				neighbours.push_back(field[index]);
 			}
 		}
 		// look down
 		index = pb::idFromPos(x,y+1,WIDTH);
-		if( index != -1 ) {
+		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!field[index]->visited) {
 				neighbours.push_back(field[index]);
 			}
 		}
 		// look up
 		index = pb::idFromPos(x,y-1,WIDTH);
-		if( index != -1 ) {
+		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!field[index]->visited) {
 				neighbours.push_back(field[index]);
 			}
@@ -139,14 +131,12 @@ private:
 
 	void step()
 	{
-		static MCell* current = field[0];
 		// make 'current' find the next place to be
 		current->visited = true;
 		// STEP 1: while there is a neighbour...
-		/*
 		MCell* next = this->getRandomUnvisitedNeighbour(current);
 		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
-			backtracking = false;
+			// backtracking = false;
 			next->visited = true;
 
 			// STEP 2
@@ -158,13 +148,12 @@ private:
 			// STEP 4
 			current = next;
 		} else { // we're stuck! backtrack our steps...
-			backtracking = true;
+			// backtracking = true;
 			if (stack.size() > 0) {
 				current = stack.back(); // make previous our current cell
 				stack.pop_back(); // remove from the stack (eat the breadcrumb)
 			}
 		}
-		*/
 	}
 
 	void removeWalls(MCell* c, MCell* n)
