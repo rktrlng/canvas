@@ -27,16 +27,18 @@ struct MCell {
 };
 
 
-const int WIDTH  = 32;
-const int HEIGHT = 32;
+const int WIDTH  = 16;
+const int HEIGHT = 16;
 
-std::vector<MCell*> field;
-std::vector<MCell*> stack;
-MCell* current = nullptr;
-bool backtracking = false;
 
 class MyApp : public rt::Application
 {
+private:
+	std::vector<MCell*> field;
+	std::vector<MCell*> stack;
+	MCell* current = nullptr;
+	bool backtracking = false;
+
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
@@ -72,10 +74,16 @@ public:
 		handleInput();
 
 		static float frametime = 0.0f;
-		float maxtime = 0.0025f - deltatime;
+		float maxtime = 0.025f - deltatime;
 		frametime += deltatime;
 		if (frametime >= maxtime) {
-			step();
+			static bool s = true;
+			if(s) {
+				s = step();
+				if (!s) {
+					std::cout << "Done! Thank you." << std::endl;
+				}
+			}
 			drawMaze();
 			frametime = 0.0f;
 		}
@@ -130,7 +138,7 @@ private:
 		return nullptr;
 	}
 
-	void step()
+	bool step()
 	{
 		// make 'current' find the next place to be
 		current->visited = true;
@@ -155,6 +163,13 @@ private:
 				stack.pop_back(); // remove from the stack (eat the breadcrumb)
 			}
 		}
+
+		// We're back at the start field[0]
+		if (current->col == 0 && current->row == 0) {
+			return false;
+		}
+
+		return true;
 	}
 
 	void removeWalls(MCell* c, MCell* n)
@@ -198,7 +213,7 @@ private:
 					if(backtracking) {
 						pixelbuffer.setPixel(x+1, y+1, RED);
 					} else {
-						pixelbuffer.setPixel(x+1, y+1, GREEN);
+						pixelbuffer.setPixel(x+1, y+1, BLUE);
 					}
 				}
 
