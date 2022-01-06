@@ -31,6 +31,7 @@ const int WIDTH  = 32;
 const int HEIGHT = 32;
 
 std::vector<MCell*> field;
+std::vector<MCell*> stack;
 
 class MyApp : public rt::Application
 {
@@ -81,12 +82,91 @@ public:
 		float maxtime = 0.05f - deltatime;
 		frametime += deltatime;
 		if (frametime >= maxtime) {
+			step();
 			drawMaze();
 			frametime = 0.0f;
 		}
 	}
 
 private:
+	MCell* getRandomUnvisitedNeighbour(MCell* mc)
+	{
+		// keep a list of possible neighbours
+		std::vector<MCell*> neighbours;
+		int x = mc->col;
+		int y = mc->row;
+		int index = 0;
+
+		// look right
+		index = pb::idFromPos(x+1,y,WIDTH);
+		if( index != -1 ) {
+			if (!field[index]->visited) {
+				neighbours.push_back(field[index]);
+			}
+		}
+		// look left
+		index = pb::idFromPos(x-1,y,WIDTH);
+		if( index != -1 ) {
+			if (!field[index]->visited) {
+				neighbours.push_back(field[index]);
+			}
+		}
+		// look down
+		index = pb::idFromPos(x,y+1,WIDTH);
+		if( index != -1 ) {
+			if (!field[index]->visited) {
+				neighbours.push_back(field[index]);
+			}
+		}
+		// look up
+		index = pb::idFromPos(x,y-1,WIDTH);
+		if( index != -1 ) {
+			if (!field[index]->visited) {
+				neighbours.push_back(field[index]);
+			}
+		}
+
+		// there's a valid neighbour!
+		if (neighbours.size() > 0) {
+			// pick one from the list
+			int r = rand()%neighbours.size();
+			return neighbours[r];
+		}
+
+		// no neighbours
+		return nullptr;
+	}
+
+	void step()
+	{
+		static MCell* current = field[0];
+		// make 'current' find the next place to be
+		current->visited = true;
+		// STEP 1: while there is a neighbour...
+		/*
+		MCell* next = this->getRandomUnvisitedNeighbour(current);
+		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
+			backtracking = false;
+			next->visited = true;
+
+			// STEP 2
+			stack.push_back(current); // drop a breadcrumb on the stack
+
+			// STEP 3
+			this->removeWalls(current, next); // break through the wall
+
+			// STEP 4
+			current = next;
+		} else { // we're stuck! backtrack our steps...
+			backtracking = true;
+			if (stack.size() > 0) {
+				current = stack.back(); // make previous our current cell
+				stack.pop_back(); // remove from the stack (eat the breadcrumb)
+			}
+		}
+		*/
+	}
+
 	void removeWalls(MCell* c, MCell* n)
 	{
 		int dx = c->col - n->col;
