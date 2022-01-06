@@ -33,6 +33,7 @@ const int HEIGHT = 32;
 std::vector<MCell*> field;
 std::vector<MCell*> stack;
 MCell* current = nullptr;
+bool backtracking = false;
 
 class MyApp : public rt::Application
 {
@@ -136,7 +137,7 @@ private:
 		// STEP 1: while there is a neighbour...
 		MCell* next = this->getRandomUnvisitedNeighbour(current);
 		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
-			// backtracking = false;
+			backtracking = false;
 			next->visited = true;
 
 			// STEP 2
@@ -148,7 +149,7 @@ private:
 			// STEP 4
 			current = next;
 		} else { // we're stuck! backtrack our steps...
-			// backtracking = true;
+			backtracking = true;
 			if (stack.size() > 0) {
 				current = stack.back(); // make previous our current cell
 				stack.pop_back(); // remove from the stack (eat the breadcrumb)
@@ -192,6 +193,14 @@ private:
 					color = GRAY;
 				}
 				pixelbuffer.setPixel(x+1, y+1, color);
+
+				if (current == cell) {
+					if(backtracking) {
+						pixelbuffer.setPixel(x+1, y+1, RED);
+					} else {
+						pixelbuffer.setPixel(x+1, y+1, GREEN);
+					}
+				}
 
 				// draw walls
 				auto walls = cell->walls;
