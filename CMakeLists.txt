@@ -211,3 +211,12 @@ target_link_libraries(blur # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# maze
+add_executable(maze # g++ demo/maze.cpp -o maze
+	demo/maze.cpp
+)
+target_link_libraries(maze # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)

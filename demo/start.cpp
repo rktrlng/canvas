@@ -8,7 +8,6 @@
  */
 
 #include <ctime>
-#include <deque>
 
 #include <canvas/application.h>
 
