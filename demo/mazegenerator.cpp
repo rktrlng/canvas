@@ -1,7 +1,7 @@
 /**
- * @file particles.cpp
+ * @file mazegenerator.cpp
  *
- * @brief particles implementation
+ * @brief Maze Generator implementation
  *
  * Copyright 2021-2022 @rktrlng
  * https://github.com/rktrlng/canvas
