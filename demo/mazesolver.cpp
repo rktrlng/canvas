@@ -77,7 +77,7 @@ public:
 				MCell* cell = new MCell();
 				cell->col = x;
 				cell->row = y;
-				if (pixelbuffer.getPixel(x, y) == BLACK) { cell->wall = true; } // wall
+				if (pixelbuffer.getPixel(x, y) == BLACK) { cell->wall = true; cell->visited = false; } // wall
 				if (pixelbuffer.getPixel(x, y) == WHITE) { cell->visited = false; cell->valid = true; cell->wall = false; } // empty field
 				if (pixelbuffer.getPixel(x, y) == RED)   { start = cell; cell->wall = true; } // startpoint
 				if (pixelbuffer.getPixel(x, y) == BLUE)  { end = cell; cell->wall = true; } // endpoint
@@ -204,6 +204,9 @@ private:
 					color = BLACK;
 				} else {
 					color = WHITE;
+				}
+				if (cell->visited) {
+					color = GRAY;
 				}
 				pb::vec2i pos = pb::vec2i(x, y);
 				pixelbuffer.setPixel(pos.x, pos.y, color);
