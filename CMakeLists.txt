@@ -220,3 +220,12 @@ target_link_libraries(mazegenerator # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# mazesolver
+add_executable(mazesolver # g++ demo/mazesolver.cpp -o mazesolver
+	demo/mazesolver.cpp
+)
+target_link_libraries(mazesolver # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
