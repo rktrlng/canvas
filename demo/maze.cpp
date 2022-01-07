@@ -27,8 +27,8 @@ struct MCell {
 };
 
 
-const int WIDTH  = 16;
-const int HEIGHT = 16;
+const int WIDTH  = 32;
+const int HEIGHT = 24;
 
 
 class MyApp : public rt::Application
@@ -82,6 +82,11 @@ public:
 				s = step();
 				if (!s) {
 					std::cout << "Done! Thank you." << std::endl;
+					drawMaze();
+					layers[0]->pixelbuffer.setPixel(1, 0, WHITE);
+					layers[0]->pixelbuffer.setPixel(1, 1, WHITE);
+					layers[0]->pixelbuffer.setPixel(WIDTH*2, HEIGHT*2-1, WHITE);
+					layers[0]->pixelbuffer.write("maze.pbf");
 				}
 			}
 			drawMaze();
@@ -207,22 +212,23 @@ private:
 				} else {
 					color = GRAY;
 				}
-				pixelbuffer.setPixel(x+1, y+1, color);
+				pb::vec2i pos = pb::vec2i(x+1, y+1);
+				pixelbuffer.setPixel(pos.x, pos.y, color);
 
 				if (current == cell) {
 					if(backtracking) {
-						pixelbuffer.setPixel(x+1, y+1, RED);
+						pixelbuffer.setPixel(pos.x, pos.y, RED);
 					} else {
-						pixelbuffer.setPixel(x+1, y+1, BLUE);
+						pixelbuffer.setPixel(pos.x, pos.y, BLUE);
 					}
 				}
 
 				// draw walls
 				auto walls = cell->walls;
-				if (walls[0]) { pixelbuffer.setPixel(x+1, y+1-1, BLACK); } else { pixelbuffer.setPixel(x+1, y+1-1, WHITE); }
-				if (walls[1]) { pixelbuffer.setPixel(x+1+1, y+1, BLACK); } else { pixelbuffer.setPixel(x+1+1, y+1, WHITE); }
-				// if (walls[2]) { pixelbuffer.setPixel(x+1, y+1+1, BLACK); } else { pixelbuffer.setPixel(x+1, y+1+1, WHITE); }
-				if (walls[3]) { pixelbuffer.setPixel(x+1-1, y+1, BLACK); } else { pixelbuffer.setPixel(x-1+1, y+1, WHITE); }
+				if (walls[0]) { pixelbuffer.setPixel(pos.x, pos.y-1, BLACK); } else { pixelbuffer.setPixel(pos.x, pos.y-1, WHITE); }
+				if (walls[1]) { pixelbuffer.setPixel(pos.x+1, pos.y, BLACK); } else { pixelbuffer.setPixel(pos.x+1, pos.y, WHITE); }
+				// if (walls[2]) { pixelbuffer.setPixel(pos.x, pos.y+1, BLACK); } else { pixelbuffer.setPixel(pos.x, pos.y+1, WHITE); }
+				// if (walls[3]) { pixelbuffer.setPixel(pos.x-1, pos.y, BLACK); } else { pixelbuffer.setPixel(pos.x-1, pos.y, WHITE); }
 			}
 		}
 		layers[0]->lock();
@@ -250,7 +256,7 @@ private:
 
 int main( void )
 {
-	MyApp application(WIDTH*2+1, HEIGHT*2+1, 24, 8);
+	MyApp application(WIDTH*2+1, HEIGHT*2+1, 8, 8);
 
 	while (!application.quit())
 	{
