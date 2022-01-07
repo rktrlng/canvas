@@ -98,11 +98,12 @@ public:
 				s = step();
 				if (!s) {
 					drawMaze();
-					layers[0]->pixelbuffer.setPixel(1, 0, WHITE);
-					layers[0]->pixelbuffer.setPixel(1, 1, WHITE);
-					layers[0]->pixelbuffer.setPixel(WIDTH*2, HEIGHT*2-1, WHITE);
-					std::string name = layers[0]->pixelbuffer.createFilename("maze", mazecounter);
-					layers[0]->pixelbuffer.write(name);
+					auto& pixelbuffer = layers[0]->pixelbuffer;
+					pixelbuffer.setPixel(1, 0, RED);
+					pixelbuffer.setPixel(1, 1, WHITE);
+					pixelbuffer.setPixel(WIDTH*2, HEIGHT*2-1, BLUE);
+					std::string name = pixelbuffer.createFilename("maze", mazecounter);
+					pixelbuffer.write(name);
 					std::cout << name << std::endl;
 					mazecounter++;
 					init();
@@ -284,7 +285,7 @@ private:
 
 int main( void )
 {
-	MyApp application(WIDTH*2+1, HEIGHT*2+1, 8, 8);
+	MyApp application(WIDTH*2+1, HEIGHT*2+1, 24, 8);
 
 	while (!application.quit())
 	{
