@@ -35,9 +35,11 @@ class MyApp : public rt::Application
 {
 private:
 	std::vector<MCell*> field;
-	std::vector<MCell*> stack;
+	std::vector<MCell*> breadcrumbs;
 	MCell* current = nullptr;
 	bool backtracking = false;
+	size_t horbias = 1;
+	size_t verbias = 1;
 
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
@@ -58,6 +60,19 @@ public:
 
 	void init()
 	{
+		// reset
+		current = nullptr;
+		for (size_t i = 0; i < field.size(); i++) {
+			delete[] field[i];
+		}
+		field.clear();
+		for (size_t i = 0; i < breadcrumbs.size(); i++) {
+			delete[] breadcrumbs[i];
+		}
+		breadcrumbs.clear();
+		backtracking = false;
+
+		// new empty field
 		for (size_t y = 0; y < HEIGHT; y++) {
 			for (size_t x = 0; x < WIDTH; x++) {
 				MCell* cell = new MCell();
@@ -73,21 +88,26 @@ public:
 	{
 		handleInput();
 
+		static int mazecounter = 0;
 		static float frametime = 0.0f;
-		float maxtime = 0.025f - deltatime;
+		float maxtime = 0.005f - deltatime;
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			static bool s = true;
 			if(s) {
 				s = step();
 				if (!s) {
-					std::cout << "Done! Thank you." << std::endl;
 					drawMaze();
 					layers[0]->pixelbuffer.setPixel(1, 0, WHITE);
 					layers[0]->pixelbuffer.setPixel(1, 1, WHITE);
 					layers[0]->pixelbuffer.setPixel(WIDTH*2, HEIGHT*2-1, WHITE);
-					layers[0]->pixelbuffer.write("maze.pbf");
+					std::string name = layers[0]->pixelbuffer.createFilename("maze", mazecounter);
+					layers[0]->pixelbuffer.write(name);
+					std::cout << name << std::endl;
+					mazecounter++;
+					init();
 				}
+				s = true;
 			}
 			drawMaze();
 			frametime = 0.0f;
@@ -95,7 +115,7 @@ public:
 	}
 
 private:
-	MCell* getRandomUnvisitedNeighbour(MCell* mc)
+	MCell* getRandomUnvisitedNeighbour(MCell* mc, size_t hbias = 1, size_t vbias = 1)
 	{
 		// keep a list of possible neighbours
 		std::vector<MCell*> neighbours;
@@ -107,28 +127,36 @@ private:
 		index = pb::idFromPos(x+1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x < WIDTH-1) {
 			if (!field[index]->visited) {
-				neighbours.push_back(field[index]);
+				for (size_t i = 0; i < hbias; i++) {
+					neighbours.push_back(field[index]);
+				}
 			}
 		}
 		// look left
 		index = pb::idFromPos(x-1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x > 0 ) {
 			if (!field[index]->visited) {
-				neighbours.push_back(field[index]);
+				for (size_t i = 0; i < hbias; i++) {
+					neighbours.push_back(field[index]);
+				}
 			}
 		}
 		// look down
 		index = pb::idFromPos(x,y+1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!field[index]->visited) {
-				neighbours.push_back(field[index]);
+				for (size_t i = 0; i < vbias; i++) {
+					neighbours.push_back(field[index]);
+				}
 			}
 		}
 		// look up
 		index = pb::idFromPos(x,y-1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!field[index]->visited) {
-				neighbours.push_back(field[index]);
+				for (size_t i = 0; i < vbias; i++) {
+					neighbours.push_back(field[index]);
+				}
 			}
 		}
 
@@ -148,24 +176,24 @@ private:
 		// make 'current' find the next place to be
 		current->visited = true;
 		// STEP 1: while there is a neighbour...
-		MCell* next = this->getRandomUnvisitedNeighbour(current);
+		MCell* next = getRandomUnvisitedNeighbour(current, horbias, verbias);
 		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
 			backtracking = false;
 			next->visited = true;
 
 			// STEP 2
-			stack.push_back(current); // drop a breadcrumb on the stack
+			breadcrumbs.push_back(current); // drop a breadcrumb on the stack
 
 			// STEP 3
-			this->removeWalls(current, next); // break through the wall
+			removeWalls(current, next); // break through the wall
 
 			// STEP 4
 			current = next;
 		} else { // we're stuck! backtrack our steps...
 			backtracking = true;
-			if (stack.size() > 0) {
-				current = stack.back(); // make previous our current cell
-				stack.pop_back(); // remove from the stack (eat the breadcrumb)
+			if (breadcrumbs.size() > 0) {
+				current = breadcrumbs.back(); // make previous our current cell
+				breadcrumbs.pop_back(); // remove from the breadcrumbs (eat the breadcrumb)
 			}
 		}
 
