@@ -85,6 +85,7 @@ public:
 			}
 		}
 		current = field[1+cols];
+		path.push_back(current);
 	}
 
 	void update(float deltatime) override
@@ -163,13 +164,13 @@ private:
 
 			// STEP 2
 			breadcrumbs.push_back(current); // drop a breadcrumb on the stack
-			path.push_back(current); // still looks good...
 
 			// STEP 3
 			// removeWalls(current, next); // break through the wall
 
 			// STEP 4
 			current = next;
+			path.push_back(current); // still looks good...
 		} else { // we're stuck! backtrack our steps...
 			backtracking = true;
 			if (breadcrumbs.size() > 0) {
@@ -210,7 +211,7 @@ private:
 		}
 
 		for (size_t i = 0; i < path.size(); i++) {
-			pixelbuffer[pb::idFromPos(path[i]->col, path[i]->row, cols)] = RED;
+			pixelbuffer[pb::idFromPos(path[i]->col, path[i]->row, cols)] = YELLOW;
 		}
 
 		// draw holes for start + end
