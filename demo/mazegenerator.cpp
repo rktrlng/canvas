@@ -99,9 +99,8 @@ public:
 				if (!s) {
 					drawMaze();
 					auto& pixelbuffer = layers[0]->pixelbuffer;
-					pixelbuffer.setPixel(1, 0, RED);
-					pixelbuffer.setPixel(1, 1, WHITE);
-					pixelbuffer.setPixel(WIDTH*2, HEIGHT*2-1, BLUE);
+					pixelbuffer.setPixel(1, 1, RED); // start
+					pixelbuffer.setPixel(WIDTH*2-1, HEIGHT*2-1, BLUE); // end
 					std::string name = pixelbuffer.createFilename("maze", mazecounter);
 					pixelbuffer.write(name);
 					std::cout << name << std::endl;
