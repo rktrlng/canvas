@@ -16,9 +16,8 @@
 struct MCell {
 	int col = 0; // x
 	int row = 0; // y
+	bool visited = false;
 	bool wall = true;
-	bool valid = false;
-	bool visited = true;
 };
 
 
@@ -80,10 +79,10 @@ public:
 				cell->col = x;
 				cell->row = y;
 				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
-				if (color == BLACK) { cell->wall = true; cell->visited = false; } // wall
-				if (color == WHITE || color == YELLOW) { cell->wall = false; cell->visited = false; cell->valid = true;} // empty field
-				if (color == RED)   { cell->wall = false; cell->valid = true; start = cell; } // startpoint
-				if (color == BLUE)  { cell->wall = false; cell->valid = true; cell->visited = false; end = cell; } // endpoint
+				// if (color == BLACK) { cell->wall = true; } // wall (default)
+				if (color == WHITE || color == YELLOW || color == GRAY) { cell->wall = false; } // empty field
+				if (color == RED)   { cell->wall = false; start = cell; } // startpoint
+				if (color == BLUE)  { cell->wall = false; end = cell; } // endpoint
 				field.push_back(cell);
 			}
 		}
@@ -132,22 +131,22 @@ private:
 
 		// look right
 		index = pb::idFromPos(x+1,y,cols);
-		if (!field[index]->wall && field[index]->valid && !field[index]->visited) {
+		if (!field[index]->wall && !field[index]->visited) {
 			neighbours.push_back(field[index]);
 		}
 		// look left
 		index = pb::idFromPos(x-1,y,cols);
-		if (!field[index]->wall && field[index]->valid && !field[index]->visited) {
+		if (!field[index]->wall && !field[index]->visited) {
 			neighbours.push_back(field[index]);
 		}
 		// look down
 		index = pb::idFromPos(x,y+1,cols);
-		if (!field[index]->wall && field[index]->valid && !field[index]->visited) {
+		if (!field[index]->wall && !field[index]->visited) {
 			neighbours.push_back(field[index]);
 		}
 		// look up
 		index = pb::idFromPos(x,y-1,cols);
-		if (!field[index]->wall && field[index]->valid && !field[index]->visited) {
+		if (!field[index]->wall && !field[index]->visited) {
 			neighbours.push_back(field[index]);
 		}
 
@@ -185,7 +184,6 @@ private:
 			backtracking = true;
 			if (breadcrumbs.size() > 0) {
 				current = breadcrumbs.back(); // make previous our current cell
-				current->valid = false;
 				breadcrumbs.pop_back(); // remove from the breadcrumbs (eat the breadcrumb)
 			}
 			if (path.size() > 0) {
