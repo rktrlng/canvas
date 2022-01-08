@@ -79,10 +79,11 @@ public:
 				MCell* cell = new MCell();
 				cell->col = x;
 				cell->row = y;
-				if (pixelbuffer.getPixel(x, y) == BLACK) { cell->wall = true; cell->visited = false; } // wall
-				if (pixelbuffer.getPixel(x, y) == WHITE) { cell->wall = false; cell->visited = false; cell->valid = true;} // empty field
-				if (pixelbuffer.getPixel(x, y) == RED)   { cell->wall = false; cell->valid = true; start = cell; } // startpoint
-				if (pixelbuffer.getPixel(x, y) == BLUE)  { cell->wall = false; cell->valid = true; cell->visited = false; end = cell; } // endpoint
+				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
+				if (color == BLACK) { cell->wall = true; cell->visited = false; } // wall
+				if (color == WHITE || color == YELLOW) { cell->wall = false; cell->visited = false; cell->valid = true;} // empty field
+				if (color == RED)   { cell->wall = false; cell->valid = true; start = cell; } // startpoint
+				if (color == BLUE)  { cell->wall = false; cell->valid = true; cell->visited = false; end = cell; } // endpoint
 				field.push_back(cell);
 			}
 		}
@@ -106,11 +107,11 @@ public:
 					std::cout << "done" << std::endl;
 					auto& pixelbuffer = layers[0]->pixelbuffer;
 					// remove .pbf extension if there is one
-					if((filename.substr(filename.find_last_of(".") + 1) == "pbf")) {
-						size_t lastindex = filename.find_last_of("."); 
+					size_t lastindex = filename.find_last_of(".");
+					if((filename.substr(lastindex + 1) == "pbf")) {
 						filename = filename.substr(0, lastindex); 
 					}
-					filename += "_solved_" + std::to_string(path.size()) + ".pbf";
+					filename += "_solved_" + std::to_string(field.size()) + "_" + std::to_string(path.size()) + ".pbf";
 					pixelbuffer.write(filename);
 					std::cout << filename << std::endl;
 				}
