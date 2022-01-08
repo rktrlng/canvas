@@ -103,7 +103,9 @@ public:
 					drawMaze();
 					std::cout << "done" << std::endl;
 					auto& pixelbuffer = layers[0]->pixelbuffer;
-					pixelbuffer.write("maze00000_solved.pbf");
+					std::string name = "maze00000_solved.pbf";
+					pixelbuffer.write(name);
+					std::cout << name << std::endl;
 				}
 			}
 			drawMaze();
@@ -206,7 +208,7 @@ private:
 					color = WHITE;
 				}
 				if (cell->visited) {
-					color = GRAY;
+					// color = GRAY;
 				}
 				pb::vec2i pos = pb::vec2i(x, y);
 				pixelbuffer.setPixel(pos.x, pos.y, color);
