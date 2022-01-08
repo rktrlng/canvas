@@ -36,6 +36,8 @@ private:
 	size_t rows = 0;
 
 public:
+	std::string filename = "";
+
 	// MyApp(uint16_t cols, uint16_t rows, uint8_t bitdepth, uint8_t factor) : rt::Application(cols, rows, bitdepth, factor)
 	// {
 	// 	std::srand(std::time(nullptr));
@@ -103,9 +105,14 @@ public:
 					drawMaze();
 					std::cout << "done" << std::endl;
 					auto& pixelbuffer = layers[0]->pixelbuffer;
-					std::string name = "maze00000_solved.pbf";
-					pixelbuffer.write(name);
-					std::cout << name << std::endl;
+					// remove .pbf extension if there is one
+					if((filename.substr(filename.find_last_of(".") + 1) == "pbf")) {
+						size_t lastindex = filename.find_last_of("."); 
+						filename = filename.substr(0, lastindex); 
+					}
+					filename += "_solved_" + std::to_string(path.size()) + ".pbf";
+					pixelbuffer.write(filename);
+					std::cout << filename << std::endl;
 				}
 			}
 			drawMaze();
@@ -246,10 +253,20 @@ private:
 };
 
 
-int main( void )
+int main(int argc, char *argv[])
 {
-	pb::PixelBuffer pixelbuffer("maze00000.pbf");
+	std::string filename = "maze00000.pbf";
+
+	if (argc == 1) {
+		std::cout << "Usage: ./mazesolver [path]" << std::endl;
+	}
+	if (argc == 2) {
+		filename = argv[1];
+	}
+
+	pb::PixelBuffer pixelbuffer(filename);
 	MyApp application(pixelbuffer, 8);
+	application.filename = filename;
 
 	while (!application.quit())
 	{
