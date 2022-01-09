@@ -98,10 +98,10 @@ public:
 		float maxtime = 0.005f - deltatime;
 		frametime += deltatime;
 		if (frametime >= maxtime) {
-			static bool s = true;
-			if(s) {
-				s = step();
-				if (!s) {
+			static bool found = false;
+			if(!found) {
+				found = step();
+				if (found) {
 					drawMaze();
 					std::cout << "done" << std::endl;
 					auto& pixelbuffer = layers[0]->pixelbuffer;
@@ -121,7 +121,7 @@ public:
 	}
 
 private:
-	MCell* getNextValidNeighbour(MCell* mc)
+	MCell* getNextUnvistedNeighbour(MCell* mc)
 	{
 		// keep a list of possible neighbours
 		std::vector<MCell*> neighbours;
@@ -165,19 +165,14 @@ private:
 	{
 		// make 'current' find the next place to be
 		current->visited = true;
-		// STEP 1: while there is a neighbour...
-		MCell* next = getNextValidNeighbour(current);
-		if (next != nullptr) { // there's still a valid neighbour. We're not stuck
+		// while there is a neighbour...
+		MCell* next = getNextUnvistedNeighbour(current);
+		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
 			backtracking = false;
 			next->visited = true;
 
-			// STEP 2
 			breadcrumbs.push_back(current); // drop a breadcrumb on the stack
 
-			// STEP 3
-			// removeWalls(current, next); // break through the wall
-
-			// STEP 4
 			current = next;
 			path.push_back(current); // still looks good...
 		} else { // we're stuck! backtrack our steps...
@@ -193,10 +188,10 @@ private:
 
 		// We've found the exit!
 		if (current->col == end->col && current->row == end->row) {
-			return false;
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 
 	void drawMaze()
