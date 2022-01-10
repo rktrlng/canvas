@@ -44,6 +44,7 @@ private:
 	int _window_height;
 	GLFWwindow* _window;
 	
+	GLuint loadShaders();
 	GLuint loadShaders(
 		const std::string& vertex_file_path,
 		const std::string& fragment_file_path

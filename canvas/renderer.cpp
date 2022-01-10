@@ -88,7 +88,8 @@ int Renderer::init()
 	glEnable(GL_CULL_FACE);
 
 	// Create and compile our GLSL program from the shaders
-	_programID = this->loadShaders("shaders/sprite.vert", "shaders/sprite.frag");
+	// _programID = this->loadShaders("shaders/sprite.vert", "shaders/sprite.frag");
+	_programID = this->loadShaders();
 
 	_projectionMatrix = glm::ortho(0.0f, (float)_window_width, (float)_window_height, 0.0f, 0.1f, 100.0f);
 
@@ -202,6 +203,89 @@ void Renderer::renderCanvas(Canvas* canvas, float px, float py, float sx, float 
 	glDisableVertexAttribArray(vertexUVID);
 }
 
+GLuint Renderer::loadShaders()
+{
+	// Create the shaders
+	GLuint vertexShaderID = glCreateShader(GL_VERTEX_SHADER);
+	GLuint fragmentShaderID = glCreateShader(GL_FRAGMENT_SHADER);
+
+	// Vertex Shader code
+	std::string vertexShaderCode;
+	vertexShaderCode += "#version 120\n";
+	vertexShaderCode += "uniform mat4 MVP;\n";
+	vertexShaderCode += "attribute vec3 vertexPosition;\n";
+	vertexShaderCode += "attribute vec2 vertexUV;\n";
+	vertexShaderCode += "varying vec2 UV;\n";
+	vertexShaderCode += "void main() {\n";
+	vertexShaderCode += "  gl_Position =  MVP * vec4(vertexPosition, 1);\n";
+	vertexShaderCode += "  UV = vertexUV;\n";
+	vertexShaderCode += "}\n";
+
+	// Fragment Shader code
+	std::string fragmentShaderCode;
+	fragmentShaderCode += "#version 120\n";
+	fragmentShaderCode += "varying vec2 UV;\n";
+	fragmentShaderCode += "uniform sampler2D textureSampler;\n";
+	fragmentShaderCode += "void main() {\n";
+	fragmentShaderCode += "  gl_FragColor = texture2D( textureSampler, UV );\n";
+	fragmentShaderCode += "}\n";
+
+
+	GLint result = GL_FALSE;
+	int infoLogLength;
+
+	// Compile Vertex Shader
+	printf("Compiling vertex shader\n");
+	char const * vertexSourcePointer = vertexShaderCode.c_str();
+	glShaderSource(vertexShaderID, 1, &vertexSourcePointer , NULL);
+	glCompileShader(vertexShaderID);
+
+	// Check Vertex Shader
+	glGetShaderiv(vertexShaderID, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(vertexShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+	if ( infoLogLength > 0 ){
+		std::vector<char> vertexShaderErrorMessage(infoLogLength+1);
+		glGetShaderInfoLog(vertexShaderID, infoLogLength, NULL, &vertexShaderErrorMessage[0]);
+		printf("%s\n", &vertexShaderErrorMessage[0]);
+	}
+
+	// Compile Fragment Shader
+	printf("Compiling fragment shader\n");
+	char const * fragmentSourcePointer = fragmentShaderCode.c_str();
+	glShaderSource(fragmentShaderID, 1, &fragmentSourcePointer , NULL);
+	glCompileShader(fragmentShaderID);
+
+	// Check Fragment Shader
+	glGetShaderiv(fragmentShaderID, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(fragmentShaderID, GL_INFO_LOG_LENGTH, &infoLogLength);
+	if ( infoLogLength > 0 ){
+		std::vector<char> fragmentShaderErrorMessage(infoLogLength+1);
+		glGetShaderInfoLog(fragmentShaderID, infoLogLength, NULL, &fragmentShaderErrorMessage[0]);
+		printf("%s\n", &fragmentShaderErrorMessage[0]);
+	}
+
+	// Link the program
+	printf("Linking program\n");
+	GLuint programID = glCreateProgram();
+	glAttachShader(programID, vertexShaderID);
+	glAttachShader(programID, fragmentShaderID);
+	glLinkProgram(programID);
+
+	// Check the program
+	glGetProgramiv(programID, GL_LINK_STATUS, &result);
+	glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &infoLogLength);
+	if ( infoLogLength > 0 ){
+		std::vector<char> programErrorMessage(infoLogLength+1);
+		glGetProgramInfoLog(programID, infoLogLength, NULL, &programErrorMessage[0]);
+		printf("%s\n", &programErrorMessage[0]);
+	}
+
+	glDeleteShader(vertexShaderID);
+	glDeleteShader(fragmentShaderID);
+
+	return programID;
+}
+
 GLuint Renderer::loadShaders(const std::string& vertex_file_path, const std::string& fragment_file_path)
 {
 	// Create the shaders
@@ -218,7 +302,7 @@ GLuint Renderer::loadShaders(const std::string& vertex_file_path, const std::str
 		}
 		vertexShaderStream.close();
 	} else {
-		printf("Can't to open %s.\n", vertex_file_path.c_str());
+		printf("Can't open %s.\n", vertex_file_path.c_str());
 		getchar();
 		return 0;
 	}
@@ -233,7 +317,7 @@ GLuint Renderer::loadShaders(const std::string& vertex_file_path, const std::str
 		}
 		fragmentShaderStream.close();
 	} else {
-		printf("Can't to open %s.\n", fragment_file_path.c_str());
+		printf("Can't open %s.\n", fragment_file_path.c_str());
 		getchar();
 		return 0;
 	}
