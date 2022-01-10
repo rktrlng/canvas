@@ -1,7 +1,7 @@
 /**
- * @file particles.cpp
+ * @file start.cpp
  *
- * @brief particles implementation
+ * @brief start
  *
  * Copyright 2021-2022 @rktrlng
  * https://github.com/rktrlng/canvas

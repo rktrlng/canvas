@@ -1,7 +1,7 @@
 /**
- * @file particles.cpp
+ * @file blur.cpp
  *
- * @brief particles implementation
+ * @brief Firefly maybe
  *
  * Copyright 2021-2022 @rktrlng
  * https://github.com/rktrlng/canvas
