@@ -31,7 +31,7 @@
 namespace rt {
 
 /// @brief KeyCode used by Input
-enum KeyCode : uint16_t
+enum class KeyCode : uint16_t
 {
 	Space = 32,
 	Apostrophe = 39,
