@@ -75,10 +75,6 @@ add_library(canvas # ar rcs libcanvas.a
 	canvas/noise.h
 	canvas/noise.cpp
 )
-file(
-	COPY canvas/shaders
-	DESTINATION ${CMAKE_BINARY_DIR}
-)
 
 
 # Start
