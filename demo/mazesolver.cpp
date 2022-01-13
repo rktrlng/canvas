@@ -99,26 +99,35 @@ public:
 		float maxtime = 0.01f - deltatime;
 		frametime += deltatime;
 		if (frametime >= maxtime) {
-			static bool found = false;
-			if(!found) {
-				found = solveStep();
-				if (found) {
-					drawMazeSolver();
-					std::cout << "done" << std::endl;
-					auto& pixelbuffer = layers[0]->pixelbuffer;
-					// remove .pbf extension if there is one
-					size_t lastindex = filename.find_last_of(".");
-					if((filename.substr(lastindex + 1) == "pbf")) {
-						filename = filename.substr(0, lastindex); 
-					}
-					filename += "_solved_" + std::to_string(field.size()) + "_" + std::to_string(solution.size()) + ".pbf";
-					pixelbuffer.write(filename);
-					std::cout << filename << std::endl;
-				}
-			}
-			drawMazeSolver();
+			// bool solved = solveMaze();
+			solveMaze();
+			
 			frametime = 0.0f;
 		}
+	}
+
+	bool solveMaze()
+	{
+		static bool found = false;
+		if(!found) {
+			found = solveStep();
+			if (found) {
+				drawMazeSolver();
+				std::cout << "done" << std::endl;
+				auto& pixelbuffer = layers[0]->pixelbuffer;
+				// remove .pbf extension if there is one
+				size_t lastindex = filename.find_last_of(".");
+				if((filename.substr(lastindex + 1) == "pbf")) {
+					filename = filename.substr(0, lastindex); 
+				}
+				filename += "_solved_" + std::to_string(field.size()) + "_" + std::to_string(solution.size()) + ".pbf";
+				pixelbuffer.write(filename);
+				std::cout << filename << std::endl;
+			}
+		}
+		drawMazeSolver();
+
+		return found;
 	}
 
 private:
