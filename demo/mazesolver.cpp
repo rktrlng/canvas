@@ -20,6 +20,7 @@ struct PCell {
 	bool wall = true;
 };
 
+enum class State { SEARCHING, BACKTRACKING };
 
 class MyApp : public rt::Application
 {
@@ -30,7 +31,7 @@ private:
 	PCell* seeker = nullptr;
 	PCell* start = nullptr;
 	PCell* end = nullptr;
-	bool backtracking = false;
+	State state = State::SEARCHING;
 	size_t cols = 0;
 	size_t rows = 0;
 
@@ -66,7 +67,7 @@ public:
 			delete[] breadcrumbs[i];
 		}
 		breadcrumbs.clear();
-		backtracking = false;
+		state = State::SEARCHING;
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		cols = pixelbuffer.header().width;
@@ -95,7 +96,7 @@ public:
 		handleInput();
 
 		static float frametime = 0.0f;
-		float maxtime = 0.005f - deltatime;
+		float maxtime = 0.01f - deltatime;
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			static bool found = false;
@@ -168,7 +169,7 @@ private:
 		// while there is a neighbour...
 		PCell* next = getNextUnvistedDirectNeighbour(seeker);
 		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
-			backtracking = false;
+			state = State::SEARCHING;
 			next->visited = true;
 
 			breadcrumbs.push_back(seeker); // drop a breadcrumb on the stack
@@ -176,7 +177,7 @@ private:
 			seeker = next;
 			solution.push_back(seeker); // still looks good...
 		} else { // we're stuck! backtrack our steps...
-			backtracking = true;
+			state = State::BACKTRACKING;
 			if (breadcrumbs.size() > 0) {
 				seeker = breadcrumbs.back(); // make previous our seeker cell
 				breadcrumbs.pop_back(); // remove from the breadcrumbs (eat the breadcrumb)
