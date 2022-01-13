@@ -25,7 +25,7 @@ enum class State { SEARCHING, BACKTRACKING };
 class MyApp : public rt::Application
 {
 private:
-	std::vector<PCell*> field;
+	std::vector<PCell*> solverfield;
 	std::vector<PCell*> breadcrumbs;
 	std::vector<PCell*> solution;
 	PCell* seeker = nullptr;
@@ -59,10 +59,10 @@ public:
 	{
 		// reset
 		seeker = nullptr;
-		for (size_t i = 0; i < field.size(); i++) {
-			delete[] field[i];
+		for (size_t i = 0; i < solverfield.size(); i++) {
+			delete[] solverfield[i];
 		}
-		field.clear();
+		solverfield.clear();
 		for (size_t i = 0; i < breadcrumbs.size(); i++) {
 			delete[] breadcrumbs[i];
 		}
@@ -73,7 +73,7 @@ public:
 		cols = pixelbuffer.header().width;
 		rows = pixelbuffer.header().height;
 
-		// new empty field
+		// new empty solverfield
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
 				PCell* cell = new PCell();
@@ -81,10 +81,10 @@ public:
 				cell->row = y;
 				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
 				// if (color == BLACK) { cell->wall = true; } // wall (default)
-				if (color == WHITE || color == ORANGE || color == GRAY) { cell->wall = false; } // empty field
+				if (color == WHITE || color == ORANGE || color == GRAY) { cell->wall = false; } // empty solverfield
 				if (color == RED)   { cell->wall = false; start = cell; } // startpoint
 				if (color == BLUE)  { cell->wall = false; end = cell; } // endpoint
-				field.push_back(cell);
+				solverfield.push_back(cell);
 			}
 		}
 		seeker = start;
@@ -120,7 +120,7 @@ public:
 				if((filename.substr(lastindex + 1) == "pbf")) {
 					filename = filename.substr(0, lastindex); 
 				}
-				filename += "_solved_" + std::to_string(field.size()) + "_" + std::to_string(solution.size()) + ".pbf";
+				filename += "_solved_" + std::to_string(solverfield.size()) + "_" + std::to_string(solution.size()) + ".pbf";
 				pixelbuffer.write(filename);
 				std::cout << filename << std::endl;
 			}
@@ -141,23 +141,23 @@ private:
 
 		// look right
 		index = pb::idFromPos(x+1,y,cols);
-		if (!field[index]->wall && !field[index]->visited) {
-			neighbours.push_back(field[index]);
+		if (!solverfield[index]->wall && !solverfield[index]->visited) {
+			neighbours.push_back(solverfield[index]);
 		}
 		// look left
 		index = pb::idFromPos(x-1,y,cols);
-		if (!field[index]->wall && !field[index]->visited) {
-			neighbours.push_back(field[index]);
+		if (!solverfield[index]->wall && !solverfield[index]->visited) {
+			neighbours.push_back(solverfield[index]);
 		}
 		// look down
 		index = pb::idFromPos(x,y+1,cols);
-		if (!field[index]->wall && !field[index]->visited) {
-			neighbours.push_back(field[index]);
+		if (!solverfield[index]->wall && !solverfield[index]->visited) {
+			neighbours.push_back(solverfield[index]);
 		}
 		// look up
 		index = pb::idFromPos(x,y-1,cols);
-		if (!field[index]->wall && !field[index]->visited) {
-			neighbours.push_back(field[index]);
+		if (!solverfield[index]->wall && !solverfield[index]->visited) {
+			neighbours.push_back(solverfield[index]);
 		}
 
 		// there's a valid neighbour!
@@ -212,7 +212,7 @@ private:
 			for (size_t x = 0; x < cols; x++) {
 				pb::RGBAColor color = BLACK;
 				int index = pb::idFromPos(x, y, cols);
-				PCell* cell = field[index];
+				PCell* cell = solverfield[index];
 				if (cell->wall) {
 					color = BLACK;
 				} else {
