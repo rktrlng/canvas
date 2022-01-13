@@ -354,15 +354,10 @@ private:
 		start = nullptr;
 		end = nullptr;
 
-		if (solverfield.size() > 0) {
-			for (size_t i = 0; i < solverfield.size(); i++) {
-				if (solverfield[i]) {
-					delete[] solverfield[i];
-					solverfield[i] = nullptr;
-				}
-			}
-			solverfield.clear();
+		for (size_t i = 0; i < solverfield.size(); i++) {
+			delete[] solverfield[i];
 		}
+		solverfield.clear();
 
 		breadcrumbs_solver.clear();
 		solution.clear();

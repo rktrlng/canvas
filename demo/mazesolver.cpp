@@ -63,10 +63,9 @@ public:
 			delete[] solverfield[i];
 		}
 		solverfield.clear();
-		for (size_t i = 0; i < breadcrumbs.size(); i++) {
-			delete[] breadcrumbs[i];
-		}
 		breadcrumbs.clear();
+		solution.clear();
+
 		state = State::SEARCHING;
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
