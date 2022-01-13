@@ -13,7 +13,7 @@
 
 #include <canvas/application.h>
 
-struct MCell {
+struct PCell {
 	int col = 0; // x
 	int row = 0; // y
 	bool visited = false;
@@ -24,12 +24,12 @@ struct MCell {
 class MyApp : public rt::Application
 {
 private:
-	std::vector<MCell*> field;
-	std::vector<MCell*> breadcrumbs;
-	std::vector<MCell*> path;
-	MCell* current = nullptr;
-	MCell* start = nullptr;
-	MCell* end = nullptr;
+	std::vector<PCell*> field;
+	std::vector<PCell*> breadcrumbs;
+	std::vector<PCell*> solution;
+	PCell* seeker = nullptr;
+	PCell* start = nullptr;
+	PCell* end = nullptr;
 	bool backtracking = false;
 	size_t cols = 0;
 	size_t rows = 0;
@@ -46,7 +46,7 @@ public:
 	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
 	{
 		std::srand(std::time(nullptr));
-		init();
+		initSolver();
 	}
 
 	virtual ~MyApp()
@@ -54,10 +54,10 @@ public:
 		
 	}
 
-	void init()
+	void initSolver()
 	{
 		// reset
-		current = nullptr;
+		seeker = nullptr;
 		for (size_t i = 0; i < field.size(); i++) {
 			delete[] field[i];
 		}
@@ -75,19 +75,19 @@ public:
 		// new empty field
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				MCell* cell = new MCell();
+				PCell* cell = new PCell();
 				cell->col = x;
 				cell->row = y;
 				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
 				// if (color == BLACK) { cell->wall = true; } // wall (default)
-				if (color == WHITE || color == YELLOW || color == GRAY) { cell->wall = false; } // empty field
+				if (color == WHITE || color == ORANGE || color == GRAY) { cell->wall = false; } // empty field
 				if (color == RED)   { cell->wall = false; start = cell; } // startpoint
 				if (color == BLUE)  { cell->wall = false; end = cell; } // endpoint
 				field.push_back(cell);
 			}
 		}
-		current = start;
-		path.push_back(current);
+		seeker = start;
+		solution.push_back(seeker);
 	}
 
 	void update(float deltatime) override
@@ -100,9 +100,9 @@ public:
 		if (frametime >= maxtime) {
 			static bool found = false;
 			if(!found) {
-				found = step();
+				found = solveStep();
 				if (found) {
-					drawMaze();
+					drawMazeSolver();
 					std::cout << "done" << std::endl;
 					auto& pixelbuffer = layers[0]->pixelbuffer;
 					// remove .pbf extension if there is one
@@ -110,21 +110,21 @@ public:
 					if((filename.substr(lastindex + 1) == "pbf")) {
 						filename = filename.substr(0, lastindex); 
 					}
-					filename += "_solved_" + std::to_string(field.size()) + "_" + std::to_string(path.size()) + ".pbf";
+					filename += "_solved_" + std::to_string(field.size()) + "_" + std::to_string(solution.size()) + ".pbf";
 					pixelbuffer.write(filename);
 					std::cout << filename << std::endl;
 				}
 			}
-			drawMaze();
+			drawMazeSolver();
 			frametime = 0.0f;
 		}
 	}
 
 private:
-	MCell* getNextUnvistedNeighbour(MCell* mc)
+	PCell* getNextUnvistedDirectNeighbour(PCell* mc)
 	{
 		// keep a list of possible neighbours
-		std::vector<MCell*> neighbours;
+		std::vector<PCell*> neighbours;
 		size_t x = mc->col;
 		size_t y = mc->row;
 		size_t index = 0;
@@ -161,40 +161,40 @@ private:
 		return nullptr;
 	}
 
-	bool step()
+	bool solveStep()
 	{
-		// make 'current' find the next place to be
-		current->visited = true;
+		// make 'seeker' find the next place to be
+		seeker->visited = true;
 		// while there is a neighbour...
-		MCell* next = getNextUnvistedNeighbour(current);
+		PCell* next = getNextUnvistedDirectNeighbour(seeker);
 		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
 			backtracking = false;
 			next->visited = true;
 
-			breadcrumbs.push_back(current); // drop a breadcrumb on the stack
+			breadcrumbs.push_back(seeker); // drop a breadcrumb on the stack
 
-			current = next;
-			path.push_back(current); // still looks good...
+			seeker = next;
+			solution.push_back(seeker); // still looks good...
 		} else { // we're stuck! backtrack our steps...
 			backtracking = true;
 			if (breadcrumbs.size() > 0) {
-				current = breadcrumbs.back(); // make previous our current cell
+				seeker = breadcrumbs.back(); // make previous our seeker cell
 				breadcrumbs.pop_back(); // remove from the breadcrumbs (eat the breadcrumb)
 			}
-			if (path.size() > 0) {
-				path.pop_back(); // nope, wrong track!
+			if (solution.size() > 0) {
+				solution.pop_back(); // nope, wrong track!
 			}
 		}
 
 		// We've found the exit!
-		if (current->col == end->col && current->row == end->row) {
+		if (seeker->col == end->col && seeker->row == end->row) {
 			return true;
 		}
 
 		return false;
 	}
 
-	void drawMaze()
+	void drawMazeSolver()
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 
@@ -202,7 +202,7 @@ private:
 			for (size_t x = 0; x < cols; x++) {
 				pb::RGBAColor color = BLACK;
 				int index = pb::idFromPos(x, y, cols);
-				MCell* cell = field[index];
+				PCell* cell = field[index];
 				if (cell->wall) {
 					color = BLACK;
 				} else {
@@ -216,11 +216,12 @@ private:
 			}
 		}
 
-		for (size_t i = 0; i < path.size(); i++) {
-			pixelbuffer[pb::idFromPos(path[i]->col, path[i]->row, cols)] = YELLOW;
+		// draw solution so far
+		for (size_t i = 0; i < solution.size(); i++) {
+			pixelbuffer[pb::idFromPos(solution[i]->col, solution[i]->row, cols)] = ORANGE;
 		}
 
-		// draw holes for start + end
+		// draw start + end
 		pixelbuffer.setPixel(start->col, start->row, RED);
 		pixelbuffer.setPixel(end->col, end->row, BLUE);
 
@@ -252,7 +253,7 @@ int main(int argc, char *argv[])
 	std::string filename = "maze00000.pbf";
 
 	if (argc == 1) {
-		std::cout << "Usage: ./mazesolver [path]" << std::endl;
+		std::cout << "Usage: ./mazesolver [solution]" << std::endl;
 	}
 	if (argc == 2) {
 		filename = argv[1];

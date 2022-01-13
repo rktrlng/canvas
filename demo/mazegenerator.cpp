@@ -45,7 +45,7 @@ public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
 		std::srand(std::time(nullptr));
-		init();
+		initGenerator();
 	}
 
 	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
@@ -58,7 +58,7 @@ public:
 		
 	}
 
-	void init()
+	void initGenerator()
 	{
 		// reset
 		current = nullptr;
@@ -95,9 +95,9 @@ public:
 		if (frametime >= maxtime) {
 			static bool s = true;
 			if(s) {
-				s = step();
+				s = generateStep();
 				if (!s) {
-					drawMaze();
+					drawMazeGenerator();
 					auto& pixelbuffer = layers[0]->pixelbuffer;
 					pixelbuffer.setPixel(1, 1, RED); // start
 					pixelbuffer.setPixel(WIDTH*2-1, HEIGHT*2-1, BLUE); // end
@@ -105,17 +105,17 @@ public:
 					pixelbuffer.write(name);
 					std::cout << name << std::endl;
 					mazecounter++;
-					init();
+					initGenerator();
 				}
 				s = true;
 			}
-			drawMaze();
+			drawMazeGenerator();
 			frametime = 0.0f;
 		}
 	}
 
 private:
-	MCell* getRandomUnvisitedNeighbour(MCell* mc, size_t hbias = 1, size_t vbias = 1)
+	MCell* getRandomUnvisitedSeperatedNeighbour(MCell* mc, size_t hbias = 1, size_t vbias = 1)
 	{
 		// keep a list of possible neighbours
 		std::vector<MCell*> neighbours;
@@ -171,12 +171,12 @@ private:
 		return nullptr;
 	}
 
-	bool step()
+	bool generateStep()
 	{
 		// make 'current' find the next place to be
 		current->visited = true;
 		// STEP 1: while there is a neighbour...
-		MCell* next = getRandomUnvisitedNeighbour(current, horbias, verbias);
+		MCell* next = getRandomUnvisitedSeperatedNeighbour(current, horbias, verbias);
 		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
 			backtracking = false;
 			next->visited = true;
@@ -226,7 +226,7 @@ private:
 		}
 	}
 
-	void drawMaze()
+	void drawMazeGenerator()
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 
