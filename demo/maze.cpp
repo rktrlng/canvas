@@ -16,6 +16,9 @@
 const int WIDTH  = 40;
 const int HEIGHT = 22;
 
+const bool write_generated = false;
+const bool write_solved = false;
+
 enum class State { GENERATING, SEARCHING, GENBACKTRACKING, SOLVEBACKTRACKING, DONEGENERATING, DONESEARCHING, VICTORY };
 
 struct MCell {
@@ -43,6 +46,9 @@ class MyApp : public rt::Application
 {
 private:
 	State state = State::GENERATING;
+	int mazenum = 0;
+	size_t cols = 0;
+	size_t rows = 0;
 
 	// ##### Generator #####
 	std::vector<MCell*> generatorfield;
@@ -58,8 +64,6 @@ private:
 	PCell* seeker = nullptr;
 	PCell* start = nullptr;
 	PCell* end = nullptr;
-	size_t cols = 0;
-	size_t rows = 0;
 
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
@@ -145,7 +149,6 @@ private:
 	// #########################################
 	bool generateMaze()
 	{
-		static int mazecounter = 0;
 		static bool done = false;
 		if(!done) {
 			done = generateStep();
@@ -154,10 +157,13 @@ private:
 				auto& pixelbuffer = layers[0]->pixelbuffer;
 				pixelbuffer.setPixel(1, 1, RED); // start
 				pixelbuffer.setPixel(WIDTH*2-1, HEIGHT*2-1, BLUE); // end
-				std::string name = pixelbuffer.createFilename("maze", mazecounter);
-				pixelbuffer.write(name);
-				std::cout << name << std::endl;
-				mazecounter++;
+
+				if (write_generated) {
+					std::string name = pixelbuffer.createFilename("maze", mazenum);
+					pixelbuffer.write(name);
+					std::cout << name << std::endl;
+				}
+
 				done = false;
 				return true;
 			}
@@ -170,8 +176,6 @@ private:
 
 	void initGenerator()
 	{
-		std::cout << "init generator" << std::endl;
-
 		// reset
 		gencurrent = nullptr;
 
@@ -348,7 +352,6 @@ private:
 	// #########################################
 	void initSolver()
 	{
-		std::cout << "init solver" << std::endl;
 		// reset
 		seeker = nullptr;
 		start = nullptr;
@@ -368,8 +371,6 @@ private:
 		cols = pixelbuffer.header().width;
 		rows = pixelbuffer.header().height;
 
-		pixelbuffer.printInfo();
-
 		// new empty solverfield
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
@@ -379,15 +380,13 @@ private:
 				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
 				// if (color == BLACK) { cell->wall = true; } // wall (default)
 				if (color == WHITE || color == ORANGE || color == GRAY) { cell->wall = false; } // empty solverfield
-				if (color == RED)   { cell->wall = false; start = cell; std::cout << "start " << x << "," << y << std::endl; } // startpoint
-				if (color == BLUE)  { cell->wall = false; end = cell; std::cout << "end " << x << "," << y << std::endl; } // endpoint
+				if (color == RED)   { cell->wall = false; start = cell; } // startpoint
+				if (color == BLUE)  { cell->wall = false; end = cell; } // endpoint
 				solverfield.push_back(cell);
 			}
-			// std::cout << "Y " << y << std::endl;
 		}
 		seeker = start;
 		solution.push_back(seeker);
-		std::cout << "end init solver" << std::endl;
 	}
 
 	bool solveMaze()
@@ -397,17 +396,21 @@ private:
 			found = solveStep();
 			if (found) {
 				drawMazeSolver();
-				std::cout << "done" << std::endl;
-				auto& pixelbuffer = layers[0]->pixelbuffer;
-				// remove .pbf extension if there is one
-				// size_t lastindex = filename.find_last_of(".");
-				// if((filename.substr(lastindex + 1) == "pbf")) {
-				// 	filename = filename.substr(0, lastindex); 
-				// }
-				std::string filename = "maze";
-				filename += "_solved_" + std::to_string(solverfield.size()) + "_" + std::to_string(solution.size()) + ".pbf";
-				pixelbuffer.write(filename);
-				std::cout << filename << std::endl;
+
+				if (write_solved) {
+					auto& pixelbuffer = layers[0]->pixelbuffer;
+					std::string filename = pixelbuffer.createFilename("maze", mazenum);
+					// remove .pbf extension if there is one
+					size_t lastindex = filename.find_last_of(".");
+					if((filename.substr(lastindex + 1) == "pbf")) {
+						filename = filename.substr(0, lastindex); 
+					}
+					filename += "_solved_" + std::to_string(solverfield.size()) + "_" + std::to_string(solution.size()) + ".pbf";
+					pixelbuffer.write(filename);
+					std::cout << filename << std::endl;
+				}
+
+				mazenum++;
 				found = false;
 				return true;
 			}
