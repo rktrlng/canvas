@@ -66,9 +66,6 @@ public:
 			delete[] field[i];
 		}
 		field.clear();
-		for (size_t i = 0; i < breadcrumbs.size(); i++) {
-			delete[] breadcrumbs[i];
-		}
 		breadcrumbs.clear();
 		backtracking = false;
 
