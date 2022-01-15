@@ -438,7 +438,7 @@ private:
 		// make 'seeker' find the next place to be
 		seeker->visited = true;
 		// while there is a neighbour...
-		PCell* next = getNextUnvistedDirectNeighbour(seeker);
+		PCell* next = getNextUnvisitedDirectNeighbour(seeker);
 		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
 			state = State::SEARCHING;
 			next->visited = true;
@@ -510,7 +510,7 @@ private:
 		layers[0]->lock();
 	}
 
-	PCell* getNextUnvistedDirectNeighbour(PCell* mc)
+	PCell* getNextUnvisitedDirectNeighbour(PCell* mc)
 	{
 		// keep a list of possible neighbours
 		std::vector<PCell*> neighbours;
