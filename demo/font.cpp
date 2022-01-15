@@ -16,6 +16,7 @@ class MyApp : public rt::Application
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
+		layers[0]->pixelbuffer.fill(BLACK);
 		fillGlyphs();
 		font();
 	}

@@ -36,6 +36,7 @@ public:
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		uint16_t cols = pixelbuffer.header().width;
 		uint16_t rows = pixelbuffer.header().height;
+		pixelbuffer.fill(BLACK);
 		
 		// fill field for wireworld
 		field = std::vector<uint8_t>(rows*cols, 0);

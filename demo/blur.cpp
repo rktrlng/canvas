@@ -18,6 +18,7 @@ public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
 		std::srand(std::time(nullptr));
+		layers[0]->pixelbuffer.fill(BLACK);
 	}
 
 	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
