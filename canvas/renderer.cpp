@@ -70,6 +70,9 @@ int Renderer::init()
 	// Ensure we can capture the escape key being pressed
 	glfwSetInputMode(_window, GLFW_STICKY_KEYS, GL_TRUE);
 
+	// hide mouse cursor
+	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+
 	// vsync (0=off, 1=on)
 	glfwSwapInterval(0);
 
