@@ -14,6 +14,8 @@
 
 class MyApp : public rt::Application
 {
+private:
+	pb::RGBAColor color = RED;
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
@@ -40,6 +42,7 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			updatePixels();
+			color = pb::Color::rotate(color, 0.005f);
 			frametime = 0.0f;
 		}
 	}
@@ -56,14 +59,21 @@ private:
 		pos.rotate(angle);
 		angle += 0.05f;
 
-		pixelbuffer.setPixel(cols/2 + pos.x, rows/2 + pos.y, WHITE);
-		pixelbuffer.setPixel(cols/2 + pos.x + 1, rows/2 + pos.y, WHITE);
-		pixelbuffer.setPixel(cols/2 + pos.x - 1, rows/2 + pos.y, WHITE);
-		pixelbuffer.setPixel(cols/2 + pos.x, rows/2 + pos.y + 1, WHITE);
-		pixelbuffer.setPixel(cols/2 + pos.x, rows/2 + pos.y - 1, WHITE);
+		drawCross(pos.x + cols/2, pos.y + rows/2, color);
 
 		pixelbuffer.blur();
 		layers[0]->lock();
+	}
+
+	void drawCross(int x, int y, pb::RGBAColor color)
+	{
+		auto& pixelbuffer = layers[0]->pixelbuffer;
+
+		pixelbuffer.setPixel(x,     y, color);
+		pixelbuffer.setPixel(x + 1, y, color);
+		pixelbuffer.setPixel(x - 1, y, color);
+		pixelbuffer.setPixel(x,     y + 1, color);
+		pixelbuffer.setPixel(x,     y - 1, color);
 	}
 
 	void handleInput()
@@ -73,8 +83,11 @@ private:
 			layers[0]->pixelbuffer.printInfo();
 		}
 
-		if (input.getMouseDown(0)) {
-			std::cout << "click " << (int) input.getMouseX() << "," << (int) input.getMouseY() << std::endl;
+		if (input.getMouse(0)) {
+			int x = (int) input.getMouseX();
+			int y = (int) input.getMouseY();
+			drawCross(x, y, WHITE);
+			// std::cout << "click " << x << "," << y << std::endl;
 		}
 
 		int scrolly = input.getScrollY();
