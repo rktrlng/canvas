@@ -72,14 +72,6 @@ public:
 	{
 		std::srand(std::time(nullptr));
 		layers[0]->pixelbuffer.fill(BLACK);
-
-		pb::RGBAColor color = RED;
-		size_t amount = 600;
-		for (size_t i = 0; i < amount; i++) {
-			palette.push_back(color);
-			color = pb::Color::rotate(color, 1.0f / amount);
-		}
-
 		initGenerator();
 	}
 
@@ -137,9 +129,10 @@ public:
 				state = State::VICTORY;
 				break;
 			case State::VICTORY:
+				drawMazeSolver(frametime);
 				static float victime = 0.0f;
 				victime += frametime;
-				if (victime > 3.0f) {
+				if (victime > 10.0f) {
 					victime = 0.0f;
 					state = State::GENERATING;
 				}
@@ -398,6 +391,14 @@ private:
 		}
 		seeker = start;
 		solution.push_back(seeker);
+
+		palette.clear();
+		pb::RGBAColor color = RED;
+		size_t amount = 600;
+		for (size_t i = 0; i < amount; i++) {
+			palette.push_back(color);
+			color = pb::Color::rotate(color, 1.0f / amount);
+		}
 	}
 
 	bool solveMaze()
@@ -406,7 +407,7 @@ private:
 		if(!found) {
 			found = solveStep();
 			if (found) {
-				drawMazeSolver();
+				drawMazeSolver(0.0f);
 
 				if (write_solved) {
 					auto& pixelbuffer = layers[0]->pixelbuffer;
@@ -427,7 +428,7 @@ private:
 			}
 			found = false;
 		}
-		drawMazeSolver();
+		drawMazeSolver(0.0f);
 
 		return found;
 	}
@@ -465,7 +466,7 @@ private:
 		return false;
 	}
 
-	void drawMazeSolver()
+	void drawMazeSolver(float deltatime)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 
@@ -494,9 +495,17 @@ private:
 			pixelbuffer[pb::idFromPos(solution[i]->col, solution[i]->row, cols)] = color;
 		}
 
+		if (state == State::VICTORY) {
+			for (size_t i = 0; i < palette.size(); i++) {
+				pb::RGBAColor color = palette[i];
+				palette[i] = pb::Color::rotate(color, 1.0f - deltatime);
+			}
+		}
+
 		// draw start + end
-		pixelbuffer.setPixel(start->col, start->row, RED);
-		pixelbuffer.setPixel(end->col, end->row, BLUE);
+		// pixelbuffer.setPixel(start->col, start->row, RED);
+		// pixelbuffer.setPixel(end->col, end->row, BLUE);
+		pixelbuffer.setPixel(end->col, end->row, palette[(solution.size()-1)%palette.size()]);
 
 		layers[0]->lock();
 	}
