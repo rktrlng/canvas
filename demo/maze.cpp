@@ -65,11 +65,21 @@ private:
 	PCell* start = nullptr;
 	PCell* end = nullptr;
 
+	std::vector<pb::RGBAColor> palette;
+
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
 		std::srand(std::time(nullptr));
 		layers[0]->pixelbuffer.fill(BLACK);
+
+		pb::RGBAColor color = RED;
+		size_t amount = 600;
+		for (size_t i = 0; i < amount; i++) {
+			palette.push_back(color);
+			color = pb::Color::rotate(color, 1.0f / amount);
+		}
+
 		initGenerator();
 	}
 
@@ -479,7 +489,9 @@ private:
 
 		// draw solution so far
 		for (size_t i = 0; i < solution.size(); i++) {
-			pixelbuffer[pb::idFromPos(solution[i]->col, solution[i]->row, cols)] = ORANGE;
+			// pixelbuffer[pb::idFromPos(solution[i]->col, solution[i]->row, cols)] = ORANGE;
+			pb::RGBAColor color = palette[i % palette.size()];
+			pixelbuffer[pb::idFromPos(solution[i]->col, solution[i]->row, cols)] = color;
 		}
 
 		// draw start + end
