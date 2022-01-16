@@ -150,7 +150,7 @@ private:
 
 int main( void )
 {
-	MyApp application(320, 180, 8, 4);
+	MyApp application(320, 180, 8, 5);
 
 	while (!application.quit())
 	{
