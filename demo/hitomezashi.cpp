@@ -17,10 +17,19 @@ class MyApp : public rt::Application
 private:
 	const uint8_t step = 5;
 	size_t counter = 0;
+	std::vector<bool> xstitch;
+	std::vector<bool> ystitch;
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
 		std::srand(std::time(nullptr));
+
+		auto& pixelbuffer = layers[0]->pixelbuffer;
+		size_t cols = pixelbuffer.header().width;
+		size_t rows = pixelbuffer.header().height;
+		xstitch = randomSequence(cols/step);
+		ystitch = randomSequence(rows/step);
+
 		hitomezashi();
 	}
 
@@ -39,7 +48,7 @@ public:
 		handleInput();
 
 		static float frametime = 0.0f;
-		float maxtime = 1.0f - deltatime;
+		float maxtime = 0.0167f - deltatime;
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			hitomezashi();
@@ -65,9 +74,6 @@ private:
 		size_t cols = pixelbuffer.header().width;
 		size_t rows = pixelbuffer.header().height;
 
-		std::vector<bool> xstitch = randomSequence(cols/step);
-		std::vector<bool> ystitch = randomSequence(rows/step);
-
 		// horizontal stitches
 		int ypos = 0;
 		for (size_t y = 0; y < ystitch.size(); y++) {
@@ -92,6 +98,15 @@ private:
 			xpos += step;
 		}
 
+		// draw mouse cursor
+		int x = (int) input.getMouseX();
+		int y = (int) input.getMouseY();
+
+		pixelbuffer.setPixel(x-1, y+0, RED);
+		pixelbuffer.setPixel(x+1, y+0, RED);
+		pixelbuffer.setPixel(x+0, y-1, RED);
+		pixelbuffer.setPixel(x+0, y+1, RED);
+
 		layers[0]->lock();
 	}
 
@@ -104,10 +119,19 @@ private:
 			counter++;
 		}
 
-		if (input.getMouse(0)) {
+		if (input.getMouseDown(0)) {
 			int x = (int) input.getMouseX();
 			int y = (int) input.getMouseY();
-			std::cout << "click " << x << "," << y << std::endl;
+
+			if (x%step == 0) { // column
+				size_t index = x/step;
+				xstitch[index] = !xstitch[index];
+			}
+
+			if (y%step == 0) { // row
+				size_t index = y/step;
+				ystitch[index] = !ystitch[index];
+			}
 		}
 
 		int scrolly = input.getScrollY();
