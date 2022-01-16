@@ -15,7 +15,8 @@
 class MyApp : public rt::Application
 {
 private:
-	const uint8_t step = 10;
+	const uint8_t step = 5;
+	size_t counter = 0;
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
@@ -47,6 +48,15 @@ public:
 	}
 
 private:
+	std::vector<bool> randomSequence(size_t amount)
+	{
+		std::vector<bool> sequence;
+		for (size_t i = 0; i < amount; i++) {
+			sequence.push_back(rand()%2);
+		}
+		return sequence;
+	}
+
 	void hitomezashi()
 	{
 		layers[0]->pixelbuffer.fill(WHITE);
@@ -55,11 +65,8 @@ private:
 		size_t cols = pixelbuffer.header().width;
 		size_t rows = pixelbuffer.header().height;
 
-		std::vector<bool> xstitch;
-		std::vector<bool> ystitch;
-
-		for (size_t y = 0; y < rows; y+=step) { ystitch.push_back(rand()%2); }
-		for (size_t x = 0; x < cols; x+=step) { xstitch.push_back(rand()%2); }
+		std::vector<bool> xstitch = randomSequence(cols/step);
+		std::vector<bool> ystitch = randomSequence(rows/step);
 
 		// horizontal stitches
 		int ypos = 0;
@@ -91,14 +98,15 @@ private:
 	void handleInput()
 	{
 		if (input.getKeyDown(rt::KeyCode::Space)) {
-			std::cout << "spacebar pressed down." << std::endl;
-			layers[0]->pixelbuffer.printInfo();
+			std::string filename = layers[0]->pixelbuffer.createFilename("hitomezashi", counter);
+			std::cout << filename << std::endl;
+			layers[0]->pixelbuffer.write(filename);
+			counter++;
 		}
 
 		if (input.getMouse(0)) {
 			int x = (int) input.getMouseX();
 			int y = (int) input.getMouseY();
-			// drawCross(x, y, WHITE);
 			std::cout << "click " << x << "," << y << std::endl;
 		}
 
@@ -113,7 +121,7 @@ private:
 
 int main( void )
 {
-	MyApp application(320, 180, 24, 4);
+	MyApp application(320, 180, 8, 4);
 
 	while (!application.quit())
 	{
