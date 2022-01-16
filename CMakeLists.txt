@@ -234,3 +234,12 @@ target_link_libraries(maze # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# hitomezashi
+add_executable(hitomezashi # g++ demo/hitomezashi.cpp -o hitomezashi
+	demo/hitomezashi.cpp
+)
+target_link_libraries(hitomezashi # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
