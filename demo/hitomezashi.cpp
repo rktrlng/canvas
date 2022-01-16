@@ -119,6 +119,11 @@ private:
 			counter++;
 		}
 
+		if (input.getKeyDown(rt::KeyCode::R)) {
+			xstitch = randomSequence(layers[0]->pixelbuffer.header().width / step);
+			ystitch = randomSequence(layers[0]->pixelbuffer.header().height / step);
+		}
+
 		if (input.getMouseDown(0)) {
 			int x = (int) input.getMouseX();
 			int y = (int) input.getMouseY();
