@@ -66,6 +66,25 @@ private:
 		return sequence;
 	}
 
+	std::vector<bool> repeatSequence(uint32_t value)
+	{
+		size_t amount_h = layers[0]->pixelbuffer.header().width / step;
+		size_t amount_v = layers[0]->pixelbuffer.header().height / step;
+		size_t amount = amount_h > amount_v ? amount_h : amount_v;
+		std::vector<bool> sequence;
+		size_t counter = 0;
+		for (size_t i = 0; i < amount; i++) {
+			uint32_t n = value;
+			do {
+				counter++;
+				sequence.push_back(n&1);
+				n >>= 1;
+			} while (n > 0);
+			if (counter >= amount) break;
+		}
+		return sequence;
+	}
+
 	void hitomezashi()
 	{
 		layers[0]->pixelbuffer.fill(WHITE);
@@ -75,9 +94,9 @@ private:
 		size_t rows = pixelbuffer.header().height;
 
 		// horizontal stitches
-		int ypos = 0;
+		size_t ypos = 0;
 		for (size_t y = 0; y < ystitch.size(); y++) {
-			int xpos = 0;
+			size_t xpos = 0;
 			if (ystitch[y]) { xpos += step; }
 			for (size_t x = 0; x < cols; x+=step) {
 				pixelbuffer.drawLine(xpos+1, ypos, xpos+step-1, ypos, BLACK);
@@ -87,9 +106,9 @@ private:
 		}
 
 		// vertical stitches
-		int xpos = 0;
+		size_t xpos = 0;
 		for (size_t x = 0; x < xstitch.size(); x++) {
-			int ypos = 0;
+			size_t ypos = 0;
 			if (xstitch[x]) { ypos += step; }
 			for (size_t y = 0; y < rows; y+=step) {
 				pixelbuffer.drawLine(xpos, ypos+1, xpos, ypos+step-1, BLACK);
@@ -123,6 +142,33 @@ private:
 			xstitch = randomSequence(layers[0]->pixelbuffer.header().width / step);
 			ystitch = randomSequence(layers[0]->pixelbuffer.header().height / step);
 		}
+
+		if (input.getKeyDown(rt::KeyCode::M)) { // magic!
+			xstitch = repeatSequence(26);
+			ystitch = repeatSequence(98);
+		}
+
+		if (input.getKeyDown(rt::KeyCode::Alpha0)) { xstitch = repeatSequence(0);}
+		if (input.getKeyDown(rt::KeyCode::Alpha1)) { xstitch = repeatSequence(1);}
+		if (input.getKeyDown(rt::KeyCode::Alpha2)) { xstitch = repeatSequence(2);}
+		if (input.getKeyDown(rt::KeyCode::Alpha3)) { xstitch = repeatSequence(1);}
+		if (input.getKeyDown(rt::KeyCode::Alpha4)) { xstitch = repeatSequence(4);}
+		if (input.getKeyDown(rt::KeyCode::Alpha5)) { xstitch = repeatSequence(5);}
+		if (input.getKeyDown(rt::KeyCode::Alpha6)) { xstitch = repeatSequence(6);}
+		if (input.getKeyDown(rt::KeyCode::Alpha7)) { xstitch = repeatSequence(1);}
+		if (input.getKeyDown(rt::KeyCode::Alpha8)) { xstitch = repeatSequence(8);}
+		if (input.getKeyDown(rt::KeyCode::Alpha9)) { xstitch = repeatSequence(9);}
+
+		if (input.getKeyDown(rt::KeyCode::F10)) { ystitch = repeatSequence(0);}
+		if (input.getKeyDown(rt::KeyCode::F1)) { ystitch = repeatSequence(1);}
+		if (input.getKeyDown(rt::KeyCode::F2)) { ystitch = repeatSequence(2);}
+		if (input.getKeyDown(rt::KeyCode::F3)) { ystitch = repeatSequence(1);}
+		if (input.getKeyDown(rt::KeyCode::F4)) { ystitch = repeatSequence(4);}
+		if (input.getKeyDown(rt::KeyCode::F5)) { ystitch = repeatSequence(5);}
+		if (input.getKeyDown(rt::KeyCode::F6)) { ystitch = repeatSequence(6);}
+		if (input.getKeyDown(rt::KeyCode::F7)) { ystitch = repeatSequence(1);}
+		if (input.getKeyDown(rt::KeyCode::F8)) { ystitch = repeatSequence(8);}
+		if (input.getKeyDown(rt::KeyCode::F9)) { ystitch = repeatSequence(9);}
 
 		if (input.getKeyDown(rt::KeyCode::X)) {
 			for (size_t i = 0; i < xstitch.size(); i++){
