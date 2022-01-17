@@ -66,7 +66,7 @@ private:
 		return sequence;
 	}
 
-	std::vector<bool> repeatSequence(uint32_t value)
+	std::vector<bool> repeatSequence(uint64_t value)
 	{
 		size_t amount_h = layers[0]->pixelbuffer.header().width / step;
 		size_t amount_v = layers[0]->pixelbuffer.header().height / step;
@@ -74,7 +74,7 @@ private:
 		std::vector<bool> sequence;
 		size_t counter = 0;
 		for (size_t i = 0; i < amount; i++) {
-			uint32_t n = value;
+			uint64_t n = value;
 			do {
 				counter++;
 				sequence.push_back(n&1);
