@@ -124,6 +124,19 @@ private:
 			ystitch = randomSequence(layers[0]->pixelbuffer.header().height / step);
 		}
 
+		if (input.getKeyDown(rt::KeyCode::X)) {
+			for (size_t i = 0; i < xstitch.size(); i++){
+				std::cout << xstitch[i] << " ";
+			}
+			std::cout << std::endl;
+		}
+		if (input.getKeyDown(rt::KeyCode::Y)) {
+			for (size_t i = 0; i < ystitch.size(); i++){
+				std::cout << ystitch[i] << " ";
+			}
+			std::cout << std::endl;
+		}
+
 		if (input.getMouseDown(0)) {
 			int x = (int) input.getMouseX();
 			int y = (int) input.getMouseY();
