@@ -144,8 +144,12 @@ private:
 		}
 
 		if (input.getKeyDown(rt::KeyCode::M)) { // magic!
-			xstitch = repeatSequence(26);
-			ystitch = repeatSequence(98);
+			// xstitch = repeatSequence(26);
+			xstitch = repeatSequence((uint64_t)0b11010);
+
+			// ystitch = repeatSequence(98);
+			// ystitch = repeatSequence(72930);
+			ystitch = repeatSequence((uint64_t)0b01000111001110001);
 		}
 
 		if (input.getKeyDown(rt::KeyCode::Alpha0)) { xstitch = repeatSequence(0);}
