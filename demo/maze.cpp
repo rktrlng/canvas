@@ -93,6 +93,9 @@ public:
 		float maxtime = 0.025f - deltatime;
 		frametime += deltatime;
 		if (frametime >= maxtime) {
+			static float donetime = 0.0f;
+			static float victime = 0.0f;
+
 			switch (state)
 			{
 			case State::GENERATING:
@@ -116,7 +119,6 @@ public:
 				}
 				break;
 			case State::DONEGENERATING:
-				static float donetime = 0.0f;
 				donetime += frametime;
 				if (donetime > 3.0f) {
 					donetime = 0.0f;
@@ -130,7 +132,6 @@ public:
 				break;
 			case State::VICTORY:
 				drawMazeSolver(frametime);
-				static float victime = 0.0f;
 				victime += frametime;
 				if (victime > 10.0f) {
 					victime = 0.0f;
