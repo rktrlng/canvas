@@ -12,21 +12,19 @@
 namespace rt {
 
 Application::Application(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) :
-	factor(factor),
 	renderer(width*factor, height*factor),
 	input(renderer.window())
 {
-	layers.push_back( new rt::Canvas(width, height, bitdepth) );
+	layers.push_back( new rt::Canvas(width, height, bitdepth, factor) );
 }
 
 Application::Application(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool setlocked /* false */) :
-	factor(factor),
 	renderer(pixelbuffer.header().width * factor, pixelbuffer.header().height * factor),
 	input(renderer.window())
 {
 	uint16_t cols = pixelbuffer.header().width;
 	uint16_t rows = pixelbuffer.header().height;
-	layers.push_back( new rt::Canvas(cols, rows, pixelbuffer.header().bitdepth) );
+	layers.push_back( new rt::Canvas(cols, rows, pixelbuffer.header().bitdepth, factor) );
 	layers[0]->pixelbuffer = pixelbuffer;
 	if (setlocked)
 	{
@@ -78,7 +76,9 @@ int Application::run()
 	{
 		std::string str = "";
 		if (layers.size() > 0) {
-			str = "Canvas: " + std::to_string(cols) + "x" + std::to_string(rows) + " pixels    |    " + std::to_string(factor) + "x    |    " + std::to_string(frames) + " FPS";
+			str = "Canvas: " + std::to_string(cols) + "x" + std::to_string(rows);
+			str += " pixels    |    " + std::to_string(layers[0]->scale);
+			str + "x    |    " + std::to_string(frames) + " FPS";
 		} else {
 			str = std::string(std::to_string(frames) + " FPS");
 		}
@@ -97,11 +97,12 @@ int Application::run()
 	glClear(GL_COLOR_BUFFER_BIT);
 
 	// Render all layers (Canvas*, xpos, ypos, xscale, yscale, rotation)
-	for (auto canvas : layers)
+	for (auto& canvas : layers)
 	{
-		float factor = renderer.width() / canvas->width();
+		// float factor = renderer.width() / canvas->width();
 		// float factor_y = renderer->height() / canvas->height(); // don't factor in height; keep pixels square.
-		renderer.renderCanvas(canvas, renderer.width()/2, renderer.height()/2, factor, factor, 0.0f);
+		// renderer.renderCanvas(canvas, renderer.width()/2, renderer.height()/2, factor, factor, 0.0f);
+		renderer.renderCanvas(canvas, renderer.width()/2 + canvas->position.x, renderer.height()/2 + canvas->position.y, canvas->scale, canvas->scale, 0.0f);
 	}
 	
 	// Swap buffers

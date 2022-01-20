@@ -21,7 +21,7 @@ namespace rt {
 class Canvas
 {
 	public:
-		Canvas(uint16_t width, uint16_t height, uint8_t bitdepth = 24);
+		Canvas(uint16_t width, uint16_t height, uint8_t bitdepth = 32, uint8_t scale = 1);
 		Canvas(const pb::PixelBuffer& pb);
 		Canvas(const std::string& imagepath);
 		virtual ~Canvas();
@@ -37,6 +37,8 @@ class Canvas
 		int generateGeometry(int width, int height);
 
 		pb::PixelBuffer pixelbuffer;
+		uint8_t scale;
+		pb::vec2i position;
 
 		// lock regenerates the texture after you're done with the pixels for the renderer to keep drawing
 		void lock() { _locked = true; generateTexture(); generateGeometry(width(), height()); }

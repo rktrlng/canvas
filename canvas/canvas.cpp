@@ -19,16 +19,17 @@
 
 namespace rt {
 
-Canvas::Canvas(uint16_t width, uint16_t height, uint8_t bitdepth /* = 24 */)
+Canvas::Canvas(uint16_t width, uint16_t height, uint8_t bitdepth /* = 32 */, uint8_t scale /* = 1 */) :
+	pixelbuffer(width, height, bitdepth), scale(scale), position(pb::vec2i(0, 0))
 {
-	pixelbuffer = { width, height, bitdepth };
+	// pixelbuffer = { width, height, bitdepth };
 	generateGeometry(width, height); // _vertexbuffer & _uvbuffer
 	generateTexture(); // _texture
 }
 
-Canvas::Canvas(const pb::PixelBuffer& pb)
+Canvas::Canvas(const pb::PixelBuffer& pb) : pixelbuffer(pb)
 {
-	pixelbuffer = pb;
+	// pixelbuffer = pb;
 	generateGeometry(pixelbuffer.header().width, pixelbuffer.header().height); // _vertexbuffer & _uvbuffer
 	generateTexture(); // _texture
 }

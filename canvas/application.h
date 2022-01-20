@@ -33,7 +33,6 @@ public:
 	void showMouse() { renderer.showMouse(); }
 
 private:
-	uint8_t factor;
 	Renderer renderer;
 
 protected:
