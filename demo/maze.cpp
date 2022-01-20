@@ -576,6 +576,7 @@ private:
 int main( void )
 {
 	MyApp application(WIDTH*2+1, HEIGHT*2+1, 24, 16);
+	application.hideMouse();
 
 	while (!application.quit())
 	{

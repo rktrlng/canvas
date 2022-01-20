@@ -214,6 +214,7 @@ private:
 int main( void )
 {
 	MyApp application(320, 180, 8, 5);
+	application.hideMouse();
 
 	while (!application.quit())
 	{

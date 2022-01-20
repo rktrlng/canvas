@@ -37,6 +37,9 @@ public:
 
 	float updateDeltaTime();
 
+	void hideMouse();
+	void showMouse();
+
 private:
 	int init();
 

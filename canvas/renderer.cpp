@@ -70,8 +70,8 @@ int Renderer::init()
 	// Ensure we can capture the escape key being pressed
 	glfwSetInputMode(_window, GLFW_STICKY_KEYS, GL_TRUE);
 
-	// hide mouse cursor
-	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+	// show mouse cursor
+	showMouse();
 
 	// vsync (0=off, 1=on)
 	glfwSwapInterval(0);
@@ -121,6 +121,16 @@ float Renderer::updateDeltaTime() {
 	// For the next frame, the "last time" will be "now"
 	lastTime = currentTime;
 	return deltaTime;
+}
+
+void Renderer::hideMouse()
+{
+	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_HIDDEN);
+}
+
+void Renderer::showMouse()
+{
+	glfwSetInputMode(_window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
 }
 
 bool Renderer::displayCanvas(Canvas* canvas, float px, float py, float sx, float sy, float rot)

@@ -29,8 +29,11 @@ public:
 	int run();
 	virtual void update(float deltatime) = 0;
 
+	void hideMouse() { renderer.hideMouse(); }
+	void showMouse() { renderer.showMouse(); }
+
 private:
-	uint8_t factor = 1;
+	uint8_t factor;
 	Renderer renderer;
 
 protected:

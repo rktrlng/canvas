@@ -188,6 +188,7 @@ int main( void )
 {
 	pb::PixelBuffer pixelbuffer(160, 90, 24);
 	MyApp application(pixelbuffer, 8);
+	application.hideMouse();
 
 	while (!application.quit())
 	{
