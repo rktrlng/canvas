@@ -78,7 +78,7 @@ int Application::run()
 		if (layers.size() > 0) {
 			str = "Canvas: " + std::to_string(cols) + "x" + std::to_string(rows);
 			str += " pixels    |    " + std::to_string(layers[0]->scale);
-			str + "x    |    " + std::to_string(frames) + " FPS";
+			str += "x    |    " + std::to_string(frames) + " FPS";
 		} else {
 			str = std::string(std::to_string(frames) + " FPS");
 		}
