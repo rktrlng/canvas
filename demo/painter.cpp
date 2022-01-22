@@ -56,10 +56,20 @@ private:
 
 		int value = 0;
 		int offset = 8;
-		for (size_t x = 0; x < 5; x++) {
+		for (size_t x = 0; x < 9; x++) {
 			if (value > 255) { value = 255; }
 			pixelbuffer.drawSquareFilled( x * size + offset, 0 + offset, size, size, {(uint8_t)value, (uint8_t)value, (uint8_t)value, 255});
-			value += 64;
+			value += 32;
+		}
+
+		pb::RGBAColor color = RED;
+		for (size_t x = 0; x < 10; x++) {
+			pixelbuffer.drawSquareFilled( x * size + offset, size + offset, size, size, color);
+			color = pb::Color::rotate(color, 0.05f);
+		}
+		for (size_t x = 0; x < 10; x++) {
+			pixelbuffer.drawSquareFilled( x * size + offset, (size*2) + offset, size, size, color);
+			color = pb::Color::rotate(color, 0.05f);
 		}
 
 		layers[1]->lock();
