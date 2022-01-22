@@ -53,9 +53,9 @@ private:
 		auto& pixelbuffer = layers[1]->pixelbuffer;
 
 		uint8_t size = 4;
+		int offset = 8;
 
 		int value = 0;
-		int offset = 8;
 		for (size_t x = 0; x < 9; x++) {
 			if (value > 255) { value = 255; }
 			pixelbuffer.drawSquareFilled( x * size + offset, 0 + offset, size, size, {(uint8_t)value, (uint8_t)value, (uint8_t)value, 255});
@@ -80,11 +80,11 @@ private:
 		int x = (int) input.getMouseX();
 		int y = (int) input.getMouseY();
 		pb::vec2i pos = pb::vec2i(x, y);
-		std::vector<pb::vec2i> points = { {-1,0}, {-2,0}, {1,0}, {2,0}, {0,-1}, {0,-2}, {0,1}, {0,2} };
+		std::vector<pb::vec2i> points = { {-3,0}, {-2,0}, {3,0}, {2,0}, {0,-3}, {0,-2}, {0,3}, {0,2} };
 		auto& pixelbuffer = layers[1]->pixelbuffer;
 		for (size_t i = 0; i < points.size(); i++) {
 			pb::vec2i dpos = pos + points[i];
-			pixelbuffer.setPixel(dpos.x, dpos.y, {255, 0, 255, 255});
+			pixelbuffer.setPixel(dpos.x, dpos.y, {0, 0, 0, 255});
 		}
 
 		layers[1]->lock();
