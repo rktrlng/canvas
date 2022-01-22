@@ -17,7 +17,8 @@ private:
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
-		layers.push_back(new rt::Canvas(width, height, bitdepth, factor));
+		rt::Canvas* menuCanvas = new rt::Canvas(width, height, bitdepth, factor);
+		layers.push_back(menuCanvas);
 	}
 
 	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
@@ -39,6 +40,7 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			clearUI();
+			drawPixels();
 			if (showMenu) {
 				drawPalette();
 			}
@@ -48,6 +50,13 @@ public:
 	}
 
 private:
+	void drawPixels() {
+		auto& pixelbuffer = layers[0]->pixelbuffer;
+		size_t cols = pixelbuffer.header().width;
+		size_t rows = pixelbuffer.header().height;
+		layers[0]->pixelbuffer.drawSquare(0, 0, cols-1, rows-1, {255, 255, 255, 64});
+	}
+
 	void clearUI()
 	{
 		layers[1]->pixelbuffer.fill({0,0,0,0});
