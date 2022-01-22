@@ -118,14 +118,13 @@ private:
 		}
 
 		if (input.getMouse(0)) {
-			int x = (int) input.getMouseX();
-			int y = (int) input.getMouseY();
+			int x = (int) input.getMouseX() - layers[0]->position.x / layers[0]->scale;
+			int y = (int) input.getMouseY() - layers[0]->position.y / layers[0]->scale;
 			if (showMenu) {
 				fcolor = layers[1]->pixelbuffer.getPixel(x, y);
 			} else {
 				layers[0]->pixelbuffer.setPixel(x, y, fcolor);
 			}
-			// std::cout << "click " << x << "," << y << " -> " << fcolor << std::endl;
 		}
 
 		int scrolly = input.getScrollY();
