@@ -243,3 +243,12 @@ target_link_libraries(hitomezashi # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# painter
+add_executable(painter # g++ demo/painter.cpp -o painter
+	demo/painter.cpp
+)
+target_link_libraries(painter # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
