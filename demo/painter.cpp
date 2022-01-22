@@ -11,6 +11,9 @@
 
 class MyApp : public rt::Application
 {
+private:
+	bool showMenu = false;
+	pb::RGBAColor fcolor = {0,0,0,0};
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
@@ -36,7 +39,9 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			clearUI();
-			drawPalette();
+			if (showMenu) {
+				drawPalette();
+			}
 			drawCursor();
 			frametime = 0.0f;
 		}
@@ -92,6 +97,8 @@ private:
 
 	void handleInput()
 	{
+		if (input.getKeyDown(rt::KeyCode::Q)) { showMenu = !showMenu; }
+
 		if (input.getKeyDown(rt::KeyCode::Minus)) { layers[0]->scale /= 2; }
 		if (input.getKeyDown(rt::KeyCode::Equal)) { layers[0]->scale *= 2; }
 		if (input.getKeyDown(rt::KeyCode::Left)) { layers[0]->position.x -= layers[0]->scale; }
@@ -110,11 +117,15 @@ private:
 			layers[0]->pixelbuffer.printInfo();
 		}
 
-		if (input.getMouseDown(0)) {
+		if (input.getMouse(0)) {
 			int x = (int) input.getMouseX();
 			int y = (int) input.getMouseY();
-			pb::RGBAColor color = layers[1]->pixelbuffer.getPixel(x, y);
-			std::cout << "click " << x << "," << y << " -> " << color << std::endl;
+			if (showMenu) {
+				fcolor = layers[1]->pixelbuffer.getPixel(x, y);
+			} else {
+				layers[0]->pixelbuffer.setPixel(x, y, fcolor);
+			}
+			// std::cout << "click " << x << "," << y << " -> " << fcolor << std::endl;
 		}
 
 		int scrolly = input.getScrollY();
