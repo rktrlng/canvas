@@ -252,3 +252,12 @@ target_link_libraries(painter # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# flowfield
+add_executable(flowfield # g++ demo/flowfield.cpp -o flowfield
+	demo/flowfield.cpp
+)
+target_link_libraries(flowfield # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
