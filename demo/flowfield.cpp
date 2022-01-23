@@ -20,7 +20,8 @@ private:
 	std::vector<pb::vec2f> field;
 	std::deque<pb::vec2f> particles;
 	size_t flowscale = 10;
-	const size_t maxparticles = 100;
+	const size_t maxparticles = 1000;
+	const double zspeed = 0.005;
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
@@ -75,9 +76,10 @@ private:
 		// update positions
 		for (size_t i = 0; i < particles.size(); i++) {
 			pb::vec2f particle = particles[i];
-			int index = i/flowscale;
-			particle.x += field[index].x * deltatime * 50;
-			particle.y += field[index].y * deltatime * 50;
+
+			int flowindex = pb::idFromPos(particle.x/flowscale, particle.y/flowscale, cols/flowscale);
+			particle.x += field[flowindex].x * deltatime * 25;
+			particle.y += field[flowindex].y * deltatime * 25;
 
 			if (particle.x < 0) particle.x = cols-1;
 			if (particle.x > cols) particle.x = 0;
@@ -94,10 +96,13 @@ private:
 		}
 
 		// handle number of particles
-		if (particles.size() < maxparticles) {
-			pb::vec2f p = { pb::rand_bm()*cols, pb::rand_bm()*rows };
-			// pb::vec2f p = { (float)cols/2, (float)rows/2 };
-			particles.push_back(p);
+		pb::vec2f p = { pb::rand_float()*cols, pb::rand_float()*rows };
+		// pb::vec2f p = { pb::rand_bm()*cols, pb::rand_bm()*rows };
+		// pb::vec2f p = { (float)cols/2, (float)rows/2 };
+
+		particles.push_back(p);
+		if (particles.size() > maxparticles) {
+			particles.pop_front();
 		}
 
 		pixelbuffer.blur();
@@ -161,7 +166,7 @@ private:
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 
 		static double z = 0.0f;
-		z += 0.005f;
+		z += zspeed;
 
 		size_t rows = pixelbuffer.header().height;
 		size_t cols = pixelbuffer.header().width;
@@ -173,11 +178,11 @@ private:
 
 				std::vector<Octave> octaves; // { frequency, multiplier }
 				// octaves.push_back( { 1, 32} );
-				octaves.push_back( { 2, 16} );
+				// octaves.push_back( { 2, 16} );
 				octaves.push_back( { 4, 8} );
 				octaves.push_back( { 8, 4} );
 				octaves.push_back( {16, 2} );
-				// octaves.push_back( {32, 1} );
+				octaves.push_back( {32, 1} );
 				double n = coherentNoise(x, y, z, octaves);
 
 				uint8_t p = 255 * n;
