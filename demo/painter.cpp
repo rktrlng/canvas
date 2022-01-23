@@ -46,6 +46,9 @@ public:
 			}
 			drawCursor();
 			frametime = 0.0f;
+
+			layers[0]->lock();
+			layers[1]->lock();
 		}
 	}
 
@@ -85,8 +88,6 @@ private:
 			pixelbuffer.drawSquareFilled( x * size + offset, (size*2) + offset, size, size, color);
 			color = pb::Color::rotate(color, 0.05f);
 		}
-
-		layers[1]->lock();
 	}
 
 	void drawCursor()
@@ -100,8 +101,6 @@ private:
 			pb::vec2i dpos = pos + points[i];
 			pixelbuffer.setPixel(dpos.x, dpos.y, {0, 0, 0, 255});
 		}
-
-		layers[1]->lock();
 	}
 
 	void handleInput()
@@ -147,8 +146,9 @@ private:
 
 int main( void )
 {
-	MyApp application(160, 90, 32, 8);
+	MyApp application(128, 72, 32, 12);
 	application.hideMouse();
+	std::cout << "Press 'Q' to toggle palette." << std::endl;
 
 	while (!application.quit())
 	{
