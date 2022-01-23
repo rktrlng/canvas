@@ -21,7 +21,8 @@ private:
 	std::deque<pb::vec2f> particles;
 	size_t flowscale = 10;
 	const size_t maxparticles = 1000;
-	const double zspeed = 0.005;
+	const double zspeed = 0.0025; // z-noise change
+	const int pspeed = 50; // particle speed
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
@@ -78,8 +79,8 @@ private:
 			pb::vec2f particle = particles[i];
 
 			int flowindex = pb::idFromPos(particle.x/flowscale, particle.y/flowscale, cols/flowscale);
-			particle.x += field[flowindex].x * deltatime * 25;
-			particle.y += field[flowindex].y * deltatime * 25;
+			particle.x += field[flowindex].x * deltatime * pspeed;
+			particle.y += field[flowindex].y * deltatime * pspeed;
 
 			if (particle.x < 0) particle.x = cols-1;
 			if (particle.x > cols) particle.x = 0;
@@ -96,8 +97,8 @@ private:
 		}
 
 		// handle number of particles
-		pb::vec2f p = { pb::rand_float()*cols, pb::rand_float()*rows };
-		// pb::vec2f p = { pb::rand_bm()*cols, pb::rand_bm()*rows };
+		// pb::vec2f p = { pb::rand_float()*cols, pb::rand_float()*rows };
+		pb::vec2f p = { pb::rand_bm()*cols, pb::rand_bm()*rows };
 		// pb::vec2f p = { (float)cols/2, (float)rows/2 };
 
 		particles.push_back(p);
