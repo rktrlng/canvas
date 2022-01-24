@@ -21,7 +21,7 @@ private:
 	std::deque<pb::vec2f> particles;
 	size_t flowscale = 10;
 	const size_t maxparticles = 1000;
-	const double zspeed = 0.0025; // z-noise change
+	const double zspeed = 0.00125; // z-noise change
 	const int pspeed = 50; // particle speed
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
