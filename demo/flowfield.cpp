@@ -71,8 +71,8 @@ private:
 	void handleParticles(float deltatime)
 	{
 		auto& pixelbuffer = layers[1]->pixelbuffer;
-		int rows = pixelbuffer.header().height;
-		int cols = pixelbuffer.header().width;
+		int rows = pixelbuffer.height();
+		int cols = pixelbuffer.width();
 
 		// update positions
 		for (size_t i = 0; i < particles.size(); i++) {
@@ -114,8 +114,8 @@ private:
 		field.clear();
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
+		size_t rows = pixelbuffer.height();
+		size_t cols = pixelbuffer.width();
 
 		// find min + max
 		std::vector<pb::RGBAColor> colors = pixelbuffer.pixels();
@@ -168,8 +168,8 @@ private:
 		static double z = 0.0f;
 		z += zspeed;
 
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
+		size_t rows = pixelbuffer.height();
+		size_t cols = pixelbuffer.width();
 		for (size_t i = 0; i < rows; i++) {
 			for (size_t j = 0; j < cols; j++) {
 				double x = (double)j/((double)cols);
