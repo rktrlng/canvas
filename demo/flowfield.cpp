@@ -19,9 +19,9 @@ private:
 	rt::PerlinNoise pn;
 	std::vector<pb::vec2f> field;
 	std::deque<pb::vec2f> particles;
-	size_t flowscale = 10;
+	size_t flowscale = 8;
 	const size_t maxparticles = 1000;
-	const double zspeed = 0.00125; // z-noise change
+	const double zspeed = 0.001; // z-noise change
 	const int pspeed = 50; // particle speed
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
@@ -97,8 +97,8 @@ private:
 		}
 
 		// handle number of particles
-		// pb::vec2f p = { pb::rand_float()*cols, pb::rand_float()*rows };
-		pb::vec2f p = { pb::rand_bm()*cols, pb::rand_bm()*rows };
+		pb::vec2f p = { pb::rand_float()*cols, pb::rand_float()*rows };
+		// pb::vec2f p = { pb::rand_bm()*cols, pb::rand_bm()*rows };
 		// pb::vec2f p = { (float)cols/2, (float)rows/2 };
 
 		particles.push_back(p);
@@ -114,6 +114,8 @@ private:
 		field.clear();
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
+		size_t rows = pixelbuffer.header().height;
+		size_t cols = pixelbuffer.header().width;
 
 		// find min + max
 		std::vector<pb::RGBAColor> colors = pixelbuffer.pixels();
@@ -125,8 +127,6 @@ private:
 		}
 
 		// noise to field values
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
 		for (size_t y = 0; y < rows; y += flowscale) {
 			for (size_t x = 0; x < cols; x += flowscale) {
 				pb::RGBAColor color = pixelbuffer.getPixel(x+flowscale/2, y+flowscale/2);
@@ -149,8 +149,7 @@ private:
 		double n = 0.0;
 		double div = 0.0;
 
-		for (size_t i = 0; i < octaves.size(); i++)
-		{
+		for (size_t i = 0; i < octaves.size(); i++) {
 			int freq = octaves[i].freq;
 			int mult = octaves[i].multiplier;
 			double a = pn.noise(x*freq, y*freq, z*freq) * mult;
@@ -180,7 +179,7 @@ private:
 				std::vector<Octave> octaves; // { frequency, multiplier }
 				// octaves.push_back( { 1, 32} );
 				// octaves.push_back( { 2, 16} );
-				octaves.push_back( { 4, 8} );
+				// octaves.push_back( { 4, 8} );
 				octaves.push_back( { 8, 4} );
 				octaves.push_back( {16, 2} );
 				octaves.push_back( {32, 1} );
@@ -230,7 +229,7 @@ private:
 
 int main( void )
 {
-	MyApp application(256, 256, 32, 3); // width, height, bitdepth, factor
+	MyApp application(320, 320, 32, 3); // width, height, bitdepth, factor
 
 	while (!application.quit())
 	{
