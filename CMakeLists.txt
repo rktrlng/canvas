@@ -144,10 +144,10 @@ target_link_libraries(voronoi # g++ -lcanvas
 )
 
 # noise
-add_executable(noisedemo # g++ demo/noisedemo.cpp -o noisedemo
-	demo/noisedemo.cpp
+add_executable(noise # g++ demo/noise.cpp -o noise
+	demo/noise.cpp
 )
-target_link_libraries(noisedemo # g++ -lcanvas
+target_link_libraries(noise # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )

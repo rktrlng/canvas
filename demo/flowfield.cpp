@@ -206,6 +206,7 @@ private:
 			}
 		}
 		// pixelbuffer.blur();
+		pixelbuffer.contrast_8();
 	}
 
 	void handleInput() {

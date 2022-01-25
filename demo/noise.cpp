@@ -1,5 +1,5 @@
 /**
- * @file noisedemo.cpp
+ * @file noise.cpp
  *
  * @brief Perlin Noise implementation
  *
@@ -83,7 +83,7 @@ private:
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 
 		static double z = 0.0f;
-		z += 0.01f;
+		z += 0.005f;
 
 		size_t rows = pixelbuffer.header().height;
 		size_t cols = pixelbuffer.header().width;
@@ -123,6 +123,7 @@ private:
 			}
 		}
 		// pixelbuffer.blur();
+		pixelbuffer.contrast_8();
 	}
 
 	void handleInput() {
