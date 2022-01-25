@@ -23,6 +23,7 @@ private:
 	const size_t maxparticles = 1000;
 	const double zspeed = 0.001; // z-noise change
 	const int pspeed = 50; // particle speed
+	const int at_once = 3; // # of particles to spawn per tick
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
@@ -97,13 +98,16 @@ private:
 		}
 
 		// handle number of particles
-		pb::vec2f p = { pb::rand_float()*cols, pb::rand_float()*rows };
-		// pb::vec2f p = { pb::rand_bm()*cols, pb::rand_bm()*rows };
-		// pb::vec2f p = { (float)cols/2, (float)rows/2 };
+		for (int i = 0; i < at_once; i++) {
+			pb::vec2f p = { pb::rand_float()*cols, pb::rand_float()*rows };
+			// pb::vec2f p = { pb::rand_bm()*cols, pb::rand_bm()*rows };
+			// pb::vec2f p = { (float)cols/2, (float)rows/2 };
 
-		particles.push_back(p);
-		if (particles.size() > maxparticles) {
-			particles.pop_front();
+			particles.push_back(p);
+
+			if (particles.size() > maxparticles) {
+				particles.pop_front();
+			}
 		}
 
 		pixelbuffer.blur();
