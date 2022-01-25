@@ -124,6 +124,7 @@ private:
 		}
 		// pixelbuffer.blur();
 		pixelbuffer.contrast_8();
+		pixelbuffer.posterize_8(10);
 	}
 
 	void handleInput() {
