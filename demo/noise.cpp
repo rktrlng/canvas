@@ -104,13 +104,6 @@ private:
 
 				uint8_t p = 255 * n;
 
-				// posterize
-				if (false) {
-					int numcolors = 9;
-					p = pb::map(p, 0, 255, 0, numcolors); // narrow down
-					p = pb::map(p, 0, numcolors, 0, 255); // stretch back
-				}
-
 				// Wood like structure
 				if (false) {
 					n = 20 * pn.noise(x, y, z);
