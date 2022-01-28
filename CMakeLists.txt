@@ -261,3 +261,12 @@ target_link_libraries(flowfield # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# diffusion-limited-aggregation
+add_executable(diffusion-limited-aggregation # g++ demo/diffusion-limited-aggregation.cpp -o diffusion-limited-aggregation
+	demo/diffusion-limited-aggregation.cpp
+)
+target_link_libraries(diffusion-limited-aggregation # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
