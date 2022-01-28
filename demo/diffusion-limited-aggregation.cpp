@@ -54,7 +54,6 @@ public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
 		std::srand(std::time(nullptr));
-		layers[0]->pixelbuffer.fill(BLACK);
 		init();
 	}
 
@@ -86,10 +85,7 @@ public:
 		float countmaxtime = 5.0f - deltatime;
 		counttime += deltatime;
 		if (counttime >= countmaxtime) {
-			int count = 0;
-			for (size_t i = 0; i < elements.size(); i++) {
-				if (!elements[i]->fixed) { count++; }
-			}
+			int count = countFreeElements();
 			std::cout << count << " elements free" << std::endl;
 			if (count == 0) {
 				std::cout << "Reset" << std::endl;
@@ -99,9 +95,37 @@ public:
 		}
 	}
 
+	int countFreeElements()
+	{
+		int count = 0;
+		for (size_t i = 0; i < elements.size(); i++) {
+			if (!elements[i]->fixed) { count++; }
+		}
+		return count;
+	}
+
+	bool edgeTouched()
+	{
+		int cols = layers[0]->pixelbuffer.width();
+		int rows = layers[0]->pixelbuffer.height();
+		bool touched = false;
+		for (size_t i = 0; i < elements.size(); i++) {
+			if ( elements[i]->fixed &&
+				(elements[i]->position.x < 5 ||
+				elements[i]->position.x > cols-5 ||
+				elements[i]->position.y < 5 ||
+				elements[i]->position.y > rows-5)
+			) {
+				touched = true;
+			}
+		}
+		return touched;
+	}
+
 private:
 	void init()
 	{
+		layers[0]->pixelbuffer.fill(BLACK);
 		int cols = layers[0]->pixelbuffer.width();
 		int rows = layers[0]->pixelbuffer.height();
 		
@@ -155,6 +179,16 @@ private:
 			if (elements[i]->fixed) {
 				pixelbuffer.setPixel(elements[i]->position.x, elements[i]->position.y, elements[i]->color);
 			}
+		}
+
+		if (edgeTouched())
+		{
+			static int count = 0;
+			std::string filename = pixelbuffer.createFilename("difflimagg", count);
+			pixelbuffer.write(filename);
+			std::cout << "write " << filename << std::endl;
+			count++;
+			init();
 		}
 
 		// move nonfixed elements and set status
