@@ -12,8 +12,9 @@
 
 #include <canvas/application.h>
 
-const float ROT_SPEED = 0.0007f;
+const float ROT_SPEED = 0.0125f;
 const int MAX_ELEMENTS = 5000;
+const int EDGE = 2;
 
 struct Element
 {
@@ -82,9 +83,10 @@ public:
 		}
 
 		static float counttime = 0.0f;
-		float countmaxtime = 5.0f - deltatime;
+		float countmaxtime = 1.0f - deltatime;
 		counttime += deltatime;
 		if (counttime >= countmaxtime) {
+			rotateColors();
 			int count = countFreeElements();
 			std::cout << count << " elements free" << std::endl;
 			if (count == 0) {
@@ -111,10 +113,10 @@ public:
 		bool touched = false;
 		for (size_t i = 0; i < elements.size(); i++) {
 			if ( elements[i]->fixed &&
-				(elements[i]->position.x < 5 ||
-				elements[i]->position.x > cols-5 ||
-				elements[i]->position.y < 5 ||
-				elements[i]->position.y > rows-5)
+				(elements[i]->position.x < EDGE ||
+				elements[i]->position.x > cols-EDGE ||
+				elements[i]->position.y < EDGE ||
+				elements[i]->position.y > rows-EDGE)
 			) {
 				touched = true;
 			}
@@ -223,8 +225,17 @@ private:
 			if (elements[i]->fixed) {
 				continue;
 			}
+			// pixelbuffer.setPixel(elements[i]->position.x, elements[i]->position.y, elements[i]->color);
+		}
+	}
+
+	void rotateColors()
+	{
+		for (size_t i = 0; i < elements.size(); i++) {
+			if (elements[i]->fixed) {
+				continue;
+			}
 			elements[i]->color = pb::Color::rotate(elements[i]->color, ROT_SPEED);
-			pixelbuffer.setPixel(elements[i]->position.x, elements[i]->position.y, elements[i]->color);
 		}
 	}
 
