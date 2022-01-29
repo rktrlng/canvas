@@ -12,7 +12,7 @@
 
 #include <canvas/application.h>
 
-const float ROT_SPEED = 0.0075f;
+const float ROT_SPEED = 0.01f;
 const int MAX_ELEMENTS = 10000;
 const int EDGE = 5;
 
@@ -128,7 +128,7 @@ private:
 	{
 		std::cout << "Reset: " << MAX_ELEMENTS << " elements" << std::endl;
 
-		layers[0]->pixelbuffer.fill(BLACK);
+		layers[0]->pixelbuffer.fill(TRANSPARENT);
 		int cols = layers[0]->pixelbuffer.width();
 		int rows = layers[0]->pixelbuffer.height();
 		
@@ -175,7 +175,7 @@ private:
 		int cols = pixelbuffer.width();
 		int rows = pixelbuffer.height();
 
-		pixelbuffer.fill(BLACK);
+		pixelbuffer.fill(TRANSPARENT);
 
 		// draw fixed tree
 		for (size_t i = 0; i < elements.size(); i++) {
@@ -206,7 +206,7 @@ private:
 					if (y==0 && x==0) continue;
 					pb::vec2i neighbour = pb::vec2i(pos.x + x, pos.y + y);
 					pb::RGBAColor color = pixelbuffer.getPixel(neighbour.x, neighbour.y);
-					if (color != BLACK && color != TRANSPARENT) {
+					if (color != TRANSPARENT) {
 						// we found the tree
 						elements[i]->fixed = true;
 					}
@@ -225,7 +225,7 @@ private:
 			if (elements[i]->fixed) {
 				continue;
 			}
-			// pixelbuffer.setPixel(elements[i]->position.x, elements[i]->position.y, elements[i]->color);
+			pixelbuffer.setPixel(elements[i]->position.x, elements[i]->position.y, elements[i]->color);
 		}
 	}
 
@@ -262,7 +262,7 @@ private:
 
 int main( void )
 {
-	MyApp application(320, 320, 24, 3);
+	MyApp application(320, 320, 32, 3);
 	application.hideMouse();
 
 	while (!application.quit())
