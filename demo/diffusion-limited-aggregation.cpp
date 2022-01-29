@@ -12,9 +12,9 @@
 
 #include <canvas/application.h>
 
-const float ROT_SPEED = 0.0125f;
-const int MAX_ELEMENTS = 5000;
-const int EDGE = 2;
+const float ROT_SPEED = 0.0075f;
+const int MAX_ELEMENTS = 10000;
+const int EDGE = 5;
 
 struct Element
 {
@@ -88,9 +88,8 @@ public:
 		if (counttime >= countmaxtime) {
 			rotateColors();
 			int count = countFreeElements();
-			std::cout << count << " elements free" << std::endl;
+			// std::cout << count << " free elements" << std::endl;
 			if (count == 0) {
-				std::cout << "Reset" << std::endl;
 				init();
 			}
 			counttime = 0.0f;
@@ -127,6 +126,8 @@ public:
 private:
 	void init()
 	{
+		std::cout << "Reset: " << MAX_ELEMENTS << " elements" << std::endl;
+
 		layers[0]->pixelbuffer.fill(BLACK);
 		int cols = layers[0]->pixelbuffer.width();
 		int rows = layers[0]->pixelbuffer.height();
@@ -183,8 +184,7 @@ private:
 			}
 		}
 
-		if (edgeTouched())
-		{
+		if (edgeTouched()) {
 			static int count = 0;
 			std::string filename = pixelbuffer.createFilename("difflimagg", count);
 			pixelbuffer.write(filename);
@@ -244,8 +244,7 @@ private:
 		if (input.getKeyDown(rt::KeyCode::Space)) {
 			std::cout << "spacebar pressed down." << std::endl;
 			// layers[0]->pixelbuffer.printInfo();
-			layers[0]->pixelbuffer.fill(BLACK);
-			elements.clear();
+			init();
 		}
 
 		if (input.getMouseDown(0)) {
@@ -263,7 +262,7 @@ private:
 
 int main( void )
 {
-	MyApp application(320, 180, 24, 4);
+	MyApp application(320, 320, 24, 3);
 	application.hideMouse();
 
 	while (!application.quit())
