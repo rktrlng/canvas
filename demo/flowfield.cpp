@@ -20,7 +20,7 @@ private:
 	std::vector<pb::vec2f> field;
 	std::deque<pb::vec2f> particles;
 	size_t flowscale = 8;
-	const size_t maxparticles = 1000;
+	const size_t maxparticles = 2500;
 	const double zspeed = 0.001; // z-noise change
 	const int pspeed = 50; // particle speed
 	const int at_once = 3; // # of particles to spawn per tick
@@ -111,6 +111,14 @@ private:
 		}
 
 		pixelbuffer.blur();
+
+		// Colorize
+		for (size_t i = 0; i < pixelbuffer.pixels().size(); i++) {
+			pb::HSVAColor hsva = pb::Color::RGBA2HSVA(pixelbuffer[i]);
+			hsva.h = 0.999f - hsva.v;
+			hsva.s = 1;
+			pixelbuffer[i] = pb::Color::HSVA2RGBA(hsva);
+		}
 	}
 	
 	void updateFlowField()
@@ -134,7 +142,7 @@ private:
 		for (size_t y = 0; y < rows; y += flowscale) {
 			for (size_t x = 0; x < cols; x += flowscale) {
 				pb::RGBAColor color = pixelbuffer.getPixel(x+flowscale/2, y+flowscale/2);
-				float angle = pb::map(color.r, min, max, -3.1415926f, 3.1415926f);
+				float angle = pb::map(color.r, min, max, -3.1415926f*1.9f, 3.1415926f*1.9f);
 				pb::vec2f vec = pb::vec2f::fromAngle(angle);
 				field.push_back(vec);
 			}
