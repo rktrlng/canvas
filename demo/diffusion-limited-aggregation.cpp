@@ -1,9 +1,9 @@
 /**
- * @file particles.cpp
+ * @file diffusion-limited-aggregation.cpp
  *
- * @brief particles implementation
+ * @brief diffusion-limited-aggregation implementation
  *
- * Copyright 2021-2022 @rktrlng
+ * Copyright 2022 @rktrlng
  * https://github.com/rktrlng/canvas
  */
 
@@ -12,9 +12,9 @@
 
 #include <canvas/application.h>
 
-const float ROT_SPEED = 0.01f;
+const float ROT_SPEED = 0.01f; // color rotation every second
 const int MAX_ELEMENTS = 10000;
-const int EDGE = 5;
+const int EDGE = 5; // save image if tree is EDGE pixels from edges
 
 struct Element
 {
