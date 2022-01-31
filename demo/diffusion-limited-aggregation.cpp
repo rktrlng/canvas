@@ -24,13 +24,13 @@ struct Element
 	int cols;
 	int rows;
 
-	Element(int x, int y, int cols, int rows)
+	Element(int x, int y, int c, int r)
 	{
 		position = pb::vec2i(x, y);
 		color = RED;
 		fixed = false;
-		cols = cols;
-		rows = rows;
+		cols = c;
+		rows = r;
 	}
 
 	void move()
