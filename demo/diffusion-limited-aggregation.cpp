@@ -21,27 +21,18 @@ struct Element
 	pb::vec2i position;
 	pb::RGBAColor color;
 	bool fixed;
-	int cols;
-	int rows;
 
-	Element(int x, int y, int c, int r)
+	Element(int x, int y)
 	{
 		position = pb::vec2i(x, y);
 		color = RED;
 		fixed = false;
-		cols = c;
-		rows = r;
 	}
 
 	void move()
 	{
-		if (!fixed) {
-			int dx = (rand()%3) - 1;
-			int dy = (rand()%3) - 1;
-			position.x += dx;
-			position.y += dy;
-			// position = pb::wrap(position, cols, rows);
-		}
+		pb::vec2i delta = pb::vec2i((rand()%3) - 1, (rand()%3) - 1);
+		position += delta;
 	}
 };
 
@@ -145,7 +136,7 @@ private:
 			int y = rand()%rows;
 			// int x = pb::rand_bm() * cols;
 			// int y = pb::rand_bm() * rows;
-			elements.push_back(new Element(x, y, cols, rows));
+			elements.push_back(new Element(x, y));
 		}
 
 		elements[0]->position.x = cols / 2;
@@ -184,6 +175,7 @@ private:
 			}
 		}
 
+		// if almost touches edge, save file
 		if (edgeTouched()) {
 			static int count = 0;
 			std::string filename = pixelbuffer.createFilename("difflimagg", count);
@@ -213,8 +205,8 @@ private:
 				}
 			}
 
+			// move free elements
 			if (!elements[i]->fixed) {
-				// element is still free moving
 				elements[i]->move();
 				borders(elements[i], cols, rows);
 			}
