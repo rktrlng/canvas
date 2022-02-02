@@ -22,7 +22,7 @@ public:
 	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool locked) : rt::Application(pixelbuffer, factor, locked)
 	{
 		grayscale();
-		floyd_steinberg();
+		floyd_steinberg(4);
 
 		uint16_t width = layers[0]->pixelbuffer.width();
 		uint16_t height = layers[0]->pixelbuffer.height();
@@ -45,7 +45,7 @@ public:
 
 private:
 	// https://en.wikipedia.org/wiki/Floyd%E2%80%93Steinberg_dithering
-	void floyd_steinberg()
+	void floyd_steinberg(int factor = 1)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		size_t rows = pixelbuffer.height();
@@ -65,7 +65,7 @@ private:
 				// oldpixel := pixels[x][y]
 				pb::RGBAColor oldpixel = pixelbuffer.getPixel(x, y);
 				// newpixel := find_closest_palette_color(oldpixel)
-				pb::RGBAColor newpixel = pb::Color::quantize(oldpixel);
+				pb::RGBAColor newpixel = pb::Color::quantize(oldpixel, factor);
 				// pixels[x][y] := newpixel
 				pixelbuffer.setPixel(x, y, newpixel);
 				// quant_error := oldpixel - newpixel
