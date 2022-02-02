@@ -70,30 +70,30 @@ private:
 				float r, g, b;
 				// pixels[x + 1][y    ] := pixels[x + 1][y    ] + quant_error × 7 / 16
 				pb::RGBAColor east = pixelbuffer.getPixel(x+1, y);
-				r = east.r + errorR * (7.0 / 16.0); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
-				g = east.g + errorG * (7.0 / 16.0); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
-				b = east.b + errorB * (7.0 / 16.0); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
+				r = round(east.r + errorR * (7.0 / 16.0)); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
+				g = round(east.g + errorG * (7.0 / 16.0)); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
+				b = round(east.b + errorB * (7.0 / 16.0)); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
 				pixelbuffer.setPixel(x+1, y, pb::RGBAColor(r, g, b, east.a));
 				
 				// pixels[x - 1][y + 1] := pixels[x - 1][y + 1] + quant_error × 3 / 16
 				pb::RGBAColor southwest = pixelbuffer.getPixel(x-1, y+1);
-				r = southwest.r + errorR * (3.0 / 16.0); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
-				g = southwest.g + errorG * (3.0 / 16.0); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
-				b = southwest.b + errorB * (3.0 / 16.0); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
+				r = round(southwest.r + errorR * (3.0 / 16.0)); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
+				g = round(southwest.g + errorG * (3.0 / 16.0)); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
+				b = round(southwest.b + errorB * (3.0 / 16.0)); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
 				pixelbuffer.setPixel(x-1, y+1, pb::RGBAColor(r, g, b, southwest.a));
 
 				// pixels[x    ][y + 1] := pixels[x    ][y + 1] + quant_error × 5 / 16
 				pb::RGBAColor south = pixelbuffer.getPixel(x, y+1);
-				r = south.r + errorR * (5.0 / 16.0); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
-				g = south.g + errorG * (5.0 / 16.0); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
-				b = south.b + errorB * (5.0 / 16.0); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
+				r = round(south.r + errorR * (5.0 / 16.0)); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
+				g = round(south.g + errorG * (5.0 / 16.0)); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
+				b = round(south.b + errorB * (5.0 / 16.0)); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
 				pixelbuffer.setPixel(x, y+1, pb::RGBAColor(r, g, b, south.a));
 
 				// pixels[x + 1][y + 1] := pixels[x + 1][y + 1] + quant_error × 1 / 16
 				pb::RGBAColor southeast = pixelbuffer.getPixel(x+1, y+1);
-				r = southeast.r + errorR * (1.0 / 16.0); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
-				g = southeast.g + errorG * (1.0 / 16.0); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
-				b = southeast.b + errorB * (1.0 / 16.0); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
+				r = round(southeast.r + errorR * (1.0 / 16.0)); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
+				g = round(southeast.g + errorG * (1.0 / 16.0)); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
+				b = round(southeast.b + errorB * (1.0 / 16.0)); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
 				pixelbuffer.setPixel(x+1, y+1, pb::RGBAColor(r, g, b, southeast.a));
 			}
 		}
