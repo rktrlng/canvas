@@ -24,6 +24,12 @@ public:
 		grayscale();
 		floyd_steinberg();
 
+		uint16_t width = layers[0]->pixelbuffer.width();
+		uint16_t height = layers[0]->pixelbuffer.height();
+		layers[0]->pixelbuffer.drawSquare(0,0,width-1,height-1,BLACK);
+
+		layers[0]->pixelbuffer.write("dither.pbf");
+
 		layers[0]->lock();
 	}
 
