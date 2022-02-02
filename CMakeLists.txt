@@ -270,3 +270,12 @@ target_link_libraries(diffusion-limited-aggregation # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+#dithering-floyd-steinberg
+add_executable(dithering-floyd-steinberg # g++ demo/dithering-floyd-steinberg.cpp -o dithering-floyd-steinberg
+	demo/dithering-floyd-steinberg.cpp
+)
+target_link_libraries(dithering-floyd-steinberg # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
