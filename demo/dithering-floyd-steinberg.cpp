@@ -67,33 +67,34 @@ private:
 				float errorG = oldpixel.g - newpixel.g;
 				float errorB = oldpixel.b - newpixel.b;
 
-				// // pixels[x + 1][y    ] := pixels[x + 1][y    ] + quant_error × 7 / 16
+				float r, g, b;
+				// pixels[x + 1][y    ] := pixels[x + 1][y    ] + quant_error × 7 / 16
 				pb::RGBAColor east = pixelbuffer.getPixel(x+1, y);
-				east.r += errorR * 7.0 / 16;
-				east.g += errorG * 7.0 / 16;
-				east.b += errorB * 7.0 / 16;
-				pixelbuffer.setPixel(x+1, y, east);
+				r = east.r + errorR * (7.0 / 16.0); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
+				g = east.g + errorG * (7.0 / 16.0); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
+				b = east.b + errorB * (7.0 / 16.0); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
+				pixelbuffer.setPixel(x+1, y, pb::RGBAColor(r, g, b, east.a));
 				
 				// pixels[x - 1][y + 1] := pixels[x - 1][y + 1] + quant_error × 3 / 16
 				pb::RGBAColor southwest = pixelbuffer.getPixel(x-1, y+1);
-				southwest.r += errorR * 3.0 / 16;
-				southwest.g += errorG * 3.0 / 16;
-				southwest.b += errorB * 3.0 / 16;
-				pixelbuffer.setPixel(x-1, y+1, southwest);
+				r = southwest.r + errorR * (3.0 / 16.0); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
+				g = southwest.g + errorG * (3.0 / 16.0); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
+				b = southwest.b + errorB * (3.0 / 16.0); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
+				pixelbuffer.setPixel(x-1, y+1, pb::RGBAColor(r, g, b, southwest.a));
 
 				// pixels[x    ][y + 1] := pixels[x    ][y + 1] + quant_error × 5 / 16
 				pb::RGBAColor south = pixelbuffer.getPixel(x, y+1);
-				south.r += errorR * 5.0 / 16;
-				south.g += errorG * 5.0 / 16;
-				south.b += errorB * 5.0 / 16;
-				pixelbuffer.setPixel(x, y+1, south);
+				r = south.r + errorR * (5.0 / 16.0); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
+				g = south.g + errorG * (5.0 / 16.0); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
+				b = south.b + errorB * (5.0 / 16.0); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
+				pixelbuffer.setPixel(x, y+1, pb::RGBAColor(r, g, b, south.a));
 
 				// pixels[x + 1][y + 1] := pixels[x + 1][y + 1] + quant_error × 1 / 16
 				pb::RGBAColor southeast = pixelbuffer.getPixel(x+1, y+1);
-				southeast.r += errorR * 1.0 / 16;
-				southeast.g += errorG * 1.0 / 16;
-				southeast.b += errorB * 1.0 / 16;
-				pixelbuffer.setPixel(x+1, y+1, southeast);
+				r = southeast.r + errorR * (1.0 / 16.0); if (r > 255) { r = 255; } if (r < 0) { r = 0; }
+				g = southeast.g + errorG * (1.0 / 16.0); if (g > 255) { g = 255; } if (g < 0) { g = 0; }
+				b = southeast.b + errorB * (1.0 / 16.0); if (b > 255) { b = 255; } if (b < 0) { b = 0; }
+				pixelbuffer.setPixel(x+1, y+1, pb::RGBAColor(r, g, b, southeast.a));
 			}
 		}
 	}
@@ -128,7 +129,7 @@ private:
 int main( void )
 {
 	pb::PixelBuffer pixelbuffer("assets/milkmaid.pbf");
-	MyApp application(pixelbuffer, 2, true);
+	MyApp application(pixelbuffer, 3, true);
 
 	while (!application.quit())
 	{
