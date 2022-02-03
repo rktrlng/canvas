@@ -23,7 +23,7 @@ private:
 	const size_t maxparticles = 2500;
 	const double zspeed = 0.001; // z-noise change
 	const int pspeed = 50; // particle speed
-	const int at_once = 3; // # of particles to spawn per tick
+	const int at_once = 10; // # of particles to spawn per tick
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
@@ -36,6 +36,12 @@ public:
 		rt::Canvas* particleCanvas = new rt::Canvas(width, height, bitdepth, factor);
 		layers.push_back(particleCanvas);
 		particleCanvas->pixelbuffer.fill(BLACK);
+
+		// fill list of particles half way
+		for (size_t i = 0; i < maxparticles/2; i++) {
+			pb::vec2f p = { pb::rand_float()*width, pb::rand_float()*height };
+			particles.push_back(p);
+		}
 	}
 
 	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
