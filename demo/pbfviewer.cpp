@@ -69,6 +69,7 @@ int main(int argc, char *argv[])
 
 	std::cout << filename << " (" << width << "x" << height << ") x " << factor;
 	std::cout << " = (" << (width*factor) << "x" << (height*factor) << ")" << std::endl;
+	pixelbuffer.printInfo();
 
 	float timer = 0.0f;
 	int frames = 0;
