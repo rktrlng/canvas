@@ -23,7 +23,7 @@ private:
 	const size_t maxparticles = 2500;
 	const double zspeed = 0.001; // z-noise change
 	const int pspeed = 50; // particle speed
-	const int at_once = 10; // # of particles to spawn per tick
+	const int at_once = 6; // # of particles to spawn per tick
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
 	{
@@ -83,7 +83,7 @@ private:
 
 		// update positions
 		for (size_t i = 0; i < particles.size(); i++) {
-			pb::vec2f particle = particles[i];
+			auto& particle = particles[i];
 
 			int flowindex = pb::index(particle.x/flowscale, particle.y/flowscale, cols/flowscale);
 			particle.x += field[flowindex].x * deltatime * pspeed;
@@ -93,8 +93,6 @@ private:
 			if (particle.x > cols) particle.x = 0;
 			if (particle.y < 0) particle.y = rows-1;
 			if (particle.y > rows) particle.y = 0;
-
-			particles[i] = particle;
 		}
 
 		// draw particles
@@ -136,7 +134,7 @@ private:
 		size_t cols = pixelbuffer.width();
 
 		// find min + max
-		std::vector<pb::RGBAColor> colors = pixelbuffer.pixels();
+		auto& colors = pixelbuffer.pixels();
 		uint8_t min = 255;
 		uint8_t max = 0;
 		for (size_t i = 0; i < colors.size(); i++) {
