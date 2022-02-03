@@ -246,7 +246,7 @@ private:
 		for (size_t y = 0; y < HEIGHT*2; y+=2) {
 			for (size_t x = 0; x < WIDTH*2; x+=2) {
 				pb::RGBAColor color = BLACK;
-				int index = pb::idFromPos(x/2, y/2, WIDTH);
+				int index = pb::index(x/2, y/2, WIDTH);
 				MCell* cell = generatorfield[index];
 				if (cell->visited) {
 					color = WHITE;
@@ -284,7 +284,7 @@ private:
 		int index = 0;
 
 		// look right
-		index = pb::idFromPos(x+1,y,WIDTH);
+		index = pb::index(x+1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x < WIDTH-1) {
 			if (!generatorfield[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
@@ -293,7 +293,7 @@ private:
 			}
 		}
 		// look left
-		index = pb::idFromPos(x-1,y,WIDTH);
+		index = pb::index(x-1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x > 0 ) {
 			if (!generatorfield[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
@@ -302,7 +302,7 @@ private:
 			}
 		}
 		// look down
-		index = pb::idFromPos(x,y+1,WIDTH);
+		index = pb::index(x,y+1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!generatorfield[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
@@ -311,7 +311,7 @@ private:
 			}
 		}
 		// look up
-		index = pb::idFromPos(x,y-1,WIDTH);
+		index = pb::index(x,y-1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!generatorfield[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
@@ -474,7 +474,7 @@ private:
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
 				pb::RGBAColor color = BLACK;
-				int index = pb::idFromPos(x, y, cols);
+				int index = pb::index(x, y, cols);
 				PCell* cell = solverfield[index];
 				if (cell->wall) {
 					color = BLACK;
@@ -491,9 +491,9 @@ private:
 
 		// draw solution so far
 		for (size_t i = 0; i < solution.size(); i++) {
-			// pixelbuffer[pb::idFromPos(solution[i]->col, solution[i]->row, cols)] = ORANGE;
+			// pixelbuffer[pb::index(solution[i]->col, solution[i]->row, cols)] = ORANGE;
 			pb::RGBAColor color = palette[i % palette.size()];
-			pixelbuffer[pb::idFromPos(solution[i]->col, solution[i]->row, cols)] = color;
+			pixelbuffer[pb::index(solution[i]->col, solution[i]->row, cols)] = color;
 		}
 
 		if (state == State::VICTORY) {
@@ -520,22 +520,22 @@ private:
 		size_t index = 0;
 
 		// look right
-		index = pb::idFromPos(x+1,y,cols);
+		index = pb::index(x+1,y,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look left
-		index = pb::idFromPos(x-1,y,cols);
+		index = pb::index(x-1,y,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look down
-		index = pb::idFromPos(x,y+1,cols);
+		index = pb::index(x,y+1,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look up
-		index = pb::idFromPos(x,y-1,cols);
+		index = pb::index(x,y-1,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}

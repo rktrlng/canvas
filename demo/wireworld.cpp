@@ -93,7 +93,7 @@ private:
 				//- HEAD -> TAIL
 				//- TAIL -> CONDUCTOR
 				//- CONDUCTOR: if 1 or 2 neighbours are HEAD -> HEAD
-				uint8_t current = field[pb::idFromPos(x,y,cols)];
+				uint8_t current = field[pb::index(x,y,cols)];
 				if (current == EMPTY) {
 					continue; // nothing to do, continue to next pixel
 				} else if (current == HEAD) {
@@ -109,17 +109,17 @@ private:
 								// this is us
 							} else {
 								pb::vec2i n = pb::wrap(pb::vec2i(x+c, y+r), cols, rows);
-								if (field[pb::idFromPos(n.x,n.y,cols)] == HEAD) { nc++; }
+								if (field[pb::index(n.x,n.y,cols)] == HEAD) { nc++; }
 							}
 						}
 					}
 					if (nc == 1 || nc == 2) { current = HEAD; }
 				}
-				next[pb::idFromPos(x,y,cols)] = current;
+				next[pb::index(x,y,cols)] = current;
 
 				// update pixelbuffer from (current) field
 				pb::RGBAColor color = BLACK;
-				int index = pb::idFromPos(x,y,cols);
+				int index = pb::index(x,y,cols);
 				if (field[index] == CONDUCTOR) {
 					color = YELLOW;
 				} else if (field[index] == HEAD) {

@@ -139,22 +139,22 @@ private:
 		size_t index = 0;
 
 		// look right
-		index = pb::idFromPos(x+1,y,cols);
+		index = pb::index(x+1,y,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look left
-		index = pb::idFromPos(x-1,y,cols);
+		index = pb::index(x-1,y,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look down
-		index = pb::idFromPos(x,y+1,cols);
+		index = pb::index(x,y+1,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look up
-		index = pb::idFromPos(x,y-1,cols);
+		index = pb::index(x,y-1,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
@@ -210,7 +210,7 @@ private:
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
 				pb::RGBAColor color = BLACK;
-				int index = pb::idFromPos(x, y, cols);
+				int index = pb::index(x, y, cols);
 				PCell* cell = solverfield[index];
 				if (cell->wall) {
 					color = BLACK;
@@ -227,7 +227,7 @@ private:
 
 		// draw solution so far
 		for (size_t i = 0; i < solution.size(); i++) {
-			pixelbuffer[pb::idFromPos(solution[i]->col, solution[i]->row, cols)] = ORANGE;
+			pixelbuffer[pb::index(solution[i]->col, solution[i]->row, cols)] = ORANGE;
 		}
 
 		// draw start + end

@@ -77,7 +77,7 @@ private:
 		int cols = pixelbuffer.header().width;
 		// int rows = pixelbuffer.header().height;
 
-		int id = pb::idFromPos(pos, cols);
+		int id = pb::index(pos, cols);
 		if (dir) {
 			field[id-1] = ALIVE;
 			field[id+0] = ALIVE;
@@ -104,7 +104,7 @@ private:
 		}
 
 		pixelbuffer.setPixel(pos.x, pos.y, BLACK);
-		int id = pb::idFromPos(pos, cols);
+		int id = pb::index(pos, cols);
 		field[id] = ALIVE;
 
 		pos.x += (rand()%3) - 1;
@@ -125,7 +125,7 @@ private:
 		std::vector<uint8_t> next = std::vector<uint8_t>(cols*rows, 0);
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				int index = pb::idFromPos(x,y,cols);
+				int index = pb::index(x,y,cols);
 				uint8_t current = field[index];
 
 				// check 8 neighbours and count the ones that are a ALIVE
@@ -136,7 +136,7 @@ private:
 							// this is us
 						} else {
 							pb::vec2i n = pb::wrap(pb::vec2i(x+c, y+r), cols, rows);
-							if (field[pb::idFromPos(n.x,n.y,cols)] == ALIVE) { nc++; }
+							if (field[pb::index(n.x,n.y,cols)] == ALIVE) { nc++; }
 						}
 					}
 				}

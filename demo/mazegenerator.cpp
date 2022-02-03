@@ -122,7 +122,7 @@ private:
 		int index = 0;
 
 		// look right
-		index = pb::idFromPos(x+1,y,WIDTH);
+		index = pb::index(x+1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x < WIDTH-1) {
 			if (!field[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
@@ -131,7 +131,7 @@ private:
 			}
 		}
 		// look left
-		index = pb::idFromPos(x-1,y,WIDTH);
+		index = pb::index(x-1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x > 0 ) {
 			if (!field[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
@@ -140,7 +140,7 @@ private:
 			}
 		}
 		// look down
-		index = pb::idFromPos(x,y+1,WIDTH);
+		index = pb::index(x,y+1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!field[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
@@ -149,7 +149,7 @@ private:
 			}
 		}
 		// look up
-		index = pb::idFromPos(x,y-1,WIDTH);
+		index = pb::index(x,y-1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!field[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
@@ -231,7 +231,7 @@ private:
 		for (size_t y = 0; y < HEIGHT*2; y+=2) {
 			for (size_t x = 0; x < WIDTH*2; x+=2) {
 				pb::RGBAColor color = BLACK;
-				int index = pb::idFromPos(x/2, y/2, WIDTH);
+				int index = pb::index(x/2, y/2, WIDTH);
 				MCell* cell = field[index];
 				if (cell->visited) {
 					color = WHITE;

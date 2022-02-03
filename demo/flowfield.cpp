@@ -79,7 +79,7 @@ private:
 		for (size_t i = 0; i < particles.size(); i++) {
 			pb::vec2f particle = particles[i];
 
-			int flowindex = pb::idFromPos(particle.x/flowscale, particle.y/flowscale, cols/flowscale);
+			int flowindex = pb::index(particle.x/flowscale, particle.y/flowscale, cols/flowscale);
 			particle.x += field[flowindex].x * deltatime * pspeed;
 			particle.y += field[flowindex].y * deltatime * pspeed;
 

@@ -101,23 +101,23 @@ private:
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
 				// Apply rules for each pixel:
-				int current = field[pb::idFromPos(x,y,cols)];
+				int current = field[pb::index(x,y,cols)];
 
 				// check 8 neighbours and count the ones that are a WALL (black)
 				int nc = 0; // number of neighbour cells
 				for (int r = -1; r < 2; r++) {
 					for (int c = -1; c < 2; c++) {
 						pb::vec2i n = pb::wrap(pb::vec2i(x+c, y+r), cols, rows);
-						if (field[pb::idFromPos(n.x,n.y,cols)] == 0) { nc++; }
+						if (field[pb::index(n.x,n.y,cols)] == 0) { nc++; }
 					}
 				}
 				if (nc < 4) { current = 1; }
 				if (nc > 4) { current = 0; }
-				next[pb::idFromPos(x,y,cols)] = current;
+				next[pb::index(x,y,cols)] = current;
 
 				// update pixelbuffer from (current) field
 				pb::RGBAColor color;
-				int index = pb::idFromPos(x,y,cols);
+				int index = pb::index(x,y,cols);
 				if (field[index] == 0) {
 					color = BLACK;
 				} else {
