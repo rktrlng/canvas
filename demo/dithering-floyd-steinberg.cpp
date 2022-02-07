@@ -79,12 +79,8 @@ private:
 		// copy RGBA pixels to Color16 pixels
 		std::vector<Color16> values;
 		for (size_t i = 0; i < rows*cols; i++) {
-			pb::RGBAColor color = pixelbuffer[i];
-			Color16 c16;
-			c16.r = color.r;
-			c16.g = color.g;
-			c16.b = color.b;
-			c16.a = color.a;
+			pb::RGBAColor p = pixelbuffer[i];
+			Color16 c16 = { p.r, p.g, p.b, p.a };
 			values.push_back(c16);
 		}
 
