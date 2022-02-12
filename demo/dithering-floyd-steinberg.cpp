@@ -21,7 +21,7 @@ public:
 
 	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool locked) : rt::Application(pixelbuffer, factor, locked)
 	{
-		grayscale();
+		luminance();
 		floyd_steinberg(1);
 
 		// draw black border around image
@@ -155,11 +155,11 @@ private:
 		}
 	}
 
-	void grayscale()
+	void luminance()
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		for (size_t i = 0; i < pixelbuffer.pixels().size(); i++) {
-			pixelbuffer.pixels()[i] = pb::Color::grayscale(pixelbuffer.pixels()[i]);
+			pixelbuffer.pixels()[i] = pb::Color::luminance(pixelbuffer.pixels()[i]);
 		}
 	}
 
