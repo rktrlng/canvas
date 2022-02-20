@@ -77,7 +77,7 @@ private:
 		int cols = pixelbuffer.header().width;
 		// int rows = pixelbuffer.header().height;
 
-		int id = pb::index(pos, cols);
+		int id = pb::index(pos.x, pos.y, cols);
 		if (dir) {
 			field[id-1] = ALIVE;
 			field[id+0] = ALIVE;
@@ -104,7 +104,7 @@ private:
 		}
 
 		pixelbuffer.setPixel(pos.x, pos.y, BLACK);
-		int id = pb::index(pos, cols);
+		int id = pb::index(pos.x, pos.y, cols);
 		field[id] = ALIVE;
 
 		pos.x += (rand()%3) - 1;
