@@ -46,6 +46,17 @@ public:
 	}
 
 private:
+	float square_wave(float t, int octaves = 3)
+	{
+		// https://www.mathworks.com/help/matlab/math/square-wave-from-sine-waves.html
+		// y = sin(t) + sin(3*t)/3 + sin(5*t)/5 + sin(7*t)/7 + sin(9*t)/9;
+		float y = 0.0f;
+		for (int i = 1; i < octaves*2; i += 2) {
+			y += sin(i*t)/i;
+		}
+		return y;
+	}
+
 	void updatePixels()
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
@@ -56,16 +67,9 @@ private:
 
 		// ##############################################
 		// calculate wave form
-		// https://www.mathworks.com/help/matlab/math/square-wave-from-sine-waves.html
 		static float t = 0;
 		t += 0.075f;
-		float y;
-		// y = sin(t);
-		// y = sin(t) + sin(3*t)/3;
-		// y = sin(t) + sin(3*t)/3 + sin(5*t)/5;
-		// y = sin(t) + sin(3*t)/3 + sin(5*t)/5 + sin(7*t)/7;
-		// y = sin(t) + sin(3*t)/3 + sin(5*t)/5 + sin(7*t)/7 + sin(9*t)/9;
-		y = sin(t) + sin(3*t)/3 + sin(5*t)/5 + sin(7*t)/7 + sin(9*t)/9 + sin(11*t)/11;
+		float y = square_wave(t, 6);
 
 		values.push_back(y);
 		if (values.size() > cols) {
