@@ -279,3 +279,12 @@ target_link_libraries(dithering-floyd-steinberg # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+#oscillation
+add_executable(oscillation # g++ demo/oscillation.cpp -o oscillation
+	demo/oscillation.cpp
+)
+target_link_libraries(oscillation # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
