@@ -40,24 +40,35 @@ public:
 		float maxtime = 0.01667f - deltatime;
 		frametime += deltatime;
 		if (frametime >= maxtime) {
-			updatePixels();
+			static int harmonic = 1;
+			static int harmonic_vel = 1;
+			static int counter = 0;
+			counter++;
+			if (counter > 250) {
+				harmonic += harmonic_vel;
+				counter = 0;
+			}
+			if (harmonic > 8 || harmonic < 2) {
+				harmonic_vel *= -1;
+			}
+			updatePixels(harmonic);
 			frametime = 0.0f;
 		}
 	}
 
 private:
-	float square_wave(float t, int octaves = 3)
+	float square_wave(float t, int harmonics = 3)
 	{
 		// https://www.mathworks.com/help/matlab/math/square-wave-from-sine-waves.html
 		// y = sin(t) + sin(3*t)/3 + sin(5*t)/5 + sin(7*t)/7 + sin(9*t)/9;
 		float y = 0.0f;
-		for (int i = 1; i < octaves*2; i += 2) {
+		for (int i = 1; i < harmonics*2; i += 2) {
 			y += sin(i*t)/i;
 		}
 		return y;
 	}
 
-	void updatePixels()
+	void updatePixels(int harmonics)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		size_t rows = pixelbuffer.header().height;
@@ -70,7 +81,7 @@ private:
 		// calculate wave form
 		static float t = 0;
 		t += 0.075f;
-		float y = square_wave(t, 6);
+		float y = square_wave(t, harmonics);
 
 		values.push_front(y);
 		if (values.size() > stop) {
