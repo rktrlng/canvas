@@ -64,6 +64,7 @@ private:
 		size_t cols = pixelbuffer.header().width;
 
 		pixelbuffer.fill(TRANSPARENT);
+		size_t stop = cols-30;
 
 		// ##############################################
 		// calculate wave form
@@ -71,20 +72,25 @@ private:
 		t += 0.075f;
 		float y = square_wave(t, 6);
 
-		values.push_back(y);
-		if (values.size() > cols) {
-			values.pop_front();
+		values.push_front(y);
+		if (values.size() > stop) {
+			values.pop_back();
 		}
 
 		// ##############################################
 		// draw wave
 		int scale = 60;
 
-		for (size_t x = 0; x < values.size(); x++) {
-			if (x > 1) {
-				pixelbuffer.drawLine(x, (values[x]*scale)+rows/2, x-1, (values[x-1]*scale)+rows/2, GREEN);
+		for (size_t i = 0; i < values.size(); i++) {
+			if (i > 1) {
+				int x = stop-i;
+				pixelbuffer.drawLine(x, (values[i-1]*scale)+rows/2, x-1, (values[i]*scale)+rows/2, GREEN);
 			}
 		}
+
+		// ##############################################
+		// draw red circle
+		pixelbuffer.drawCircleFilled(stop, (values[0]*scale)+rows/2, 3, RED);
 
 		// ##############################################
 		// draw grid
