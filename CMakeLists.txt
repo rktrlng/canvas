@@ -76,6 +76,10 @@ add_library(canvas # ar rcs libcanvas.a
 	canvas/noise.cpp
 )
 
+#asciiart
+add_executable(asciiart
+	demo/asciiart.cpp
+)
 
 # Start
 add_executable(start # g++ demo/start.cpp -o start
