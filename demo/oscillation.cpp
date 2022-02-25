@@ -48,7 +48,7 @@ public:
 				harmonic += harmonic_vel;
 				counter = 0;
 			}
-			if (harmonic > 8 || harmonic < 2) {
+			if (harmonic > 6 || harmonic < 2) {
 				harmonic_vel *= -1;
 			}
 			updatePixels(harmonic);
@@ -129,7 +129,6 @@ private:
 		pixelbuffer.drawLine(0, rows-1, cols-1, rows-1, pb::RGBAColor(light, alpha));
 
 		// ##############################################
-		// lock()
 		layers[0]->lock();
 	}
 
