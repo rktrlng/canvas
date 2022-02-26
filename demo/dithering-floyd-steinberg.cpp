@@ -159,7 +159,7 @@ private:
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		for (size_t i = 0; i < pixelbuffer.pixels().size(); i++) {
-			pixelbuffer.pixels()[i] = pb::Color::luminance(pixelbuffer.pixels()[i]);
+			pixelbuffer.pixels()[i] = pb::luminance(pixelbuffer.pixels()[i]);
 		}
 	}
 

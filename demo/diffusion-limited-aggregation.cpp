@@ -227,7 +227,7 @@ private:
 			if (elements[i]->fixed) {
 				continue;
 			}
-			elements[i]->color = pb::Color::rotate(elements[i]->color, ROT_SPEED);
+			elements[i]->color = pb::rotate(elements[i]->color, ROT_SPEED);
 		}
 	}
 

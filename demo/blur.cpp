@@ -42,7 +42,7 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			updatePixels();
-			color = pb::Color::rotate(color, 0.005f);
+			color = pb::rotate(color, 0.005f);
 			frametime = 0.0f;
 		}
 	}

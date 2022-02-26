@@ -118,10 +118,10 @@ private:
 
 		// Colorize
 		for (size_t i = 0; i < pixelbuffer.pixels().size(); i++) {
-			pb::HSVAColor hsva = pb::Color::RGBA2HSVA(pixelbuffer[i]);
+			pb::HSVAColor hsva = pb::RGBA2HSVA(pixelbuffer[i]);
 			hsva.h = 0.999f - hsva.v;
 			hsva.s = 1;
-			pixelbuffer[i] = pb::Color::HSVA2RGBA(hsva);
+			pixelbuffer[i] = pb::HSVA2RGBA(hsva);
 		}
 	}
 	

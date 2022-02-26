@@ -82,11 +82,11 @@ private:
 		pb::RGBAColor color = RED;
 		for (size_t x = 0; x < 10; x++) {
 			pixelbuffer.drawSquareFilled( x * size + offset, size + offset, size, size, color);
-			color = pb::Color::rotate(color, 0.05f);
+			color = pb::rotate(color, 0.05f);
 		}
 		for (size_t x = 0; x < 10; x++) {
 			pixelbuffer.drawSquareFilled( x * size + offset, (size*2) + offset, size, size, color);
-			color = pb::Color::rotate(color, 0.05f);
+			color = pb::rotate(color, 0.05f);
 		}
 	}
 

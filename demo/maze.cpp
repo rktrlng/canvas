@@ -398,7 +398,7 @@ private:
 		size_t amount = 600;
 		for (size_t i = 0; i < amount; i++) {
 			palette.push_back(color);
-			color = pb::Color::rotate(color, 1.0f / amount);
+			color = pb::rotate(color, 1.0f / amount);
 		}
 	}
 
@@ -499,7 +499,7 @@ private:
 		if (state == State::VICTORY) {
 			for (size_t i = 0; i < palette.size(); i++) {
 				pb::RGBAColor color = palette[i];
-				palette[i] = pb::Color::rotate(color, 1.0f - deltatime);
+				palette[i] = pb::rotate(color, 1.0f - deltatime);
 			}
 		}
 
