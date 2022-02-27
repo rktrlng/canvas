@@ -60,23 +60,28 @@ private:
 		angle += 1 * deltaTime;
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		// uint16_t cols = pixelbuffer.header().width;
-		// uint16_t rows = pixelbuffer.header().height;
+		float cols = (float) pixelbuffer.header().width;
+		float rows = (float) pixelbuffer.header().height;
 
 		pixelbuffer.fill(BLACK);
 
 		// define transform for object
-		pb::vec4f scale = pb::vec4f(75.0, 75.0, 75.0, 0.0);
-		pb::vec4f rotation = pb::vec4f(angle, angle + M_PI/3, angle - M_PI/3, 0.0);
-		pb::vec4f translation = pb::vec4f(pixelbuffer.width()/2, pixelbuffer.height()/2, 0.0, 0.0);
+		pb::vec4f scale = pb::vec4f(125.0f, 125.0f, 125.0f, 0.0f);
+		pb::vec4f rotation = pb::vec4f(angle, angle + M_PI/3, angle - M_PI/3, 0.0f);
+		pb::vec4f translation = pb::vec4f(pixelbuffer.width()/2, pixelbuffer.height()/2, 0.0f, 1.0f);
 
 		// create modelmatrix
-		pb::mat4f modelmatrix = pb::modelMatrix(translation, rotation, scale);
+		pb::mat4f model = pb::modelMatrix(translation, rotation, scale);
+		pb::mat4f view = pb::mat4f(); // identity for now...
+		pb::mat4f projection = pb::perspectiveMatrix(92.0f, cols/rows, 0.01f, 1000.0f);
 
+		// create mvp
+		pb::mat4f mvp = projection * view * model;
+
+		// transform each point in 3D object to screen coords
 		pb::vec4f drawpoints[8];
 		for (size_t i = 0; i < 8; i++) {
-			// transform each point in 3D object to screen coords
-			pb::vec4f transformed = pb::matmulMV(modelmatrix, points[i]);
+			pb::vec4f transformed = mvp * points[i];
 			drawpoints[i] = pb::vec4(transformed.x, transformed.y, transformed.z, 1.0f);
 		}
 
