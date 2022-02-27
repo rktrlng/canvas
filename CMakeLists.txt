@@ -292,3 +292,12 @@ target_link_libraries(oscillation # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# Cube
+add_executable(cube # g++ demo/cube.cpp -o cube
+	demo/cube.cpp
+)
+target_link_libraries(cube # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
