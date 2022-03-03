@@ -275,7 +275,7 @@ target_link_libraries(diffusion-limited-aggregation # g++ -lcanvas
 	${ALL_GRAPHICS_LIBS}
 )
 
-#dithering-floyd-steinberg
+# dithering-floyd-steinberg
 add_executable(dithering-floyd-steinberg # g++ demo/dithering-floyd-steinberg.cpp -o dithering-floyd-steinberg
 	demo/dithering-floyd-steinberg.cpp
 )
@@ -284,7 +284,7 @@ target_link_libraries(dithering-floyd-steinberg # g++ -lcanvas
 	${ALL_GRAPHICS_LIBS}
 )
 
-#oscillation
+# oscillation
 add_executable(oscillation # g++ demo/oscillation.cpp -o oscillation
 	demo/oscillation.cpp
 )
@@ -293,11 +293,20 @@ target_link_libraries(oscillation # g++ -lcanvas
 	${ALL_GRAPHICS_LIBS}
 )
 
-# Cube
+# cube
 add_executable(cube # g++ demo/cube.cpp -o cube
 	demo/cube.cpp
 )
 target_link_libraries(cube # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
+
+# bezier
+add_executable(bezier # g++ demo/bezier.cpp -o bezier
+	demo/bezier.cpp
+)
+target_link_libraries(bezier # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
