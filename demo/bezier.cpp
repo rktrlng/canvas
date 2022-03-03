@@ -10,6 +10,7 @@
 #include <ctime>
 
 #include <canvas/application.h>
+#include <pixelbuffer/math/geom.h>
 
 class MyApp : public rt::Application
 {
@@ -45,63 +46,86 @@ public:
 	}
 
 private:
-	pb::vec2f a;
-	pb::vec2f b;
-	pb::vec2f c;
-	pb::vec2f d;
-	pb::vec2f prev;
+	pb::BezierCubic curve;
 
 	void init()
 	{
-		a = pb::vec2f(30, 90);
-		b = pb::vec2f(80, 30);
-		c = pb::vec2f(240, 150);
-		d = pb::vec2f(290, 90);
-		prev = pb::vec2f(30, 30);
+		curve.start = pb::vec2f(30, 90);
+		curve.control_start = pb::vec2f(80, 30);
+		curve.control_end = pb::vec2f(240, 150);
+		curve.end = pb::vec2f(290, 90);
 	}
 
 	void updatePixels()
 	{
+		drawBezier(curve);
+
+		layers[0]->lock();
+	}
+
+	void drawBezier(const pb::BezierCubic& bezier)
+	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		// size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
+		// size_t rows = pixelbuffer.height();
+		// size_t cols = pixelbuffer.width();
 
 		pixelbuffer.fill(TRANSPARENT);
 
-		for (float x = 0; x < cols; x++) {
-			pb::vec2 bezier = pb::vec2::lerp_cubic(a, b, c, d, x/cols);
-			if (x != 0) {
-				pixelbuffer.drawLine(prev.x, prev.y, bezier.x, bezier.y, RED);
+		pb::vec2f delta = bezier.end - bezier.start;
+		int segmentlength = 3;
+		float steps = delta.mag()/segmentlength;
+
+		pb::vec2f prev = pb::vec2f(0, 0);
+		for (float t = 0; t <= 1.01f; t += 1.0f / steps) {
+			pb::vec2f point = bezier.point(t);
+			if (t != 0) {
+				pixelbuffer.drawLine(prev.x, prev.y, point.x, point.y, RED);
 			}
-			prev = bezier;
+			prev = point;
 		}
 
-		pixelbuffer.drawCircle(b.x, b.y, 3, GREEN);
-		pixelbuffer.drawCircle(c.x, c.y, 3, GREEN);
-		pixelbuffer.drawLine(a.x, a.y, b.x, b.y, YELLOW);
-		pixelbuffer.drawLine(c.x, c.y, d.x, d.y, YELLOW);
+		// draw control points and lines
+		pixelbuffer.drawCircle(bezier.control_start.x, bezier.control_start.y, 3, GREEN);
+		pixelbuffer.drawCircle(bezier.control_end.x, bezier.control_end.y, 3, GREEN);
+		pixelbuffer.drawLine(bezier.start.x, bezier.start.y, bezier.control_start.x, bezier.control_start.y, YELLOW);
+		pixelbuffer.drawLine(bezier.control_end.x, bezier.control_end.y, bezier.end.x, bezier.end.y, YELLOW);
+		// draw start and end points
+		pixelbuffer.drawCircle(bezier.start.x, bezier.start.y, 3, GREEN);
+		pixelbuffer.drawCircle(bezier.end.x, bezier.end.y, 3, GREEN);
 
-		
-		layers[0]->lock();
+		// pixelbuffer.drawLine(bezier.control_start.x, bezier.control_start.y, bezier.control_end.x, bezier.control_end.y, {255, 127, 0, 240});
 	}
 
 	void handleInput()
 	{
 		if (input.getKeyDown(rt::KeyCode::Space)) {
-			// std::cout << "spacebar pressed down." << std::endl;
-			// layers[0]->pixelbuffer.printInfo();
 			init();
 		}
 
 		if (input.getMouse(0)) {
-			b.x = input.getMouseX();
-			b.y = input.getMouseY();
-			// std::cout << "click " << (int) input.getMouseX() << "," << (int) input.getMouseY() << std::endl;
-		}
+			pb::vec2f mousepos  = pb::vec2f(input.getMouseX(), input.getMouseY());
 
-		if (input.getMouse(1)) {
-			c.x = input.getMouseX();
-			c.y = input.getMouseY();
+			pb::Circlef start   = pb::Circlef(curve.start.x, curve.start.y, 3);
+			pb::Circlef start_c = pb::Circlef(curve.control_start.x, curve.control_start.y, 3);
+			pb::Circlef end     = pb::Circlef(curve.end.x, curve.end.y, 3);
+			pb::Circlef end_c   = pb::Circlef(curve.control_end.x, curve.control_end.y, 3);
+
+			if (pb::point2circle(mousepos, start)) {
+				curve.start.x = mousepos.x;
+				curve.start.y = mousepos.y;
+			}
+			if (pb::point2circle(mousepos, start_c)) {
+				curve.control_start.x = mousepos.x;
+				curve.control_start.y = mousepos.y;
+			}
+			if (pb::point2circle(mousepos, end)) {
+				curve.end.x = mousepos.x;
+				curve.end.y = mousepos.y;
+			}
+			if (pb::point2circle(mousepos, end_c)) {
+				curve.control_end.x = mousepos.x;
+				curve.control_end.y = mousepos.y;
+			}
 			// std::cout << "click " << (int) input.getMouseX() << "," << (int) input.getMouseY() << std::endl;
 		}
 
