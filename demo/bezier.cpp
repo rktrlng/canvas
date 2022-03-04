@@ -103,6 +103,18 @@ private:
 			init();
 		}
 
+		static bool stickystart  = false;
+		static bool stickystartc = false;
+		static bool stickyend    = false;
+		static bool stickyendc   = false;
+
+		if (input.getMouseUp(0)) {
+			stickystart  = false;
+			stickystartc = false;
+			stickyend    = false;
+			stickyendc   = false;
+		}
+
 		if (input.getMouse(0)) {
 			pb::vec2f mousepos  = pb::vec2f(input.getMouseX(), input.getMouseY());
 
@@ -116,17 +128,30 @@ private:
 			pb::vec2f control_vec_end   = curve.control_end - curve.end;
 
 			if (pb::point2circle(mousepos, start)) {
+				stickystart = true;
+			}
+			if (pb::point2circle(mousepos, start_c)) {
+				stickystartc = true;
+			}
+			if (pb::point2circle(mousepos, end)) {
+				stickyend = true;
+			}
+			if (pb::point2circle(mousepos, end_c)) {
+				stickyendc = true;
+			}
+
+			if (stickystart) {
 				curve.start = mousepos;
 				curve.control_start = curve.start + control_vec_start;
 			}
-			if (pb::point2circle(mousepos, start_c)) {
+			if (stickystartc) {
 				curve.control_start = mousepos;
 			}
-			if (pb::point2circle(mousepos, end)) {
+			if (stickyend) {
 				curve.end = mousepos;
 				curve.control_end = curve.end + control_vec_end;
 			}
-			if (pb::point2circle(mousepos, end_c)) {
+			if (stickyendc) {
 				curve.control_end = mousepos;
 			}
 		}
