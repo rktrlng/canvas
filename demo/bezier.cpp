@@ -99,10 +99,6 @@ private:
 
 	void handleInput()
 	{
-		if (input.getKeyDown(rt::KeyCode::Space)) {
-			init();
-		}
-
 		static bool stickystart  = false;
 		static bool stickystartc = false;
 		static bool stickyend    = false;
@@ -115,18 +111,19 @@ private:
 			stickyendc   = false;
 		}
 
-		if (input.getMouse(0)) {
-			pb::vec2f mousepos  = pb::vec2f(input.getMouseX(), input.getMouseY());
+		// get mousepos and collission spheres on points
+		pb::vec2f mousepos  = pb::vec2f(input.getMouseX(), input.getMouseY());
 
-			pb::Circlef start   = pb::Circlef(curve.start.x, curve.start.y, 3);
-			pb::Circlef start_c = pb::Circlef(curve.control_start.x, curve.control_start.y, 3);
-			pb::Circlef end     = pb::Circlef(curve.end.x, curve.end.y, 3);
-			pb::Circlef end_c   = pb::Circlef(curve.control_end.x, curve.control_end.y, 3);
+		pb::Circlef start   = pb::Circlef(curve.start.x, curve.start.y, 3);
+		pb::Circlef start_c = pb::Circlef(curve.control_start.x, curve.control_start.y, 3);
+		pb::Circlef end     = pb::Circlef(curve.end.x, curve.end.y, 3);
+		pb::Circlef end_c   = pb::Circlef(curve.control_end.x, curve.control_end.y, 3);
 
-			// vec from end points to their handlepoints (to move control points relative to end points)
-			pb::vec2f control_vec_start = curve.control_start - curve.start;
-			pb::vec2f control_vec_end   = curve.control_end - curve.end;
+		// vec from end points to their handlepoints (to move control points relative to end points)
+		pb::vec2f control_vec_start = curve.control_start - curve.start;
+		pb::vec2f control_vec_end   = curve.control_end - curve.end;
 
+		if (input.getMouseDown(0)) {
 			if (pb::point2circle(mousepos, start)) {
 				stickystart = true;
 			}
@@ -139,7 +136,9 @@ private:
 			if (pb::point2circle(mousepos, end_c)) {
 				stickyendc = true;
 			}
+		}
 
+		if (input.getMouse(0)) {
 			if (stickystart) {
 				curve.start = mousepos;
 				curve.control_start = curve.start + control_vec_start;
@@ -156,10 +155,15 @@ private:
 			}
 		}
 
-		int scrolly = input.getScrollY();
-		if (scrolly != 0) {
-			std::cout << "scroll: " << scrolly << std::endl;
+		// ########################################################
+		if (input.getKeyDown(rt::KeyCode::Space)) {
+			init();
 		}
+
+		// int scrolly = input.getScrollY();
+		// if (scrolly != 0) {
+		// 	std::cout << "scroll: " << scrolly << std::endl;
+		// }
 	}
 
 };
