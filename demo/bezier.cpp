@@ -103,9 +103,6 @@ private:
 			init();
 		}
 
-		// vec from end points to their handlepoints (to move control points relative to end points)
-		pb::vec2f control_vec_start = curve.control_start - curve.start;
-		pb::vec2f control_vec_end   = curve.control_end - curve.end;
 		if (input.getMouse(0)) {
 			pb::vec2f mousepos  = pb::vec2f(input.getMouseX(), input.getMouseY());
 
@@ -113,6 +110,10 @@ private:
 			pb::Circlef start_c = pb::Circlef(curve.control_start.x, curve.control_start.y, 3);
 			pb::Circlef end     = pb::Circlef(curve.end.x, curve.end.y, 3);
 			pb::Circlef end_c   = pb::Circlef(curve.control_end.x, curve.control_end.y, 3);
+
+			// vec from end points to their handlepoints (to move control points relative to end points)
+			pb::vec2f control_vec_start = curve.control_start - curve.start;
+			pb::vec2f control_vec_end   = curve.control_end - curve.end;
 
 			if (pb::point2circle(mousepos, start)) {
 				curve.start = mousepos;
