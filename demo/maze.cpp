@@ -42,7 +42,7 @@ struct PCell {
 };
 
 
-class MyApp : public rt::Application
+class MyApp : public cnv::Application
 {
 private:
 	State state = State::GENERATING;
@@ -68,14 +68,14 @@ private:
 	std::vector<pb::RGBAColor> palette;
 
 public:
-	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
+	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
 		std::srand(std::time(nullptr));
 		layers[0]->pixelbuffer.fill(BLACK);
 		initGenerator();
 	}
 
-	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -555,7 +555,7 @@ private:
 
 	void handleInput()
 	{
-		if (input.getKeyDown(rt::KeyCode::Space)) {
+		if (input.getKeyDown(cnv::KeyCode::Space)) {
 			std::cout << "spacebar pressed down." << std::endl;
 			layers[0]->pixelbuffer.printInfo();
 		}

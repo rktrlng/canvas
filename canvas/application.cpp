@@ -1,7 +1,7 @@
 /**
  * @file application.cpp
  *
- * @brief rt::Application implementation
+ * @brief cnv::Application implementation
  *
  * Copyright 2021-2022 @rktrlng
  * https://github.com/rktrlng/canvas
@@ -9,13 +9,13 @@
 
 #include <canvas/application.h>
 
-namespace rt {
+namespace cnv {
 
 Application::Application(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) :
 	renderer(width*factor, height*factor),
 	input(renderer.window())
 {
-	layers.push_back( new rt::Canvas(width, height, bitdepth, factor) );
+	layers.push_back( new cnv::Canvas(width, height, bitdepth, factor) );
 }
 
 Application::Application(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool setlocked /* false */) :
@@ -24,7 +24,7 @@ Application::Application(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool setl
 {
 	uint16_t cols = pixelbuffer.header().width;
 	uint16_t rows = pixelbuffer.header().height;
-	layers.push_back( new rt::Canvas(cols, rows, pixelbuffer.header().bitdepth, factor) );
+	layers.push_back( new cnv::Canvas(cols, rows, pixelbuffer.header().bitdepth, factor) );
 	layers[0]->pixelbuffer = pixelbuffer;
 	if (setlocked)
 	{
@@ -114,4 +114,4 @@ int Application::run()
 
 
 
-} // namespace rt
+} // namespace cnv

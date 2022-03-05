@@ -1,7 +1,7 @@
 /**
  * @file renderer.cpp
  *
- * @brief rt::Renderer implementation
+ * @brief cnv::Renderer implementation
  *
  * Copyright 2015-2022 @rktrlng
  * https://github.com/rktrlng/canvas
@@ -23,7 +23,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 
 
 
-namespace rt {
+namespace cnv {
 
 Renderer::Renderer(int w, int h) :
 	_window_width(w), _window_height(h), _window(nullptr)
@@ -299,4 +299,4 @@ GLuint Renderer::loadShaders()
 }
 
 
-} // namespace rt
+} // namespace cnv

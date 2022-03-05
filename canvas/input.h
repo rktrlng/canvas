@@ -1,7 +1,7 @@
 /**
  * @file input.h
  *
- * @brief rt::Input header
+ * @brief cnv::Input header
  *
  * Copyright 2015-2022 @rktrlng
  * https://github.com/rktrlng/canvas
@@ -28,7 +28,7 @@
 #define 	GLFW_MOUSE_BUTTON_MIDDLE   GLFW_MOUSE_BUTTON_3
 */
 
-namespace rt {
+namespace cnv {
 
 /// @brief KeyCode used by Input
 enum class KeyCode : uint16_t
@@ -268,6 +268,6 @@ private:
 	int _windowHeight; ///< @brief Height of the window
 };
 
-} // namespace rt
+} // namespace cnv
 
 #endif /* INPUT_H */

@@ -64,8 +64,8 @@ int main(int argc, char *argv[])
 	int height = pixelbuffer.header().height;
 
 	// Create Renderer BEFORE creating a Canvas
-	rt::Renderer renderer = rt::Renderer(width*factor, height*factor);
-	rt::Canvas canvas = rt::Canvas(pixelbuffer);
+	cnv::Renderer renderer = cnv::Renderer(width*factor, height*factor);
+	cnv::Canvas canvas = cnv::Canvas(pixelbuffer);
 
 	std::cout << filename << " (" << width << "x" << height << ") x " << factor;
 	std::cout << " = (" << (width*factor) << "x" << (height*factor) << ")" << std::endl;

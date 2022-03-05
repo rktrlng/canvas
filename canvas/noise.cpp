@@ -19,7 +19,7 @@
 
 #include <canvas/noise.h>
 
-namespace rt {
+namespace cnv {
 
 // Initialize with the reference values for the permutation vector
 PerlinNoise::PerlinNoise() {
@@ -108,4 +108,4 @@ double PerlinNoise::grad(int hash, double x, double y, double z) {
 	return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
 }
 
-} // namespace rt
+} // namespace cnv

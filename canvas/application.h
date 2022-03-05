@@ -1,7 +1,7 @@
 /**
  * @file application.h
  *
- * @brief rt::Application header
+ * @brief cnv::Application header
  *
  * Copyright 2021-2022 @rktrlng
  * https://github.com/rktrlng/canvas
@@ -16,7 +16,7 @@
 #include <canvas/input.h>
 #include <canvas/canvas.h>
 
-namespace rt {
+namespace cnv {
 
 class Application
 {
@@ -42,4 +42,4 @@ protected:
 
 #endif // APPLICATION_H
 
-} // namespace rt
+} // namespace cnv

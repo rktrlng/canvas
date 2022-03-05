@@ -1,7 +1,7 @@
 /**
  * @file renderer.h
  *
- * @brief rt::Renderer header
+ * @brief cnv::Renderer header
  *
  * Copyright 2015-2022 @rktrlng
  * https://github.com/rktrlng/canvas
@@ -20,7 +20,7 @@
 
 #include <canvas/canvas.h>
 
-namespace rt {
+namespace cnv {
 
 class Renderer
 {
@@ -28,8 +28,8 @@ public:
 	Renderer(int w, int h);
 	virtual ~Renderer();
 
-	void renderCanvas(rt::Canvas* canvas, float px, float py, float sx, float sy, float rot);
-	bool displayCanvas(rt::Canvas* canvas, float px, float py, float sx, float sy, float rot);
+	void renderCanvas(cnv::Canvas* canvas, float px, float py, float sx, float sy, float rot);
+	bool displayCanvas(cnv::Canvas* canvas, float px, float py, float sx, float sy, float rot);
 	GLFWwindow* window() { return _window; };
 
 	int width() { return _window_width; };
@@ -54,6 +54,6 @@ private:
 	glm::mat4 _viewMatrix;
 };
 
-} // namespace rt
+} // namespace cnv
 
 #endif /* RENDERER_H */

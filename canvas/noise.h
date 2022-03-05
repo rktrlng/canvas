@@ -19,7 +19,7 @@
 #ifndef NOISE_H
 #define NOISE_H
 
-namespace rt {
+namespace cnv {
 
 /// @brief The Noise class generates Perlin Noise.
 class PerlinNoise
@@ -59,6 +59,6 @@ private:
 	std::vector<int> p; ///< @brief The permutation vector
 };
 
-} // namespace rt
+} // namespace cnv
 
 #endif /* NOISE_H */

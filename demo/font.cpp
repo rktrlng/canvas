@@ -11,17 +11,17 @@
 
 #include <canvas/application.h>
 
-class MyApp : public rt::Application
+class MyApp : public cnv::Application
 {
 public:
-	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
+	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
 		layers[0]->pixelbuffer.fill(BLACK);
 		fillGlyphs();
 		font();
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -100,7 +100,7 @@ private:
 	}
 
 	void handleInput() {
-		if (input.getKeyDown(rt::KeyCode::Space)) {
+		if (input.getKeyDown(cnv::KeyCode::Space)) {
 			std::cout << "spacebar pressed down." << std::endl;
 			layers[0]->pixelbuffer.printInfo();
 		}

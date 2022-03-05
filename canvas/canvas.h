@@ -1,7 +1,7 @@
 /**
  * @file canvas.h
  *
- * @brief rt::Canvas header
+ * @brief cnv::Canvas header
  *
  * Copyright 2021-2022 @rktrlng
  * https://github.com/rktrlng/canvas
@@ -16,7 +16,7 @@
 
 #include <pixelbuffer/pixelbuffer.h>
 
-namespace rt {
+namespace cnv {
 
 class Canvas
 {
@@ -52,6 +52,6 @@ class Canvas
 		bool _locked = false;
 };
 
-} // namespace rt
+} // namespace cnv
 
 #endif /* CANVAS_H */

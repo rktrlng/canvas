@@ -9,19 +9,19 @@
 
 #include <canvas/application.h>
 
-class MyApp : public rt::Application
+class MyApp : public cnv::Application
 {
 private:
 	bool showMenu = false;
 	pb::RGBAColor fcolor = {0,0,0,0};
 public:
-	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
+	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
-		rt::Canvas* menuCanvas = new rt::Canvas(width, height, bitdepth, factor);
+		cnv::Canvas* menuCanvas = new cnv::Canvas(width, height, bitdepth, factor);
 		layers.push_back(menuCanvas);
 	}
 
-	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -105,22 +105,22 @@ private:
 
 	void handleInput()
 	{
-		if (input.getKeyDown(rt::KeyCode::Q)) { showMenu = !showMenu; }
+		if (input.getKeyDown(cnv::KeyCode::Q)) { showMenu = !showMenu; }
 
-		if (input.getKeyDown(rt::KeyCode::Minus)) { layers[0]->scale /= 2; }
-		if (input.getKeyDown(rt::KeyCode::Equal)) { layers[0]->scale *= 2; }
-		if (input.getKeyDown(rt::KeyCode::Left)) { layers[0]->position.x -= layers[0]->scale; }
-		if (input.getKeyDown(rt::KeyCode::Right)) { layers[0]->position.x += layers[0]->scale; }
-		if (input.getKeyDown(rt::KeyCode::Up)) { layers[0]->position.y -= layers[0]->scale; }
-		if (input.getKeyDown(rt::KeyCode::Down)) { layers[0]->position.y += layers[0]->scale; }
-		if (input.getKeyDown(rt::KeyCode::C)) { layers[0]->position = {0, 0}; }
+		if (input.getKeyDown(cnv::KeyCode::Minus)) { layers[0]->scale /= 2; }
+		if (input.getKeyDown(cnv::KeyCode::Equal)) { layers[0]->scale *= 2; }
+		if (input.getKeyDown(cnv::KeyCode::Left)) { layers[0]->position.x -= layers[0]->scale; }
+		if (input.getKeyDown(cnv::KeyCode::Right)) { layers[0]->position.x += layers[0]->scale; }
+		if (input.getKeyDown(cnv::KeyCode::Up)) { layers[0]->position.y -= layers[0]->scale; }
+		if (input.getKeyDown(cnv::KeyCode::Down)) { layers[0]->position.y += layers[0]->scale; }
+		if (input.getKeyDown(cnv::KeyCode::C)) { layers[0]->position = {0, 0}; }
 
 		if (layers[0]->scale <= 0) { layers[0]->scale = 1; }
 		if (layers[0]->scale >= 64) { layers[0]->scale = 64; }
 
 		layers[1]->scale = layers[0]->scale;
 
-		if (input.getKeyDown(rt::KeyCode::Space)) {
+		if (input.getKeyDown(cnv::KeyCode::Space)) {
 			std::cout << "spacebar pressed down." << std::endl;
 			layers[0]->pixelbuffer.printInfo();
 		}

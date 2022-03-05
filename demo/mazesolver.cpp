@@ -22,7 +22,7 @@ struct PCell {
 
 enum class State { SEARCHING, BACKTRACKING };
 
-class MyApp : public rt::Application
+class MyApp : public cnv::Application
 {
 private:
 	std::vector<PCell*> solverfield;
@@ -38,13 +38,13 @@ private:
 public:
 	std::string filename = "";
 
-	// MyApp(uint16_t cols, uint16_t rows, uint8_t bitdepth, uint8_t factor) : rt::Application(cols, rows, bitdepth, factor)
+	// MyApp(uint16_t cols, uint16_t rows, uint8_t bitdepth, uint8_t factor) : cnv::Application(cols, rows, bitdepth, factor)
 	// {
 	// 	std::srand(std::time(nullptr));
 	// 	init();
 	// }
 
-	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	{
 		std::srand(std::time(nullptr));
 		initSolver();
@@ -239,7 +239,7 @@ private:
 
 	void handleInput()
 	{
-		if (input.getKeyDown(rt::KeyCode::Space)) {
+		if (input.getKeyDown(cnv::KeyCode::Space)) {
 			std::cout << "spacebar pressed down." << std::endl;
 			layers[0]->pixelbuffer.printInfo();
 		}

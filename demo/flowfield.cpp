@@ -13,10 +13,10 @@
 #include <canvas/application.h>
 #include <canvas/noise.h>
 
-class MyApp : public rt::Application
+class MyApp : public cnv::Application
 {
 private:
-	rt::PerlinNoise pn;
+	cnv::PerlinNoise pn;
 	std::vector<pb::vec2f> field;
 	std::deque<pb::vec2f> particles;
 	size_t flowscale = 8;
@@ -25,15 +25,15 @@ private:
 	const int pspeed = 50; // particle speed
 	const int at_once = 6; // # of particles to spawn per tick
 public:
-	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : rt::Application(width, height, bitdepth, factor)
+	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
 		srand((unsigned)time(nullptr));
 
 		unsigned int seed = rand()%1000;
 		// unsigned int seed = 42;
-		pn = rt::PerlinNoise(seed);
+		pn = cnv::PerlinNoise(seed);
 
-		rt::Canvas* particleCanvas = new rt::Canvas(width, height, bitdepth, factor);
+		cnv::Canvas* particleCanvas = new cnv::Canvas(width, height, bitdepth, factor);
 		layers.push_back(particleCanvas);
 		particleCanvas->pixelbuffer.fill(BLACK);
 
@@ -44,7 +44,7 @@ public:
 		}
 	}
 
-	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : rt::Application(pixelbuffer, factor)
+	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -226,7 +226,7 @@ private:
 	}
 
 	void handleInput() {
-		if (input.getKeyDown(rt::KeyCode::Space)) {
+		if (input.getKeyDown(cnv::KeyCode::Space)) {
 			std::cout << "spacebar pressed down." << std::endl;
 			layers[0]->pixelbuffer.printInfo();
 		}

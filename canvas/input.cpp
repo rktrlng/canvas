@@ -12,7 +12,7 @@
 
 #include <canvas/input.h>
 
-namespace rt {
+namespace cnv {
 
 int _gscroll = 0;
 
@@ -130,4 +130,4 @@ void Input::_handleKey(unsigned int key)
 	}
 }
 
-} // namespace rt
+} // namespace cnv

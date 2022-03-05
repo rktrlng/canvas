@@ -1,7 +1,7 @@
 /**
  * @file canvas.cpp
  *
- * @brief rt::Canvas implementation
+ * @brief cnv::Canvas implementation
  *
  * Copyright 2021-2022 @rktrlng
  * https://github.com/rktrlng/canvas
@@ -17,7 +17,7 @@
 
 #include <canvas/canvas.h>
 
-namespace rt {
+namespace cnv {
 
 Canvas::Canvas(uint16_t width, uint16_t height, uint8_t bitdepth /* = 32 */, uint8_t scale /* = 1 */) :
 	pixelbuffer(width, height, bitdepth), scale(scale), position(pb::vec2i(0, 0))
@@ -122,4 +122,4 @@ GLuint Canvas::generateTexture()
 	return _texture;
 }
 
-} // namespace rt
+} // namespace cnv
