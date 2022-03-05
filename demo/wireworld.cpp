@@ -13,6 +13,15 @@
 
 class MyApp : public cnv::Application
 {
+private:
+	const uint8_t EMPTY = 0; // BLACK
+	const uint8_t CONDUCTOR = 1; // YELLOW
+	const uint8_t HEAD = 2; // BLUE
+	const uint8_t TAIL = 3; // CYAN
+
+	// internal data to work with (value are 0,1,2,3)
+	std::vector<uint8_t> m_field;
+
 public:
 	// MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	// {
@@ -35,16 +44,16 @@ public:
 		uint16_t cols = pixelbuffer.header().width;
 		uint16_t rows = pixelbuffer.header().height;
 		
-		// fill field for wireworld
-		field = std::vector<uint8_t>(rows*cols, 0);
+		// fill m_field for wireworld
+		m_field = std::vector<uint8_t>(rows*cols, 0);
 		int counter = 0;
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
 				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
-				if (color == BLACK) { field[counter] = EMPTY; }
-				if (color == YELLOW) { field[counter] = CONDUCTOR; }
-				if (color == BLUE) { field[counter] = HEAD;}
-				if (color == CYAN) { field[counter] = TAIL; }
+				if (color == BLACK) { m_field[counter] = EMPTY; }
+				if (color == YELLOW) { m_field[counter] = CONDUCTOR; }
+				if (color == BLUE) { m_field[counter] = HEAD;}
+				if (color == CYAN) { m_field[counter] = TAIL; }
 
 				counter++;
 			}
@@ -69,14 +78,6 @@ public:
 	}
 
 private:
-	const uint8_t EMPTY = 0; // BLACK
-	const uint8_t CONDUCTOR = 1; // YELLOW
-	const uint8_t HEAD = 2; // BLUE
-	const uint8_t TAIL = 3; // CYAN
-
-	// internal data to work with (value are 0,1,2,3)
-	std::vector<uint8_t> field;
-
 	void wireworld()
 	{
 		// get pixelbuffer, rows and cols
@@ -93,7 +94,7 @@ private:
 				//- HEAD -> TAIL
 				//- TAIL -> CONDUCTOR
 				//- CONDUCTOR: if 1 or 2 neighbours are HEAD -> HEAD
-				uint8_t current = field[rt::index(x,y,cols)];
+				uint8_t current = m_field[rt::index(x,y,cols)];
 				if (current == EMPTY) {
 					continue; // nothing to do, continue to next pixel
 				} else if (current == HEAD) {
@@ -109,7 +110,7 @@ private:
 								// this is us
 							} else {
 								rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
-								if (field[rt::index(n.x,n.y,cols)] == HEAD) { nc++; }
+								if (m_field[rt::index(n.x,n.y,cols)] == HEAD) { nc++; }
 							}
 						}
 					}
@@ -117,12 +118,12 @@ private:
 				}
 				next[rt::index(x,y,cols)] = current;
 
-				// update pixelbuffer from (current) field
+				// update pixelbuffer from (current) m_field
 				rt::RGBAColor color = BLACK;
 				int index = rt::index(x,y,cols);
-				if (field[index] == CONDUCTOR) {
+				if (m_field[index] == CONDUCTOR) {
 					color = YELLOW;
-				} else if (field[index] == HEAD) {
+				} else if (m_field[index] == HEAD) {
 					color = BLUE;
 				} else { // TAIL
 					color = CYAN;
@@ -131,8 +132,8 @@ private:
 			}
 		}
 
-		// update field to next state
-		field = next;
+		// update m_field to next state
+		m_field = next;
 	}
 
 	void handleInput() {

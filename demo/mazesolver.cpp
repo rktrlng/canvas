@@ -25,15 +25,15 @@ enum class State { SEARCHING, BACKTRACKING };
 class MyApp : public cnv::Application
 {
 private:
-	std::vector<PCell*> solverfield;
-	std::vector<PCell*> breadcrumbs;
-	std::vector<PCell*> solution;
-	PCell* seeker = nullptr;
-	PCell* start = nullptr;
-	PCell* end = nullptr;
-	State state = State::SEARCHING;
-	size_t cols = 0;
-	size_t rows = 0;
+	std::vector<PCell*> m_solverfield;
+	std::vector<PCell*> m_breadcrumbs;
+	std::vector<PCell*> m_solution;
+	PCell* m_seeker = nullptr;
+	PCell* m_start = nullptr;
+	PCell* m_end = nullptr;
+	State m_state = State::SEARCHING;
+	size_t m_cols = 0;
+	size_t m_rows = 0;
 
 public:
 	std::string filename = "";
@@ -58,36 +58,36 @@ public:
 	void initSolver()
 	{
 		// reset
-		seeker = nullptr;
-		for (size_t i = 0; i < solverfield.size(); i++) {
-			delete[] solverfield[i];
+		m_seeker = nullptr;
+		for (size_t i = 0; i < m_solverfield.size(); i++) {
+			delete[] m_solverfield[i];
 		}
-		solverfield.clear();
-		breadcrumbs.clear();
-		solution.clear();
+		m_solverfield.clear();
+		m_breadcrumbs.clear();
+		m_solution.clear();
 
-		state = State::SEARCHING;
+		m_state = State::SEARCHING;
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		cols = pixelbuffer.header().width;
-		rows = pixelbuffer.header().height;
+		m_cols = pixelbuffer.header().width;
+		m_rows = pixelbuffer.header().height;
 
-		// new empty solverfield
-		for (size_t y = 0; y < rows; y++) {
-			for (size_t x = 0; x < cols; x++) {
+		// new empty m_solverfield
+		for (size_t y = 0; y < m_rows; y++) {
+			for (size_t x = 0; x < m_cols; x++) {
 				PCell* cell = new PCell();
 				cell->col = x;
 				cell->row = y;
 				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
 				// if (color == BLACK) { cell->wall = true; } // wall (default)
-				if (color == WHITE || color == ORANGE || color == GRAY) { cell->wall = false; } // empty solverfield
-				if (color == RED)   { cell->wall = false; start = cell; } // startpoint
-				if (color == BLUE)  { cell->wall = false; end = cell; } // endpoint
-				solverfield.push_back(cell);
+				if (color == WHITE || color == ORANGE || color == GRAY) { cell->wall = false; } // empty m_solverfield
+				if (color == RED)   { cell->wall = false; m_start = cell; } // m_startpoint
+				if (color == BLUE)  { cell->wall = false; m_end = cell; } // endpoint
+				m_solverfield.push_back(cell);
 			}
 		}
-		seeker = start;
-		solution.push_back(seeker);
+		m_seeker = m_start;
+		m_solution.push_back(m_seeker);
 	}
 
 	void update(float deltatime) override
@@ -119,7 +119,7 @@ public:
 				if((filename.substr(lastindex + 1) == "pbf")) {
 					filename = filename.substr(0, lastindex); 
 				}
-				filename += "_solved_" + std::to_string(solverfield.size()) + "_" + std::to_string(solution.size()) + ".pbf";
+				filename += "_solved_" + std::to_string(m_solverfield.size()) + "_" + std::to_string(m_solution.size()) + ".pbf";
 				pixelbuffer.write(filename);
 				std::cout << filename << std::endl;
 			}
@@ -139,24 +139,24 @@ private:
 		size_t index = 0;
 
 		// look right
-		index = rt::index(x+1,y,cols);
-		if (!solverfield[index]->wall && !solverfield[index]->visited) {
-			neighbours.push_back(solverfield[index]);
+		index = rt::index(x+1,y,m_cols);
+		if (!m_solverfield[index]->wall && !m_solverfield[index]->visited) {
+			neighbours.push_back(m_solverfield[index]);
 		}
 		// look left
-		index = rt::index(x-1,y,cols);
-		if (!solverfield[index]->wall && !solverfield[index]->visited) {
-			neighbours.push_back(solverfield[index]);
+		index = rt::index(x-1,y,m_cols);
+		if (!m_solverfield[index]->wall && !m_solverfield[index]->visited) {
+			neighbours.push_back(m_solverfield[index]);
 		}
 		// look down
-		index = rt::index(x,y+1,cols);
-		if (!solverfield[index]->wall && !solverfield[index]->visited) {
-			neighbours.push_back(solverfield[index]);
+		index = rt::index(x,y+1,m_cols);
+		if (!m_solverfield[index]->wall && !m_solverfield[index]->visited) {
+			neighbours.push_back(m_solverfield[index]);
 		}
 		// look up
-		index = rt::index(x,y-1,cols);
-		if (!solverfield[index]->wall && !solverfield[index]->visited) {
-			neighbours.push_back(solverfield[index]);
+		index = rt::index(x,y-1,m_cols);
+		if (!m_solverfield[index]->wall && !m_solverfield[index]->visited) {
+			neighbours.push_back(m_solverfield[index]);
 		}
 
 		// there's a valid neighbour!
@@ -172,31 +172,31 @@ private:
 
 	bool solveStep()
 	{
-		// make 'seeker' find the next place to be
-		seeker->visited = true;
+		// make 'm_seeker' find the next place to be
+		m_seeker->visited = true;
 		// while there is a neighbour...
-		PCell* next = getNextUnvistedDirectNeighbour(seeker);
+		PCell* next = getNextUnvistedDirectNeighbour(m_seeker);
 		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
-			state = State::SEARCHING;
+			m_state = State::SEARCHING;
 			next->visited = true;
 
-			breadcrumbs.push_back(seeker); // drop a breadcrumb on the stack
+			m_breadcrumbs.push_back(m_seeker); // drop a breadcrumb on the stack
 
-			seeker = next;
-			solution.push_back(seeker); // still looks good...
+			m_seeker = next;
+			m_solution.push_back(m_seeker); // still looks good...
 		} else { // we're stuck! backtrack our steps...
-			state = State::BACKTRACKING;
-			if (breadcrumbs.size() > 0) {
-				seeker = breadcrumbs.back(); // make previous our seeker cell
-				breadcrumbs.pop_back(); // remove from the breadcrumbs (eat the breadcrumb)
+			m_state = State::BACKTRACKING;
+			if (m_breadcrumbs.size() > 0) {
+				m_seeker = m_breadcrumbs.back(); // make previous our m_seeker cell
+				m_breadcrumbs.pop_back(); // remove from the m_breadcrumbs (eat the breadcrumb)
 			}
-			if (solution.size() > 0) {
-				solution.pop_back(); // nope, wrong track!
+			if (m_solution.size() > 0) {
+				m_solution.pop_back(); // nope, wrong track!
 			}
 		}
 
 		// We've found the exit!
-		if (seeker->col == end->col && seeker->row == end->row) {
+		if (m_seeker->col == m_end->col && m_seeker->row == m_end->row) {
 			return true;
 		}
 
@@ -207,11 +207,11 @@ private:
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 
-		for (size_t y = 0; y < rows; y++) {
-			for (size_t x = 0; x < cols; x++) {
+		for (size_t y = 0; y < m_rows; y++) {
+			for (size_t x = 0; x < m_cols; x++) {
 				rt::RGBAColor color = BLACK;
-				int index = rt::index(x, y, cols);
-				PCell* cell = solverfield[index];
+				int index = rt::index(x, y, m_cols);
+				PCell* cell = m_solverfield[index];
 				if (cell->wall) {
 					color = BLACK;
 				} else {
@@ -225,14 +225,14 @@ private:
 			}
 		}
 
-		// draw solution so far
-		for (size_t i = 0; i < solution.size(); i++) {
-			pixelbuffer[rt::index(solution[i]->col, solution[i]->row, cols)] = ORANGE;
+		// draw m_solution so far
+		for (size_t i = 0; i < m_solution.size(); i++) {
+			pixelbuffer[rt::index(m_solution[i]->col, m_solution[i]->row, m_cols)] = ORANGE;
 		}
 
-		// draw start + end
-		pixelbuffer.setPixel(start->col, start->row, RED);
-		pixelbuffer.setPixel(end->col, end->row, BLUE);
+		// draw m_start + end
+		pixelbuffer.setPixel(m_start->col, m_start->row, RED);
+		pixelbuffer.setPixel(m_end->col, m_end->row, BLUE);
 
 		layers[0]->lock();
 	}
@@ -262,7 +262,7 @@ int main(int argc, char *argv[])
 	std::string filename = "maze00000.pbf";
 
 	if (argc == 1) {
-		std::cout << "Usage: ./mazesolver [solution]" << std::endl;
+		std::cout << "Usage: ./mazesolver [m_solution]" << std::endl;
 	}
 	if (argc == 2) {
 		filename = argv[1];

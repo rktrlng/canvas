@@ -1,7 +1,7 @@
 /**
- * @file particles.cpp
+ * @file m_particles.cpp
  *
- * @brief particles implementation
+ * @brief m_particles implementation
  *
  * Copyright 2021-2022 @rktrlng
  * https://github.com/rktrlng/canvas
@@ -54,7 +54,7 @@ struct Particle
 class MyApp : public cnv::Application
 {
 private:
-	std::deque<Particle*> particles;
+	std::deque<Particle*> m_particles;
 
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
@@ -110,23 +110,23 @@ private:
 			size_t rows = pixelbuffer.header().height;
 			size_t cols = pixelbuffer.header().width;
 
-			for (size_t i = 0; i < particles.size(); i++) {
-				pixelbuffer.setPixel(particles[i]->position.x, particles[i]->position.y, BLACK);
-				particles[i]->addForce(rt::vec2(0.0f, GRAVITY));
-				particles[i]->move(frametime);
-				particles[i]->velocity *= FRICTION;
-				particles[i]->color = rt::rotate(particles[i]->color, ROT_SPEED);
-				borders(particles[i], cols, rows);
-				pixelbuffer.setPixel(particles[i]->position.x, particles[i]->position.y, particles[i]->color);
+			for (size_t i = 0; i < m_particles.size(); i++) {
+				pixelbuffer.setPixel(m_particles[i]->position.x, m_particles[i]->position.y, BLACK);
+				m_particles[i]->addForce(rt::vec2(0.0f, GRAVITY));
+				m_particles[i]->move(frametime);
+				m_particles[i]->velocity *= FRICTION;
+				m_particles[i]->color = rt::rotate(m_particles[i]->color, ROT_SPEED);
+				borders(m_particles[i], cols, rows);
+				pixelbuffer.setPixel(m_particles[i]->position.x, m_particles[i]->position.y, m_particles[i]->color);
 			}
 
-			if (particles.size() < MAX_PARTICLES) {
+			if (m_particles.size() < MAX_PARTICLES) {
 				Particle* p = new Particle(cols/2, rows/4);
-				particles.push_back(p);
+				m_particles.push_back(p);
 			}
 			else {
-				pixelbuffer.setPixel(particles[0]->position.x, particles[0]->position.y, BLACK);
-				particles.pop_front();
+				pixelbuffer.setPixel(m_particles[0]->position.x, m_particles[0]->position.y, BLACK);
+				m_particles.pop_front();
 			}
 
 			frametime = 0.0f;
@@ -143,7 +143,7 @@ private:
 			std::cout << "spacebar pressed down." << std::endl;
 			// layers[0]->pixelbuffer.printInfo();
 			layers[0]->pixelbuffer.fill(BLACK);
-			particles.clear();
+			m_particles.clear();
 		}
 
 		if (input.getMouseDown(0)) {

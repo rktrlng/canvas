@@ -1,7 +1,7 @@
 /**
- * @file flowfield.cpp
+ * @file flowm_field.cpp
  *
- * @brief Flowfield implementation
+ * @brief Flowm_field implementation
  *
  * Copyright 2022 @rktrlng
  * https://github.com/rktrlng/canvas
@@ -16,14 +16,14 @@
 class MyApp : public cnv::Application
 {
 private:
-	cnv::PerlinNoise pn;
-	std::vector<rt::vec2f> field;
-	std::deque<rt::vec2f> particles;
-	size_t flowscale = 8;
-	const size_t maxparticles = 2500;
-	const double zspeed = 0.001; // z-noise change
-	const int pspeed = 50; // particle speed
-	const int at_once = 6; // # of particles to spawn per tick
+	cnv::PerlinNoise m_pn;
+	std::vector<rt::vec2f> m_field;
+	std::deque<rt::vec2f> m_particles;
+	size_t m_flowscale = 8;
+	const size_t MAXPARTICLES = 2500;
+	const double ZSPEED = 0.001; // z-noise change
+	const int PSPEED = 50; // particle speed
+	const int AT_ONCE = 6; // # of particles to spawn per tick
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
@@ -31,16 +31,16 @@ public:
 
 		unsigned int seed = rand()%1000;
 		// unsigned int seed = 42;
-		pn = cnv::PerlinNoise(seed);
+		m_pn = cnv::PerlinNoise(seed);
 
 		cnv::Canvas* particleCanvas = new cnv::Canvas(width, height, bitdepth, factor);
 		layers.push_back(particleCanvas);
 		particleCanvas->pixelbuffer.fill(BLACK);
 
 		// fill list of particles half way
-		for (size_t i = 0; i < maxparticles/2; i++) {
+		for (size_t i = 0; i < MAXPARTICLES/2; i++) {
 			rt::vec2f p = { rt::rand_float()*width, rt::rand_float()*height };
-			particles.push_back(p);
+			m_particles.push_back(p);
 		}
 	}
 
@@ -64,7 +64,7 @@ public:
 		if (frametime >= maxtime)
 		{
 			noise();
-			updateFlowField();
+			updateFlowm_field();
 			handleParticles(frametime);
 
 			layers[0]->lock();
@@ -82,12 +82,12 @@ private:
 		int cols = pixelbuffer.width();
 
 		// update positions
-		for (size_t i = 0; i < particles.size(); i++) {
-			auto& particle = particles[i];
+		for (size_t i = 0; i < m_particles.size(); i++) {
+			auto& particle = m_particles[i];
 
-			int flowindex = rt::index(particle.x/flowscale, particle.y/flowscale, cols/flowscale);
-			particle.x += field[flowindex].x * deltatime * pspeed;
-			particle.y += field[flowindex].y * deltatime * pspeed;
+			int flowindex = rt::index(particle.x/m_flowscale, particle.y/m_flowscale, cols/m_flowscale);
+			particle.x += m_field[flowindex].x * deltatime * PSPEED;
+			particle.y += m_field[flowindex].y * deltatime * PSPEED;
 
 			if (particle.x < 0) particle.x = cols-1;
 			if (particle.x > cols) particle.x = 0;
@@ -96,21 +96,21 @@ private:
 		}
 
 		// draw particles
-		for (size_t i = 0; i < particles.size(); i++) {
-			rt::vec2f particle = particles[i];
+		for (size_t i = 0; i < m_particles.size(); i++) {
+			rt::vec2f particle = m_particles[i];
 			pixelbuffer.setPixel(particle.x, particle.y, WHITE);
 		}
 
 		// handle number of particles
-		for (int i = 0; i < at_once; i++) {
+		for (int i = 0; i < AT_ONCE; i++) {
 			rt::vec2f p = { rt::rand_float()*cols, rt::rand_float()*rows };
 			// rt::vec2f p = { rt::rand_bm()*cols, rt::rand_bm()*rows };
 			// rt::vec2f p = { (float)cols/2, (float)rows/2 };
 
-			particles.push_back(p);
+			m_particles.push_back(p);
 
-			if (particles.size() > maxparticles) {
-				particles.pop_front();
+			if (m_particles.size() > MAXPARTICLES) {
+				m_particles.pop_front();
 			}
 		}
 
@@ -125,9 +125,9 @@ private:
 		}
 	}
 	
-	void updateFlowField()
+	void updateFlowm_field()
 	{
-		field.clear();
+		m_field.clear();
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		size_t rows = pixelbuffer.height();
@@ -142,13 +142,13 @@ private:
 			if (colors[i].r > max) max = colors[i].r;
 		}
 
-		// noise to field values
-		for (size_t y = 0; y < rows; y += flowscale) {
-			for (size_t x = 0; x < cols; x += flowscale) {
-				rt::RGBAColor color = pixelbuffer.getPixel(x+flowscale/2, y+flowscale/2);
+		// noise to m_field values
+		for (size_t y = 0; y < rows; y += m_flowscale) {
+			for (size_t x = 0; x < cols; x += m_flowscale) {
+				rt::RGBAColor color = pixelbuffer.getPixel(x+m_flowscale/2, y+m_flowscale/2);
 				float angle = rt::map(color.r, min, max, -3.1415926f*1.9f, 3.1415926f*1.9f);
 				rt::vec2f vec = rt::vec2f::fromAngle(angle);
-				field.push_back(vec);
+				m_field.push_back(vec);
 			}
 		}
 	}
@@ -168,7 +168,7 @@ private:
 		for (size_t i = 0; i < octaves.size(); i++) {
 			int freq = octaves[i].freq;
 			int mult = octaves[i].multiplier;
-			double a = pn.noise(x*freq, y*freq, z*freq) * mult;
+			double a = m_pn.noise(x*freq, y*freq, z*freq) * mult;
 			n += a;
 			div += mult;
 		}
@@ -182,7 +182,7 @@ private:
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 
 		static double z = 0.0f;
-		z += zspeed;
+		z += ZSPEED;
 
 		size_t rows = pixelbuffer.height();
 		size_t cols = pixelbuffer.width();
@@ -212,7 +212,7 @@ private:
 
 				// Wood like structure
 				if (false) {
-					n = 20 * pn.noise(x, y, z);
+					n = 20 * m_pn.noise(x, y, z);
 					n = n - floor(n);
 					p = 255 * n;
 				}

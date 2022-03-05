@@ -40,7 +40,7 @@ struct Element
 class MyApp : public cnv::Application
 {
 private:
-	std::vector<Element*> elements;
+	std::vector<Element*> m_elements;
 
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
@@ -90,8 +90,8 @@ public:
 	int countFreeElements()
 	{
 		int count = 0;
-		for (size_t i = 0; i < elements.size(); i++) {
-			if (!elements[i]->fixed) { count++; }
+		for (size_t i = 0; i < m_elements.size(); i++) {
+			if (!m_elements[i]->fixed) { count++; }
 		}
 		return count;
 	}
@@ -101,12 +101,12 @@ public:
 		int cols = layers[0]->pixelbuffer.width();
 		int rows = layers[0]->pixelbuffer.height();
 		bool touched = false;
-		for (size_t i = 0; i < elements.size(); i++) {
-			if ( elements[i]->fixed &&
-				(elements[i]->position.x < EDGE ||
-				elements[i]->position.x > cols-EDGE ||
-				elements[i]->position.y < EDGE ||
-				elements[i]->position.y > rows-EDGE)
+		for (size_t i = 0; i < m_elements.size(); i++) {
+			if ( m_elements[i]->fixed &&
+				(m_elements[i]->position.x < EDGE ||
+				m_elements[i]->position.x > cols-EDGE ||
+				m_elements[i]->position.y < EDGE ||
+				m_elements[i]->position.y > rows-EDGE)
 			) {
 				touched = true;
 			}
@@ -123,12 +123,12 @@ private:
 		int cols = layers[0]->pixelbuffer.width();
 		int rows = layers[0]->pixelbuffer.height();
 		
-		for (size_t i = 0; i < elements.size(); i++)
+		for (size_t i = 0; i < m_elements.size(); i++)
 		{
-			delete elements[i];
-			elements[i] = nullptr;
+			delete m_elements[i];
+			m_elements[i] = nullptr;
 		}
-		elements.clear();
+		m_elements.clear();
 		
 		for (size_t i = 0; i < MAX_ELEMENTS; i++)
 		{
@@ -136,12 +136,12 @@ private:
 			int y = rand()%rows;
 			// int x = rt::rand_bm() * cols;
 			// int y = rt::rand_bm() * rows;
-			elements.push_back(new Element(x, y));
+			m_elements.push_back(new Element(x, y));
 		}
 
-		elements[0]->position.x = cols / 2;
-		elements[0]->position.y = rows / 2;
-		elements[0]->fixed = true;
+		m_elements[0]->position.x = cols / 2;
+		m_elements[0]->position.y = rows / 2;
+		m_elements[0]->fixed = true;
 	}
 
 	void borders(Element* element, int cols, int rows)
@@ -169,9 +169,9 @@ private:
 		pixelbuffer.fill(TRANSPARENT);
 
 		// draw fixed tree
-		for (size_t i = 0; i < elements.size(); i++) {
-			if (elements[i]->fixed) {
-				pixelbuffer.setPixel(elements[i]->position.x, elements[i]->position.y, elements[i]->color);
+		for (size_t i = 0; i < m_elements.size(); i++) {
+			if (m_elements[i]->fixed) {
+				pixelbuffer.setPixel(m_elements[i]->position.x, m_elements[i]->position.y, m_elements[i]->color);
 			}
 		}
 
@@ -186,13 +186,13 @@ private:
 		}
 
 		// move nonfixed elements and set status
-		for (size_t i = 0; i < elements.size(); i++) {
-			if (elements[i]->fixed) {
+		for (size_t i = 0; i < m_elements.size(); i++) {
+			if (m_elements[i]->fixed) {
 				continue;
 			}
 
 			// Look around
-			rt::vec2i pos = elements[i]->position;
+			rt::vec2i pos = m_elements[i]->position;
 			for (int y = -1; y < 2; y++) {
 				for (int x = -1; x < 2; x++) {
 					if (y==0 && x==0) continue;
@@ -200,34 +200,34 @@ private:
 					rt::RGBAColor color = pixelbuffer.getPixel(neighbour.x, neighbour.y);
 					if (color != TRANSPARENT) {
 						// we found the tree
-						elements[i]->fixed = true;
+						m_elements[i]->fixed = true;
 					}
 				}
 			}
 
 			// move free elements
-			if (!elements[i]->fixed) {
-				elements[i]->move();
-				borders(elements[i], cols, rows);
+			if (!m_elements[i]->fixed) {
+				m_elements[i]->move();
+				borders(m_elements[i], cols, rows);
 			}
 		}
 
 		// draw moving elements
-		for (size_t i = 0; i < elements.size(); i++) {
-			if (elements[i]->fixed) {
+		for (size_t i = 0; i < m_elements.size(); i++) {
+			if (m_elements[i]->fixed) {
 				continue;
 			}
-			pixelbuffer.setPixel(elements[i]->position.x, elements[i]->position.y, elements[i]->color);
+			pixelbuffer.setPixel(m_elements[i]->position.x, m_elements[i]->position.y, m_elements[i]->color);
 		}
 	}
 
 	void rotateColors()
 	{
-		for (size_t i = 0; i < elements.size(); i++) {
-			if (elements[i]->fixed) {
+		for (size_t i = 0; i < m_elements.size(); i++) {
+			if (m_elements[i]->fixed) {
 				continue;
 			}
-			elements[i]->color = rt::rotate(elements[i]->color, ROT_SPEED);
+			m_elements[i]->color = rt::rotate(m_elements[i]->color, ROT_SPEED);
 		}
 	}
 

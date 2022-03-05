@@ -38,20 +38,20 @@ public:
 	}
 
 private:
-	std::vector<rt::vec4f> points;
+	std::vector<rt::vec4f> m_points;
 
 	void init()
 	{
-		points.clear();
-		points = std::vector<rt::vec4f>(8);
-		points[0] = rt::vec4f(-0.5, -0.5, -0.5, 1.0);
-		points[1] = rt::vec4f( 0.5, -0.5, -0.5, 1.0);
-		points[2] = rt::vec4f( 0.5,  0.5, -0.5, 1.0);
-		points[3] = rt::vec4f(-0.5,  0.5, -0.5, 1.0);
-		points[4] = rt::vec4f(-0.5, -0.5,  0.5, 1.0);
-		points[5] = rt::vec4f( 0.5, -0.5,  0.5, 1.0);
-		points[6] = rt::vec4f( 0.5,  0.5,  0.5, 1.0);
-		points[7] = rt::vec4f(-0.5,  0.5,  0.5, 1.0);
+		m_points.clear();
+		m_points = std::vector<rt::vec4f>(8);
+		m_points[0] = rt::vec4f(-0.5, -0.5, -0.5, 1.0);
+		m_points[1] = rt::vec4f( 0.5, -0.5, -0.5, 1.0);
+		m_points[2] = rt::vec4f( 0.5,  0.5, -0.5, 1.0);
+		m_points[3] = rt::vec4f(-0.5,  0.5, -0.5, 1.0);
+		m_points[4] = rt::vec4f(-0.5, -0.5,  0.5, 1.0);
+		m_points[5] = rt::vec4f( 0.5, -0.5,  0.5, 1.0);
+		m_points[6] = rt::vec4f( 0.5,  0.5,  0.5, 1.0);
+		m_points[7] = rt::vec4f(-0.5,  0.5,  0.5, 1.0);
 	}
 
 	void drawCube(float deltaTime)
@@ -81,7 +81,7 @@ private:
 		// transform each point in 3D object to screen coords
 		rt::vec4f drawpoints[8];
 		for (size_t i = 0; i < 8; i++) {
-			rt::vec4f transformed = mvp * points[i];
+			rt::vec4f transformed = mvp * m_points[i];
 			drawpoints[i] = rt::vec4(transformed.x, transformed.y, transformed.z, 1.0f);
 		}
 

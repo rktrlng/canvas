@@ -46,20 +46,20 @@ public:
 	}
 
 private:
-	rt::BezierCubic curve;
+	rt::BezierCubic m_curve;
 
 	void init()
 	{
 		int height = layers[0]->height();
-		curve.start = rt::vec2f(30, rand()%height);
-		curve.control_start = rt::vec2f(80, rand()%height);
-		curve.control_end = rt::vec2f(240, rand()%height);
-		curve.end = rt::vec2f(290, rand()%height);
+		m_curve.start = rt::vec2f(30, rand()%height);
+		m_curve.control_start = rt::vec2f(80, rand()%height);
+		m_curve.control_end = rt::vec2f(240, rand()%height);
+		m_curve.end = rt::vec2f(290, rand()%height);
 	}
 
 	void updatePixels()
 	{
-		drawBezier(curve);
+		drawBezier(m_curve);
 
 		layers[0]->lock();
 	}
@@ -115,14 +115,14 @@ private:
 			// get mousepos and collission spheres on points
 			rt::vec2f mousepos  = rt::vec2f(input.getMouseX(), input.getMouseY());
 
-			rt::Circlef start   = rt::Circlef(curve.start.x, curve.start.y, 3);
-			rt::Circlef start_c = rt::Circlef(curve.control_start.x, curve.control_start.y, 3);
-			rt::Circlef end     = rt::Circlef(curve.end.x, curve.end.y, 3);
-			rt::Circlef end_c   = rt::Circlef(curve.control_end.x, curve.control_end.y, 3);
+			rt::Circlef start   = rt::Circlef(m_curve.start.x, m_curve.start.y, 3);
+			rt::Circlef start_c = rt::Circlef(m_curve.control_start.x, m_curve.control_start.y, 3);
+			rt::Circlef end     = rt::Circlef(m_curve.end.x, m_curve.end.y, 3);
+			rt::Circlef end_c   = rt::Circlef(m_curve.control_end.x, m_curve.control_end.y, 3);
 
 			// vec from end points to their handlepoints (to move control points relative to end points)
-			rt::vec2f control_vec_start = curve.control_start - curve.start;
-			rt::vec2f control_vec_end   = curve.control_end - curve.end;
+			rt::vec2f control_vec_start = m_curve.control_start - m_curve.start;
+			rt::vec2f control_vec_end   = m_curve.control_end - m_curve.end;
 
 			if (input.getMouseDown(0)) {
 				if (rt::point2circle(mousepos, start)) {
@@ -141,18 +141,18 @@ private:
 
 			if (input.getMouse(0)) {
 				if (stickystart) {
-					curve.start = mousepos;
-					curve.control_start = curve.start + control_vec_start;
+					m_curve.start = mousepos;
+					m_curve.control_start = m_curve.start + control_vec_start;
 				}
 				if (stickystartc) {
-					curve.control_start = mousepos;
+					m_curve.control_start = mousepos;
 				}
 				if (stickyend) {
-					curve.end = mousepos;
-					curve.control_end = curve.end + control_vec_end;
+					m_curve.end = mousepos;
+					m_curve.control_end = m_curve.end + control_vec_end;
 				}
 				if (stickyendc) {
-					curve.control_end = mousepos;
+					m_curve.control_end = mousepos;
 				}
 			}
 		}

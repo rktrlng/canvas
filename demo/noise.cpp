@@ -15,7 +15,7 @@
 class MyApp : public cnv::Application
 {
 private:
-	cnv::PerlinNoise pn;
+	cnv::PerlinNoise m_pn;
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
@@ -23,7 +23,7 @@ public:
 
 		unsigned int seed = rand()%1000;
 		// unsigned int seed = 42;
-		pn = cnv::PerlinNoise(seed);
+		m_pn = cnv::PerlinNoise(seed);
 	}
 
 	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
@@ -69,7 +69,7 @@ private:
 		{
 			int freq = octaves[i].freq;
 			int mult = octaves[i].multiplier;
-			double a = pn.noise(x*freq, y*freq, z*freq) * mult;
+			double a = m_pn.noise(x*freq, y*freq, z*freq) * mult;
 			n += a;
 			div += mult;
 		}
@@ -106,7 +106,7 @@ private:
 
 				// Wood like structure
 				if (false) {
-					n = 20 * pn.noise(x, y, z);
+					n = 20 * m_pn.noise(x, y, z);
 					n = n - floor(n);
 					p = 255 * n;
 				}

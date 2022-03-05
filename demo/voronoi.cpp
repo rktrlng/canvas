@@ -35,7 +35,7 @@ struct Agent
 class MyApp : public cnv::Application
 {
 private:
-	std::vector<Agent*> agents;
+	std::vector<Agent*> m_agents;
 
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
@@ -44,7 +44,7 @@ public:
 
 		for (size_t i = 0; i < 50; i++)
 		{
-			agents.push_back(new Agent(width, height));
+			m_agents.push_back(new Agent(width, height));
 		}
 	}
 
@@ -79,9 +79,9 @@ public:
 private:
 	void handleAgents()
 	{
-		for (size_t i = 0; i < agents.size(); i++)
+		for (size_t i = 0; i < m_agents.size(); i++)
 		{
-			agents[i]->move();
+			m_agents[i]->move();
 		}
 	}
 
@@ -95,15 +95,15 @@ private:
 			for (size_t x = 0; x < cols; x++) {
 				int max_distance = rt::vec2i(rows, cols).mag();
 				int min_distance = max_distance;
-				Agent* agent = agents[0];
-				for (size_t i = 0; i < agents.size(); i++)
+				Agent* agent = m_agents[0];
+				for (size_t i = 0; i < m_agents.size(); i++)
 				{
-					rt::vec2i delta = rt::vec2i(x,y) - agents[i]->position;
+					rt::vec2i delta = rt::vec2i(x,y) - m_agents[i]->position;
 					int current_distance = delta.mag();
 					if (current_distance < min_distance)
 					{
 						min_distance = current_distance;
-						agent = agents[i];
+						agent = m_agents[i];
 					}
 				}
 				

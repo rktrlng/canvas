@@ -39,13 +39,13 @@ public:
 		std::srand(std::time(nullptr));
 		random(60);
 		// fill field for cave
-		field = std::vector<uint8_t>(rows*cols, 0);
+		m_field = std::vector<uint8_t>(rows*cols, 0);
 		int counter = 0;
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
 				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
-				if (color == BLACK) { field[counter] = 0; }
-				if (color == WHITE) { field[counter] = 1; }
+				if (color == BLACK) { m_field[counter] = 0; }
+				if (color == WHITE) { m_field[counter] = 1; }
 
 				counter++;
 			}
@@ -79,7 +79,7 @@ public:
 
 private:
 	// internal data to work with (value are 0,1)
-	std::vector<uint8_t> field;
+	std::vector<uint8_t> m_field;
 
 	void cave()
 	{
@@ -101,14 +101,14 @@ private:
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
 				// Apply rules for each pixel:
-				int current = field[rt::index(x,y,cols)];
+				int current = m_field[rt::index(x,y,cols)];
 
 				// check 8 neighbours and count the ones that are a WALL (black)
 				int nc = 0; // number of neighbour cells
 				for (int r = -1; r < 2; r++) {
 					for (int c = -1; c < 2; c++) {
 						rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
-						if (field[rt::index(n.x,n.y,cols)] == 0) { nc++; }
+						if (m_field[rt::index(n.x,n.y,cols)] == 0) { nc++; }
 					}
 				}
 				if (nc < 4) { current = 1; }
@@ -118,7 +118,7 @@ private:
 				// update pixelbuffer from (current) field
 				rt::RGBAColor color;
 				int index = rt::index(x,y,cols);
-				if (field[index] == 0) {
+				if (m_field[index] == 0) {
 					color = BLACK;
 				} else {
 					color = WHITE;
@@ -128,7 +128,7 @@ private:
 		}
 
 		// update field to next state
-		field = next;
+		m_field = next;
 	}
 
 	void handleInput() {

@@ -50,7 +50,7 @@ public:
 	}
 
 private:
-	std::vector<rt::PixelBuffer> glyphs;
+	std::vector<rt::PixelBuffer> m_glyphs;
 	void font()
 	{
 		static bool cursor = true;
@@ -84,7 +84,7 @@ private:
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		for (size_t i = 0; i < text.length(); i++)
 		{
-			pixelbuffer.paste(glyphs[text[i]-32], (i*6)+x, y);
+			pixelbuffer.paste(m_glyphs[text[i]-32], (i*6)+x, y);
 		}
 	}
 
@@ -94,7 +94,7 @@ private:
 		for (size_t i = 0; i < 512; i += 6)
 		{
 			rt::PixelBuffer character = font.copy(i,0,6,8);
-			glyphs.push_back(character);
+			m_glyphs.push_back(character);
 		}
 		
 	}

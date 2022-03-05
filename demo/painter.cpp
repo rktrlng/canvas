@@ -12,8 +12,8 @@
 class MyApp : public cnv::Application
 {
 private:
-	bool showMenu = false;
-	rt::RGBAColor fcolor = {0,0,0,0};
+	bool m_showMenu = false;
+	rt::RGBAColor m_fcolor = {0,0,0,0};
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
@@ -41,7 +41,7 @@ public:
 		if (frametime >= maxtime) {
 			clearUI();
 			drawPixels();
-			if (showMenu) {
+			if (m_showMenu) {
 				drawPalette();
 			}
 			drawCursor();
@@ -105,7 +105,7 @@ private:
 
 	void handleInput()
 	{
-		if (input.getKeyDown(cnv::KeyCode::Q)) { showMenu = !showMenu; }
+		if (input.getKeyDown(cnv::KeyCode::Q)) { m_showMenu = !m_showMenu; }
 
 		if (input.getKeyDown(cnv::KeyCode::Minus)) { layers[0]->scale /= 2; }
 		if (input.getKeyDown(cnv::KeyCode::Equal)) { layers[0]->scale *= 2; }
@@ -128,10 +128,12 @@ private:
 		if (input.getMouse(0)) {
 			int x = (int) input.getMouseX() - layers[0]->position.x / layers[0]->scale;
 			int y = (int) input.getMouseY() - layers[0]->position.y / layers[0]->scale;
-			if (showMenu) {
-				fcolor = layers[1]->pixelbuffer.getPixel(x, y);
+			if (m_showMenu) {
+				m_fcolor = layers[1]->pixelbuffer.getPixel(x, y);
+				std::cout << "pick color: " << m_fcolor << std::endl;
 			} else {
-				layers[0]->pixelbuffer.setPixel(x, y, fcolor);
+				layers[0]->pixelbuffer.setPixel(x, y, m_fcolor);
+				std::cout << "paint color: " << m_fcolor << std::endl;
 			}
 		}
 

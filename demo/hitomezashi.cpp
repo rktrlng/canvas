@@ -15,10 +15,10 @@
 class MyApp : public cnv::Application
 {
 private:
-	const uint8_t step = 5;
-	size_t counter = 0;
-	std::vector<bool> xstitch;
-	std::vector<bool> ystitch;
+	const uint8_t STEP = 5;
+	size_t m_counter = 0;
+	std::vector<bool> m_xstitch;
+	std::vector<bool> m_ystitch;
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
@@ -27,8 +27,8 @@ public:
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		size_t cols = pixelbuffer.header().width;
 		size_t rows = pixelbuffer.header().height;
-		xstitch = randomSequence(cols/step);
-		ystitch = randomSequence(rows/step);
+		m_xstitch = randomSequence(cols/STEP);
+		m_ystitch = randomSequence(rows/STEP);
 
 		hitomezashi();
 	}
@@ -68,8 +68,8 @@ private:
 
 	std::vector<bool> repeatSequence(uint64_t value)
 	{
-		size_t amount_h = layers[0]->pixelbuffer.header().width / step;
-		size_t amount_v = layers[0]->pixelbuffer.header().height / step;
+		size_t amount_h = layers[0]->pixelbuffer.header().width / STEP;
+		size_t amount_v = layers[0]->pixelbuffer.header().height / STEP;
 		size_t amount = amount_h > amount_v ? amount_h : amount_v;
 		std::vector<bool> sequence;
 		size_t counter = 0;
@@ -95,26 +95,26 @@ private:
 
 		// horizontal stitches
 		size_t ypos = 0;
-		for (size_t y = 0; y < ystitch.size(); y++) {
+		for (size_t y = 0; y < m_ystitch.size(); y++) {
 			size_t xpos = 0;
-			if (ystitch[y]) { xpos += step; }
-			for (size_t x = 0; x < cols; x+=step) {
-				pixelbuffer.drawLine(xpos+1, ypos, xpos+step-1, ypos, BLACK);
-				xpos += step*2;
+			if (m_ystitch[y]) { xpos += STEP; }
+			for (size_t x = 0; x < cols; x+=STEP) {
+				pixelbuffer.drawLine(xpos+1, ypos, xpos+STEP-1, ypos, BLACK);
+				xpos += STEP*2;
 			}
-			ypos += step;
+			ypos += STEP;
 		}
 
 		// vertical stitches
 		size_t xpos = 0;
-		for (size_t x = 0; x < xstitch.size(); x++) {
+		for (size_t x = 0; x < m_xstitch.size(); x++) {
 			size_t ypos = 0;
-			if (xstitch[x]) { ypos += step; }
-			for (size_t y = 0; y < rows; y+=step) {
-				pixelbuffer.drawLine(xpos, ypos+1, xpos, ypos+step-1, BLACK);
-				ypos += step*2;
+			if (m_xstitch[x]) { ypos += STEP; }
+			for (size_t y = 0; y < rows; y+=STEP) {
+				pixelbuffer.drawLine(xpos, ypos+1, xpos, ypos+STEP-1, BLACK);
+				ypos += STEP*2;
 			}
-			xpos += step;
+			xpos += STEP;
 		}
 
 		// draw mouse cursor
@@ -132,57 +132,57 @@ private:
 	void handleInput()
 	{
 		if (input.getKeyDown(cnv::KeyCode::Space)) {
-			std::string filename = layers[0]->pixelbuffer.createFilename("hitomezashi", counter);
+			std::string filename = layers[0]->pixelbuffer.createFilename("hitomezashi", m_counter);
 			std::cout << filename << std::endl;
 			layers[0]->pixelbuffer.write(filename);
-			counter++;
+			m_counter++;
 		}
 
 		if (input.getKeyDown(cnv::KeyCode::R)) {
-			xstitch = randomSequence(layers[0]->pixelbuffer.header().width / step);
-			ystitch = randomSequence(layers[0]->pixelbuffer.header().height / step);
+			m_xstitch = randomSequence(layers[0]->pixelbuffer.header().width / STEP);
+			m_ystitch = randomSequence(layers[0]->pixelbuffer.header().height / STEP);
 		}
 
 		if (input.getKeyDown(cnv::KeyCode::M)) { // magic!
-			// xstitch = repeatSequence(26);
-			xstitch = repeatSequence((uint64_t)0b11010);
+			//m_ xstitch = repeatSequence(26);
+			m_xstitch = repeatSequence((uint64_t)0b11010);
 
-			// ystitch = repeatSequence(98);
-			// ystitch = repeatSequence(72930);
-			ystitch = repeatSequence((uint64_t)0b01000111001110001);
+			// m_ystitch = repeatSequence(98);
+			// m_ystitch = repeatSequence(72930);
+			m_ystitch = repeatSequence((uint64_t)0b01000111001110001);
 		}
 
-		if (input.getKeyDown(cnv::KeyCode::Alpha0)) { xstitch = repeatSequence(0);}
-		if (input.getKeyDown(cnv::KeyCode::Alpha1)) { xstitch = repeatSequence(1);}
-		if (input.getKeyDown(cnv::KeyCode::Alpha2)) { xstitch = repeatSequence(2);}
-		if (input.getKeyDown(cnv::KeyCode::Alpha3)) { xstitch = repeatSequence(1);}
-		if (input.getKeyDown(cnv::KeyCode::Alpha4)) { xstitch = repeatSequence(4);}
-		if (input.getKeyDown(cnv::KeyCode::Alpha5)) { xstitch = repeatSequence(5);}
-		if (input.getKeyDown(cnv::KeyCode::Alpha6)) { xstitch = repeatSequence(6);}
-		if (input.getKeyDown(cnv::KeyCode::Alpha7)) { xstitch = repeatSequence(1);}
-		if (input.getKeyDown(cnv::KeyCode::Alpha8)) { xstitch = repeatSequence(8);}
-		if (input.getKeyDown(cnv::KeyCode::Alpha9)) { xstitch = repeatSequence(9);}
+		if (input.getKeyDown(cnv::KeyCode::Alpha0)) { m_xstitch = repeatSequence(0);}
+		if (input.getKeyDown(cnv::KeyCode::Alpha1)) { m_xstitch = repeatSequence(1);}
+		if (input.getKeyDown(cnv::KeyCode::Alpha2)) { m_xstitch = repeatSequence(2);}
+		if (input.getKeyDown(cnv::KeyCode::Alpha3)) { m_xstitch = repeatSequence(1);}
+		if (input.getKeyDown(cnv::KeyCode::Alpha4)) { m_xstitch = repeatSequence(4);}
+		if (input.getKeyDown(cnv::KeyCode::Alpha5)) { m_xstitch = repeatSequence(5);}
+		if (input.getKeyDown(cnv::KeyCode::Alpha6)) { m_xstitch = repeatSequence(6);}
+		if (input.getKeyDown(cnv::KeyCode::Alpha7)) { m_xstitch = repeatSequence(1);}
+		if (input.getKeyDown(cnv::KeyCode::Alpha8)) { m_xstitch = repeatSequence(8);}
+		if (input.getKeyDown(cnv::KeyCode::Alpha9)) { m_xstitch = repeatSequence(9);}
 
-		if (input.getKeyDown(cnv::KeyCode::F10)) { ystitch = repeatSequence(0);}
-		if (input.getKeyDown(cnv::KeyCode::F1)) { ystitch = repeatSequence(1);}
-		if (input.getKeyDown(cnv::KeyCode::F2)) { ystitch = repeatSequence(2);}
-		if (input.getKeyDown(cnv::KeyCode::F3)) { ystitch = repeatSequence(1);}
-		if (input.getKeyDown(cnv::KeyCode::F4)) { ystitch = repeatSequence(4);}
-		if (input.getKeyDown(cnv::KeyCode::F5)) { ystitch = repeatSequence(5);}
-		if (input.getKeyDown(cnv::KeyCode::F6)) { ystitch = repeatSequence(6);}
-		if (input.getKeyDown(cnv::KeyCode::F7)) { ystitch = repeatSequence(1);}
-		if (input.getKeyDown(cnv::KeyCode::F8)) { ystitch = repeatSequence(8);}
-		if (input.getKeyDown(cnv::KeyCode::F9)) { ystitch = repeatSequence(9);}
+		if (input.getKeyDown(cnv::KeyCode::F10)) { m_ystitch = repeatSequence(0);}
+		if (input.getKeyDown(cnv::KeyCode::F1))  { m_ystitch = repeatSequence(1);}
+		if (input.getKeyDown(cnv::KeyCode::F2))  { m_ystitch = repeatSequence(2);}
+		if (input.getKeyDown(cnv::KeyCode::F3))  { m_ystitch = repeatSequence(1);}
+		if (input.getKeyDown(cnv::KeyCode::F4))  { m_ystitch = repeatSequence(4);}
+		if (input.getKeyDown(cnv::KeyCode::F5))  { m_ystitch = repeatSequence(5);}
+		if (input.getKeyDown(cnv::KeyCode::F6))  { m_ystitch = repeatSequence(6);}
+		if (input.getKeyDown(cnv::KeyCode::F7))  { m_ystitch = repeatSequence(1);}
+		if (input.getKeyDown(cnv::KeyCode::F8))  { m_ystitch = repeatSequence(8);}
+		if (input.getKeyDown(cnv::KeyCode::F9))  { m_ystitch = repeatSequence(9);}
 
 		if (input.getKeyDown(cnv::KeyCode::X)) {
-			for (size_t i = 0; i < xstitch.size(); i++){
-				std::cout << xstitch[i] << " ";
+			for (size_t i = 0; i < m_xstitch.size(); i++){
+				std::cout << m_xstitch[i] << " ";
 			}
 			std::cout << std::endl;
 		}
 		if (input.getKeyDown(cnv::KeyCode::Y)) {
-			for (size_t i = 0; i < ystitch.size(); i++){
-				std::cout << ystitch[i] << " ";
+			for (size_t i = 0; i < m_ystitch.size(); i++){
+				std::cout << m_ystitch[i] << " ";
 			}
 			std::cout << std::endl;
 		}
@@ -191,14 +191,14 @@ private:
 			int x = (int) input.getMouseX();
 			int y = (int) input.getMouseY();
 
-			if (x%step == 0) { // column
-				size_t index = x/step;
-				xstitch[index] = !xstitch[index];
+			if (x%STEP == 0) { // column
+				size_t index = x/STEP;
+				m_xstitch[index] = !m_xstitch[index];
 			}
 
-			if (y%step == 0) { // row
-				size_t index = y/step;
-				ystitch[index] = !ystitch[index];
+			if (y%STEP == 0) { // row
+				size_t index = y/STEP;
+				m_ystitch[index] = !m_ystitch[index];
 			}
 		}
 

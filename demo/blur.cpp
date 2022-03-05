@@ -15,7 +15,7 @@
 class MyApp : public cnv::Application
 {
 private:
-	rt::RGBAColor color = RED;
+	rt::RGBAColor m_color = RED;
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
@@ -42,7 +42,7 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			updatePixels();
-			color = rt::rotate(color, 0.005f);
+			m_color = rt::rotate(m_color, 0.005f);
 			frametime = 0.0f;
 		}
 	}
@@ -59,7 +59,7 @@ private:
 		pos.rotate(angle);
 		angle += 0.05f;
 
-		drawCross(pos.x + cols/2, pos.y + rows/2, color);
+		drawCross(pos.x + cols/2, pos.y + rows/2, m_color);
 
 		pixelbuffer.blur();
 		layers[0]->lock();

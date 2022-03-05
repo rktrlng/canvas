@@ -34,12 +34,12 @@ const int HEIGHT = 24;
 class MyApp : public cnv::Application
 {
 private:
-	std::vector<MCell*> field;
-	std::vector<MCell*> breadcrumbs;
-	MCell* current = nullptr;
-	bool backtracking = false;
-	size_t horbias = 1;
-	size_t verbias = 1;
+	std::vector<MCell*> m_field;
+	std::vector<MCell*> m_breadcrumbs;
+	MCell* m_current = nullptr;
+	bool m_backtracking = false;
+	size_t m_horbias = 1;
+	size_t m_verbias = 1;
 
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
@@ -62,24 +62,24 @@ public:
 	void initGenerator()
 	{
 		// reset
-		current = nullptr;
-		for (size_t i = 0; i < field.size(); i++) {
-			delete[] field[i];
+		m_current = nullptr;
+		for (size_t i = 0; i < m_field.size(); i++) {
+			delete[] m_field[i];
 		}
-		field.clear();
-		breadcrumbs.clear();
-		backtracking = false;
+		m_field.clear();
+		m_breadcrumbs.clear();
+		m_backtracking = false;
 
-		// new empty field
+		// new empty m_field
 		for (size_t y = 0; y < HEIGHT; y++) {
 			for (size_t x = 0; x < WIDTH; x++) {
 				MCell* cell = new MCell();
 				cell->col = x;
 				cell->row = y;
-				field.push_back(cell);
+				m_field.push_back(cell);
 			}
 		}
-		current = field[0];
+		m_current = m_field[0];
 	}
 
 	void update(float deltatime) override
@@ -124,36 +124,36 @@ private:
 		// look right
 		index = rt::index(x+1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x < WIDTH-1) {
-			if (!field[index]->visited) {
+			if (!m_field[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
-					neighbours.push_back(field[index]);
+					neighbours.push_back(m_field[index]);
 				}
 			}
 		}
 		// look left
 		index = rt::index(x-1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x > 0 ) {
-			if (!field[index]->visited) {
+			if (!m_field[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
-					neighbours.push_back(field[index]);
+					neighbours.push_back(m_field[index]);
 				}
 			}
 		}
 		// look down
 		index = rt::index(x,y+1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
-			if (!field[index]->visited) {
+			if (!m_field[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
-					neighbours.push_back(field[index]);
+					neighbours.push_back(m_field[index]);
 				}
 			}
 		}
 		// look up
 		index = rt::index(x,y-1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
-			if (!field[index]->visited) {
+			if (!m_field[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
-					neighbours.push_back(field[index]);
+					neighbours.push_back(m_field[index]);
 				}
 			}
 		}
@@ -171,32 +171,32 @@ private:
 
 	bool generateStep()
 	{
-		// make 'current' find the next place to be
-		current->visited = true;
+		// make 'm_current' find the next place to be
+		m_current->visited = true;
 		// STEP 1: while there is a neighbour...
-		MCell* next = getRandomUnvisitedSeperatedNeighbour(current, horbias, verbias);
+		MCell* next = getRandomUnvisitedSeperatedNeighbour(m_current, m_horbias, m_verbias);
 		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
-			backtracking = false;
+			m_backtracking = false;
 			next->visited = true;
 
 			// STEP 2
-			breadcrumbs.push_back(current); // drop a breadcrumb on the stack
+			m_breadcrumbs.push_back(m_current); // drop a breadcrumb on the stack
 
 			// STEP 3
-			removeWalls(current, next); // break through the wall
+			removeWalls(m_current, next); // break through the wall
 
 			// STEP 4
-			current = next;
+			m_current = next;
 		} else { // we're stuck! backtrack our steps...
-			backtracking = true;
-			if (breadcrumbs.size() > 0) {
-				current = breadcrumbs.back(); // make previous our current cell
-				breadcrumbs.pop_back(); // remove from the breadcrumbs (eat the breadcrumb)
+			m_backtracking = true;
+			if (m_breadcrumbs.size() > 0) {
+				m_current = m_breadcrumbs.back(); // make previous our m_current cell
+				m_breadcrumbs.pop_back(); // remove from the m_breadcrumbs (eat the breadcrumb)
 			}
 		}
 
-		// We're back at the start field[0]
-		if (current->col == 0 && current->row == 0) {
+		// We're back at the start m_field[0]
+		if (m_current->col == 0 && m_current->row == 0) {
 			return false;
 		}
 
@@ -232,7 +232,7 @@ private:
 			for (size_t x = 0; x < WIDTH*2; x+=2) {
 				rt::RGBAColor color = BLACK;
 				int index = rt::index(x/2, y/2, WIDTH);
-				MCell* cell = field[index];
+				MCell* cell = m_field[index];
 				if (cell->visited) {
 					color = WHITE;
 				} else {
@@ -241,8 +241,8 @@ private:
 				rt::vec2i pos = rt::vec2i(x+1, y+1);
 				pixelbuffer.setPixel(pos.x, pos.y, color);
 
-				if (current == cell) {
-					if(backtracking) {
+				if (m_current == cell) {
+					if(m_backtracking) {
 						pixelbuffer.setPixel(pos.x, pos.y, RED);
 					} else {
 						pixelbuffer.setPixel(pos.x, pos.y, BLUE);

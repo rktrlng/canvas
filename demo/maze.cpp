@@ -45,27 +45,27 @@ struct PCell {
 class MyApp : public cnv::Application
 {
 private:
-	State state = State::GENERATING;
-	int mazenum = 0;
-	size_t cols = 0;
-	size_t rows = 0;
+	State m_state = State::GENERATING;
+	int m_mazenum = 0;
+	size_t m_cols = 0;
+	size_t m_rows = 0;
 
 	// ##### Generator #####
-	std::vector<MCell*> generatorfield;
-	std::vector<MCell*> breadcrumbs_generator;
-	MCell* gencurrent = nullptr;
-	size_t horbias = 1;
-	size_t verbias = 1;
+	std::vector<MCell*> m_generatorfield;
+	std::vector<MCell*> m_breadcrumbs_generator;
+	MCell* m_gencurrent = nullptr;
+	size_t m_horbias = 1;
+	size_t m_verbias = 1;
 
 	// ##### Solver #####
-	std::vector<PCell*> solverfield;
-	std::vector<PCell*> breadcrumbs_solver;
-	std::vector<PCell*> solution;
-	PCell* seeker = nullptr;
-	PCell* start = nullptr;
-	PCell* end = nullptr;
+	std::vector<PCell*> m_solverfield;
+	std::vector<PCell*> m_breadcrumbs_solver;
+	std::vector<PCell*> m_solution;
+	PCell* m_seeker = nullptr;
+	PCell* m_start = nullptr;
+	PCell* m_end = nullptr;
 
-	std::vector<rt::RGBAColor> palette;
+	std::vector<rt::RGBAColor> m_palette;
 
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
@@ -96,26 +96,26 @@ public:
 			static float donetime = 0.0f;
 			static float victime = 0.0f;
 
-			switch (state)
+			switch (m_state)
 			{
 			case State::GENERATING:
 				if (generateMaze()) {
-					state = State::DONEGENERATING;
+					m_state = State::DONEGENERATING;
 				}
 				break;
 			case State::GENBACKTRACKING:
 				if (generateMaze()) {
-					state = State::DONEGENERATING;
+					m_state = State::DONEGENERATING;
 				}
 				break;
 			case State::SOLVEBACKTRACKING:
 				if (solveMaze()) {
-					state = State::DONESEARCHING;
+					m_state = State::DONESEARCHING;
 				}
 				break;
 			case State::SEARCHING:
 				if (solveMaze()) {
-					state = State::DONESEARCHING;
+					m_state = State::DONESEARCHING;
 				}
 				break;
 			case State::DONEGENERATING:
@@ -123,26 +123,26 @@ public:
 				if (donetime > 3.0f) {
 					donetime = 0.0f;
 					initSolver();
-					state = State::SEARCHING;
+					m_state = State::SEARCHING;
 				}
 				break;
 			case State::DONESEARCHING:
 				initGenerator();
-				state = State::VICTORY;
+				m_state = State::VICTORY;
 				break;
 			case State::VICTORY:
 				drawMazeSolver(frametime);
 				victime += frametime;
 				if (victime > 10.0f) {
 					victime = 0.0f;
-					state = State::GENERATING;
+					m_state = State::GENERATING;
 				}
 				break;
 			default:
-				// state = State::GENERATING;
+				// m_state = State::GENERATING;
 				break;
 			}
-			// std::cout << "state: " << (int)state << std::endl;
+			// std::cout << "m_state: " << (int)m_state << std::m_endl;
 			
 			frametime = 0.0f;
 		}
@@ -160,11 +160,11 @@ private:
 			if (done) {
 				drawMazeGenerator();
 				auto& pixelbuffer = layers[0]->pixelbuffer;
-				pixelbuffer.setPixel(1, 1, RED); // start
-				pixelbuffer.setPixel(WIDTH*2-1, HEIGHT*2-1, BLUE); // end
+				pixelbuffer.setPixel(1, 1, RED); // m_start
+				pixelbuffer.setPixel(WIDTH*2-1, HEIGHT*2-1, BLUE); // m_end
 
 				if (write_generated) {
-					std::string name = pixelbuffer.createFilename("maze", mazenum);
+					std::string name = pixelbuffer.createFilename("maze", m_mazenum);
 					pixelbuffer.write(name);
 					std::cout << name << std::endl;
 				}
@@ -182,57 +182,57 @@ private:
 	void initGenerator()
 	{
 		// reset
-		gencurrent = nullptr;
+		m_gencurrent = nullptr;
 
-		for (size_t i = 0; i < generatorfield.size(); i++) {
-			delete[] generatorfield[i];
+		for (size_t i = 0; i < m_generatorfield.size(); i++) {
+			delete[] m_generatorfield[i];
 		}
-		generatorfield.clear();
+		m_generatorfield.clear();
 
-		breadcrumbs_generator.clear();
+		m_breadcrumbs_generator.clear();
 
-		state = State::GENERATING;
+		m_state = State::GENERATING;
 
-		// new empty generatorfield
+		// new empty m_generatorfield
 		for (size_t y = 0; y < HEIGHT; y++) {
 			for (size_t x = 0; x < WIDTH; x++) {
 				MCell* cell = new MCell();
 				cell->col = x;
 				cell->row = y;
-				generatorfield.push_back(cell);
+				m_generatorfield.push_back(cell);
 			}
 		}
-		gencurrent = generatorfield[0];
+		m_gencurrent = m_generatorfield[0];
 	}
 
 	bool generateStep()
 	{
-		// make 'gencurrent' find the next place to be
-		gencurrent->visited = true;
+		// make 'm_gencurrent' find the next place to be
+		m_gencurrent->visited = true;
 		// STEP 1: while there is a neighbour...
-		MCell* next = getRandomUnvisitedSeperatedNeighbour(gencurrent, horbias, verbias);
+		MCell* next = getRandomUnvisitedSeperatedNeighbour(m_gencurrent, m_horbias, m_verbias);
 		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
-			state = State::GENERATING;
+			m_state = State::GENERATING;
 			next->visited = true;
 
 			// STEP 2
-			breadcrumbs_generator.push_back(gencurrent); // drop a breadcrumb on the stack
+			m_breadcrumbs_generator.push_back(m_gencurrent); // drop a breadcrumb on the stack
 
 			// STEP 3
-			removeWalls(gencurrent, next); // break through the wall
+			removeWalls(m_gencurrent, next); // break through the wall
 
 			// STEP 4
-			gencurrent = next;
+			m_gencurrent = next;
 		} else { // we're stuck! backtrack our steps...
-			state = State::GENBACKTRACKING;
-			if (breadcrumbs_generator.size() > 0) {
-				gencurrent = breadcrumbs_generator.back(); // make previous our gencurrent cell
-				breadcrumbs_generator.pop_back(); // remove from the breadcrumbs (eat the breadcrumb)
+			m_state = State::GENBACKTRACKING;
+			if (m_breadcrumbs_generator.size() > 0) {
+				m_gencurrent = m_breadcrumbs_generator.back(); // make previous our m_gencurrent cell
+				m_breadcrumbs_generator.pop_back(); // remove from the breadcrumbs (eat the breadcrumb)
 			}
 		}
 
-		// We're back at the start generatorfield[0]
-		if (gencurrent->col == 0 && gencurrent->row == 0) {
+		// We're back at the m_start m_generatorfield[0]
+		if (m_gencurrent->col == 0 && m_gencurrent->row == 0) {
 			return true;
 		}
 
@@ -247,7 +247,7 @@ private:
 			for (size_t x = 0; x < WIDTH*2; x+=2) {
 				rt::RGBAColor color = BLACK;
 				int index = rt::index(x/2, y/2, WIDTH);
-				MCell* cell = generatorfield[index];
+				MCell* cell = m_generatorfield[index];
 				if (cell->visited) {
 					color = WHITE;
 				} else {
@@ -256,8 +256,8 @@ private:
 				rt::vec2i pos = rt::vec2i(x+1, y+1);
 				pixelbuffer.setPixel(pos.x, pos.y, color);
 
-				if (gencurrent == cell) {
-					if(state == State::GENBACKTRACKING) {
+				if (m_gencurrent == cell) {
+					if(m_state == State::GENBACKTRACKING) {
 						pixelbuffer.setPixel(pos.x, pos.y, RED);
 					} else {
 						pixelbuffer.setPixel(pos.x, pos.y, BLUE);
@@ -286,36 +286,36 @@ private:
 		// look right
 		index = rt::index(x+1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x < WIDTH-1) {
-			if (!generatorfield[index]->visited) {
+			if (!m_generatorfield[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
-					neighbours.push_back(generatorfield[index]);
+					neighbours.push_back(m_generatorfield[index]);
 				}
 			}
 		}
 		// look left
 		index = rt::index(x-1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x > 0 ) {
-			if (!generatorfield[index]->visited) {
+			if (!m_generatorfield[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
-					neighbours.push_back(generatorfield[index]);
+					neighbours.push_back(m_generatorfield[index]);
 				}
 			}
 		}
 		// look down
 		index = rt::index(x,y+1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
-			if (!generatorfield[index]->visited) {
+			if (!m_generatorfield[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
-					neighbours.push_back(generatorfield[index]);
+					neighbours.push_back(m_generatorfield[index]);
 				}
 			}
 		}
 		// look up
 		index = rt::index(x,y-1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
-			if (!generatorfield[index]->visited) {
+			if (!m_generatorfield[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
-					neighbours.push_back(generatorfield[index]);
+					neighbours.push_back(m_generatorfield[index]);
 				}
 			}
 		}
@@ -358,46 +358,46 @@ private:
 	void initSolver()
 	{
 		// reset
-		seeker = nullptr;
-		start = nullptr;
-		end = nullptr;
+		m_seeker = nullptr;
+		m_start = nullptr;
+		m_end = nullptr;
 
-		for (size_t i = 0; i < solverfield.size(); i++) {
-			delete[] solverfield[i];
+		for (size_t i = 0; i < m_solverfield.size(); i++) {
+			delete[] m_solverfield[i];
 		}
-		solverfield.clear();
+		m_solverfield.clear();
 
-		breadcrumbs_solver.clear();
-		solution.clear();
+		m_breadcrumbs_solver.clear();
+		m_solution.clear();
 
-		state = State::SEARCHING;
+		m_state = State::SEARCHING;
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		cols = pixelbuffer.header().width;
-		rows = pixelbuffer.header().height;
+		m_cols = pixelbuffer.header().width;
+		m_rows = pixelbuffer.header().height;
 
-		// new empty solverfield
-		for (size_t y = 0; y < rows; y++) {
-			for (size_t x = 0; x < cols; x++) {
+		// new empty m_solverfield
+		for (size_t y = 0; y < m_rows; y++) {
+			for (size_t x = 0; x < m_cols; x++) {
 				PCell* cell = new PCell();
 				cell->col = x;
 				cell->row = y;
 				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
 				// if (color == BLACK) { cell->wall = true; } // wall (default)
-				if (color == WHITE || color == ORANGE || color == GRAY) { cell->wall = false; } // empty solverfield
-				if (color == RED)   { cell->wall = false; start = cell; } // startpoint
-				if (color == BLUE)  { cell->wall = false; end = cell; } // endpoint
-				solverfield.push_back(cell);
+				if (color == WHITE || color == ORANGE || color == GRAY) { cell->wall = false; } // empty m_solverfield
+				if (color == RED)   { cell->wall = false; m_start = cell; } // m_startpoint
+				if (color == BLUE)  { cell->wall = false; m_end = cell; } // m_endpoint
+				m_solverfield.push_back(cell);
 			}
 		}
-		seeker = start;
-		solution.push_back(seeker);
+		m_seeker = m_start;
+		m_solution.push_back(m_seeker);
 
-		palette.clear();
+		m_palette.clear();
 		rt::RGBAColor color = RED;
 		size_t amount = 600;
 		for (size_t i = 0; i < amount; i++) {
-			palette.push_back(color);
+			m_palette.push_back(color);
 			color = rt::rotate(color, 1.0f / amount);
 		}
 	}
@@ -412,18 +412,18 @@ private:
 
 				if (write_solved) {
 					auto& pixelbuffer = layers[0]->pixelbuffer;
-					std::string filename = pixelbuffer.createFilename("maze", mazenum);
+					std::string filename = pixelbuffer.createFilename("maze", m_mazenum);
 					// remove .pbf extension if there is one
 					size_t lastindex = filename.find_last_of(".");
 					if((filename.substr(lastindex + 1) == "pbf")) {
 						filename = filename.substr(0, lastindex); 
 					}
-					filename += "_solved_" + std::to_string(solverfield.size()) + "_" + std::to_string(solution.size()) + ".pbf";
+					filename += "_solved_" + std::to_string(m_solverfield.size()) + "_" + std::to_string(m_solution.size()) + ".pbf";
 					pixelbuffer.write(filename);
 					std::cout << filename << std::endl;
 				}
 
-				mazenum++;
+				m_mazenum++;
 				found = false;
 				return true;
 			}
@@ -436,31 +436,31 @@ private:
 
 	bool solveStep()
 	{
-		// make 'seeker' find the next place to be
-		seeker->visited = true;
+		// make 'm_seeker' find the next place to be
+		m_seeker->visited = true;
 		// while there is a neighbour...
-		PCell* next = getNextUnvisitedDirectNeighbour(seeker);
+		PCell* next = getNextUnvisitedDirectNeighbour(m_seeker);
 		if (next != nullptr) { // there's still an unvisited neighbour. We're not stuck
-			state = State::SEARCHING;
+			m_state = State::SEARCHING;
 			next->visited = true;
 
-			breadcrumbs_solver.push_back(seeker); // drop a breadcrumb on the stack
+			m_breadcrumbs_solver.push_back(m_seeker); // drop a breadcrumb on the stack
 
-			seeker = next;
-			solution.push_back(seeker); // still looks good...
+			m_seeker = next;
+			m_solution.push_back(m_seeker); // still looks good...
 		} else { // we're stuck! backtrack our steps...
-			state = State::SOLVEBACKTRACKING;
-			if (breadcrumbs_solver.size() > 0) {
-				seeker = breadcrumbs_solver.back(); // make previous our seeker cell
-				breadcrumbs_solver.pop_back(); // remove from the breadcrumbs (eat the breadcrumb)
+			m_state = State::SOLVEBACKTRACKING;
+			if (m_breadcrumbs_solver.size() > 0) {
+				m_seeker = m_breadcrumbs_solver.back(); // make previous our m_seeker cell
+				m_breadcrumbs_solver.pop_back(); // remove from the breadcrumbs (eat the breadcrumb)
 			}
-			if (solution.size() > 0) {
-				solution.pop_back(); // nope, wrong track!
+			if (m_solution.size() > 0) {
+				m_solution.pop_back(); // nope, wrong track!
 			}
 		}
 
 		// We've found the exit!
-		if (seeker->col == end->col && seeker->row == end->row) {
+		if (m_seeker->col == m_end->col && m_seeker->row == m_end->row) {
 			return true;
 		}
 
@@ -471,11 +471,11 @@ private:
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 
-		for (size_t y = 0; y < rows; y++) {
-			for (size_t x = 0; x < cols; x++) {
+		for (size_t y = 0; y < m_rows; y++) {
+			for (size_t x = 0; x < m_cols; x++) {
 				rt::RGBAColor color = BLACK;
-				int index = rt::index(x, y, cols);
-				PCell* cell = solverfield[index];
+				int index = rt::index(x, y, m_cols);
+				PCell* cell = m_solverfield[index];
 				if (cell->wall) {
 					color = BLACK;
 				} else {
@@ -489,24 +489,24 @@ private:
 			}
 		}
 
-		// draw solution so far
-		for (size_t i = 0; i < solution.size(); i++) {
-			// pixelbuffer[rt::index(solution[i]->col, solution[i]->row, cols)] = ORANGE;
-			rt::RGBAColor color = palette[i % palette.size()];
-			pixelbuffer[rt::index(solution[i]->col, solution[i]->row, cols)] = color;
+		// draw m_solution so far
+		for (size_t i = 0; i < m_solution.size(); i++) {
+			// pixelbuffer[rt::index(m_solution[i]->col, m_solution[i]->row, m_cols)] = ORANGE;
+			rt::RGBAColor color = m_palette[i % m_palette.size()];
+			pixelbuffer[rt::index(m_solution[i]->col, m_solution[i]->row, m_cols)] = color;
 		}
 
-		if (state == State::VICTORY) {
-			for (size_t i = 0; i < palette.size(); i++) {
-				rt::RGBAColor color = palette[i];
-				palette[i] = rt::rotate(color, 1.0f - deltatime);
+		if (m_state == State::VICTORY) {
+			for (size_t i = 0; i < m_palette.size(); i++) {
+				rt::RGBAColor color = m_palette[i];
+				m_palette[i] = rt::rotate(color, 1.0f - deltatime);
 			}
 		}
 
-		// draw start + end
-		// pixelbuffer.setPixel(start->col, start->row, RED);
-		// pixelbuffer.setPixel(end->col, end->row, BLUE);
-		pixelbuffer.setPixel(end->col, end->row, palette[(solution.size()-1)%palette.size()]);
+		// draw m_start + m_end
+		// pixelbuffer.setPixel(m_start->col, m_start->row, RED);
+		// pixelbuffer.setPixel(m_end->col, m_end->row, BLUE);
+		pixelbuffer.setPixel(m_end->col, m_end->row, m_palette[(m_solution.size()-1)%m_palette.size()]);
 
 		layers[0]->lock();
 	}
@@ -520,24 +520,24 @@ private:
 		size_t index = 0;
 
 		// look right
-		index = rt::index(x+1,y,cols);
-		if (!solverfield[index]->wall && !solverfield[index]->visited) {
-			neighbours.push_back(solverfield[index]);
+		index = rt::index(x+1,y,m_cols);
+		if (!m_solverfield[index]->wall && !m_solverfield[index]->visited) {
+			neighbours.push_back(m_solverfield[index]);
 		}
 		// look left
-		index = rt::index(x-1,y,cols);
-		if (!solverfield[index]->wall && !solverfield[index]->visited) {
-			neighbours.push_back(solverfield[index]);
+		index = rt::index(x-1,y,m_cols);
+		if (!m_solverfield[index]->wall && !m_solverfield[index]->visited) {
+			neighbours.push_back(m_solverfield[index]);
 		}
 		// look down
-		index = rt::index(x,y+1,cols);
-		if (!solverfield[index]->wall && !solverfield[index]->visited) {
-			neighbours.push_back(solverfield[index]);
+		index = rt::index(x,y+1,m_cols);
+		if (!m_solverfield[index]->wall && !m_solverfield[index]->visited) {
+			neighbours.push_back(m_solverfield[index]);
 		}
 		// look up
-		index = rt::index(x,y-1,cols);
-		if (!solverfield[index]->wall && !solverfield[index]->visited) {
-			neighbours.push_back(solverfield[index]);
+		index = rt::index(x,y-1,m_cols);
+		if (!m_solverfield[index]->wall && !m_solverfield[index]->visited) {
+			neighbours.push_back(m_solverfield[index]);
 		}
 
 		// there's a valid neighbour!

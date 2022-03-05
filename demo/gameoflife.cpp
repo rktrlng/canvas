@@ -38,8 +38,8 @@ public:
 		uint16_t rows = pixelbuffer.header().height;
 		pixelbuffer.fill(BLACK);
 		
-		// fill field for wireworld
-		field = std::vector<uint8_t>(rows*cols, 0);
+		// fill field for game of life
+		m_field = std::vector<uint8_t>(rows*cols, 0);
 
 		pentomino(rt::vec2i(cols / 4, rows / 2));
 		pentomino(rt::vec2i(cols / 4 * 3, rows / 2), 1);
@@ -69,7 +69,7 @@ private:
 	const uint8_t ALIVE = 1; // WHITE
 
 	// internal data to work with (value are 0,1)
-	std::vector<uint8_t> field;
+	std::vector<uint8_t> m_field;
 
 	void pentomino(const rt::vec2i& pos, int dir = 0)
 	{
@@ -79,17 +79,17 @@ private:
 
 		int id = rt::index(pos.x, pos.y, cols);
 		if (dir) {
-			field[id-1] = ALIVE;
-			field[id+0] = ALIVE;
-			field[id+1] = ALIVE;
-			field[id+0-cols] = ALIVE;
-			field[id-1+cols] = ALIVE;
+			m_field[id-1] = ALIVE;
+			m_field[id+0] = ALIVE;
+			m_field[id+1] = ALIVE;
+			m_field[id+0-cols] = ALIVE;
+			m_field[id-1+cols] = ALIVE;
 		} else {
-			field[id+0] = ALIVE;
-			field[id+0+cols] = ALIVE;
-			field[id+0-cols] = ALIVE;
-			field[id+0-1] = ALIVE;
-			field[id+cols+1] = ALIVE;
+			m_field[id+0] = ALIVE;
+			m_field[id+0+cols] = ALIVE;
+			m_field[id+0-cols] = ALIVE;
+			m_field[id+0-1] = ALIVE;
+			m_field[id+cols+1] = ALIVE;
 		}
 	}
 
@@ -105,7 +105,7 @@ private:
 
 		pixelbuffer.setPixel(pos.x, pos.y, BLACK);
 		int id = rt::index(pos.x, pos.y, cols);
-		field[id] = ALIVE;
+		m_field[id] = ALIVE;
 
 		pos.x += (rand()%3) - 1;
 		pos.y += (rand()%3) - 1;
@@ -126,7 +126,7 @@ private:
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
 				int index = rt::index(x,y,cols);
-				uint8_t current = field[index];
+				uint8_t current = m_field[index];
 
 				// check 8 neighbours and count the ones that are a ALIVE
 				int nc = 0; // number of neighbour cells
@@ -136,7 +136,7 @@ private:
 							// this is us
 						} else {
 							rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
-							if (field[rt::index(n.x,n.y,cols)] == ALIVE) { nc++; }
+							if (m_field[rt::index(n.x,n.y,cols)] == ALIVE) { nc++; }
 						}
 					}
 				}
@@ -151,7 +151,7 @@ private:
 
 				// update pixelbuffer from (current) field
 				rt::RGBAColor color;
-				if (field[index] == ALIVE) {
+				if (m_field[index] == ALIVE) {
 					color = WHITE;
 				} else {
 					color = BLACK;
@@ -161,7 +161,7 @@ private:
 		}
 
 		// update field to next state
-		field = next;
+		m_field = next;
 	}
 
 	void handleInput() {

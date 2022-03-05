@@ -15,7 +15,7 @@
 class MyApp : public cnv::Application
 {
 private:
-	std::deque<float> values;
+	std::deque<float> m_values;
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
@@ -83,25 +83,25 @@ private:
 		t += 0.075f;
 		float y = square_wave(t, harmonics);
 
-		values.push_front(y);
-		if (values.size() > stop) {
-			values.pop_back();
+		m_values.push_front(y);
+		if (m_values.size() > stop) {
+			m_values.pop_back();
 		}
 
 		// ##############################################
 		// draw wave
 		int scale = 60;
 
-		for (size_t i = 0; i < values.size(); i++) {
+		for (size_t i = 0; i < m_values.size(); i++) {
 			if (i > 1) {
 				int x = stop-i;
-				pixelbuffer.drawLine(x, (values[i-1]*scale)+rows/2, x-1, (values[i]*scale)+rows/2, GREEN);
+				pixelbuffer.drawLine(x, (m_values[i-1]*scale)+rows/2, x-1, (m_values[i]*scale)+rows/2, GREEN);
 			}
 		}
 
 		// ##############################################
 		// draw red circle
-		pixelbuffer.drawCircleFilled(stop, (values[0]*scale)+rows/2, 3, RED);
+		pixelbuffer.drawCircleFilled(stop, (m_values[0]*scale)+rows/2, 3, RED);
 
 		// ##############################################
 		// draw grid
