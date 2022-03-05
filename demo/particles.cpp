@@ -22,17 +22,17 @@ const bool BLUR = true;
 
 struct Particle
 {
-	pb::vec2 position;
-	pb::vec2 velocity;
-	pb::vec2 acceleration;
+	rt::vec2 position;
+	rt::vec2 velocity;
+	rt::vec2 acceleration;
 	float mass;
-	pb::RGBAColor color;
+	rt::RGBAColor color;
 
 	Particle(float x, float y)
 	{
-		position = pb::vec2(x, y);
-		velocity = pb::vec2((rand()%HOR_SPREAD) - (HOR_SPREAD/2), -(rand()%VER_SPREAD));
-		acceleration = pb::vec2(0.0f, 0.0f);
+		position = rt::vec2(x, y);
+		velocity = rt::vec2((rand()%HOR_SPREAD) - (HOR_SPREAD/2), -(rand()%VER_SPREAD));
+		acceleration = rt::vec2(0.0f, 0.0f);
 		mass = 1.0f;
 		color = RED;
 	}
@@ -44,7 +44,7 @@ struct Particle
 		acceleration *= 0;
 	}
 
-	void addForce(pb::vec2 force)
+	void addForce(rt::vec2 force)
 	{
 		acceleration += force / mass;
 	}
@@ -63,7 +63,7 @@ public:
 		layers[0]->pixelbuffer.fill(BLACK);
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -112,10 +112,10 @@ private:
 
 			for (size_t i = 0; i < particles.size(); i++) {
 				pixelbuffer.setPixel(particles[i]->position.x, particles[i]->position.y, BLACK);
-				particles[i]->addForce(pb::vec2(0.0f, GRAVITY));
+				particles[i]->addForce(rt::vec2(0.0f, GRAVITY));
 				particles[i]->move(frametime);
 				particles[i]->velocity *= FRICTION;
-				particles[i]->color = pb::rotate(particles[i]->color, ROT_SPEED);
+				particles[i]->color = rt::rotate(particles[i]->color, ROT_SPEED);
 				borders(particles[i], cols, rows);
 				pixelbuffer.setPixel(particles[i]->position.x, particles[i]->position.y, particles[i]->color);
 			}

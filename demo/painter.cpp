@@ -13,7 +13,7 @@ class MyApp : public cnv::Application
 {
 private:
 	bool showMenu = false;
-	pb::RGBAColor fcolor = {0,0,0,0};
+	rt::RGBAColor fcolor = {0,0,0,0};
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
@@ -21,7 +21,7 @@ public:
 		layers.push_back(menuCanvas);
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -79,14 +79,14 @@ private:
 			value += 32;
 		}
 
-		pb::RGBAColor color = RED;
+		rt::RGBAColor color = RED;
 		for (size_t x = 0; x < 10; x++) {
 			pixelbuffer.drawSquareFilled( x * size + offset, size + offset, size, size, color);
-			color = pb::rotate(color, 0.05f);
+			color = rt::rotate(color, 0.05f);
 		}
 		for (size_t x = 0; x < 10; x++) {
 			pixelbuffer.drawSquareFilled( x * size + offset, (size*2) + offset, size, size, color);
-			color = pb::rotate(color, 0.05f);
+			color = rt::rotate(color, 0.05f);
 		}
 	}
 
@@ -94,11 +94,11 @@ private:
 	{
 		int x = (int) input.getMouseX();
 		int y = (int) input.getMouseY();
-		pb::vec2i pos = pb::vec2i(x, y);
-		std::vector<pb::vec2i> points = { {-3,0}, {-2,0}, {3,0}, {2,0}, {0,-3}, {0,-2}, {0,3}, {0,2} };
+		rt::vec2i pos = rt::vec2i(x, y);
+		std::vector<rt::vec2i> points = { {-3,0}, {-2,0}, {3,0}, {2,0}, {0,-3}, {0,-2}, {0,3}, {0,2} };
 		auto& pixelbuffer = layers[1]->pixelbuffer;
 		for (size_t i = 0; i < points.size(); i++) {
-			pb::vec2i dpos = pos + points[i];
+			rt::vec2i dpos = pos + points[i];
 			pixelbuffer.setPixel(dpos.x, dpos.y, {0, 0, 0, 255});
 		}
 	}

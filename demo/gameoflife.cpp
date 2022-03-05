@@ -19,7 +19,7 @@ public:
 	// 	init();
 	// }
 
-	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	{
 		init();
 	}
@@ -41,9 +41,9 @@ public:
 		// fill field for wireworld
 		field = std::vector<uint8_t>(rows*cols, 0);
 
-		pentomino(pb::vec2i(cols / 4, rows / 2));
-		pentomino(pb::vec2i(cols / 4 * 3, rows / 2), 1);
-		agitator(pb::vec2i(cols / 2, rows / 2));
+		pentomino(rt::vec2i(cols / 4, rows / 2));
+		pentomino(rt::vec2i(cols / 4 * 3, rows / 2), 1);
+		agitator(rt::vec2i(cols / 2, rows / 2));
 	}
 
 
@@ -57,7 +57,7 @@ public:
 		if (frametime >= maxtime)
 		{
 			gameoflife();
-			agitator(pb::vec2i(0, 0));
+			agitator(rt::vec2i(0, 0));
 			layers[0]->lock();
 
 			frametime = 0.0f;
@@ -71,13 +71,13 @@ private:
 	// internal data to work with (value are 0,1)
 	std::vector<uint8_t> field;
 
-	void pentomino(const pb::vec2i& pos, int dir = 0)
+	void pentomino(const rt::vec2i& pos, int dir = 0)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		int cols = pixelbuffer.header().width;
 		// int rows = pixelbuffer.header().height;
 
-		int id = pb::index(pos.x, pos.y, cols);
+		int id = rt::index(pos.x, pos.y, cols);
 		if (dir) {
 			field[id-1] = ALIVE;
 			field[id+0] = ALIVE;
@@ -93,23 +93,23 @@ private:
 		}
 	}
 
-	void agitator(const pb::vec2i& p)
+	void agitator(const rt::vec2i& p)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		int cols = pixelbuffer.header().width;
 		int rows = pixelbuffer.header().height;
-		static pb::vec2i pos;
-		if (p != pb::vec2i(0, 0)) {
+		static rt::vec2i pos;
+		if (p != rt::vec2i(0, 0)) {
 			pos = p;
 		}
 
 		pixelbuffer.setPixel(pos.x, pos.y, BLACK);
-		int id = pb::index(pos.x, pos.y, cols);
+		int id = rt::index(pos.x, pos.y, cols);
 		field[id] = ALIVE;
 
 		pos.x += (rand()%3) - 1;
 		pos.y += (rand()%3) - 1;
-		pos = pb::wrap(pos, cols, rows);
+		pos = rt::wrap(pos, cols, rows);
 
 		pixelbuffer.setPixel(pos.x, pos.y, RED);
 	}
@@ -125,7 +125,7 @@ private:
 		std::vector<uint8_t> next = std::vector<uint8_t>(cols*rows, 0);
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				int index = pb::index(x,y,cols);
+				int index = rt::index(x,y,cols);
 				uint8_t current = field[index];
 
 				// check 8 neighbours and count the ones that are a ALIVE
@@ -135,8 +135,8 @@ private:
 						if (r == 0 && c == 0) {
 							// this is us
 						} else {
-							pb::vec2i n = pb::wrap(pb::vec2i(x+c, y+r), cols, rows);
-							if (field[pb::index(n.x,n.y,cols)] == ALIVE) { nc++; }
+							rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
+							if (field[rt::index(n.x,n.y,cols)] == ALIVE) { nc++; }
 						}
 					}
 				}
@@ -150,7 +150,7 @@ private:
 				next[index] = current;
 
 				// update pixelbuffer from (current) field
-				pb::RGBAColor color;
+				rt::RGBAColor color;
 				if (field[index] == ALIVE) {
 					color = WHITE;
 				} else {
@@ -186,7 +186,7 @@ private:
 
 int main( void )
 {
-	pb::PixelBuffer pixelbuffer(160, 90, 24);
+	rt::PixelBuffer pixelbuffer(160, 90, 24);
 	MyApp application(pixelbuffer, 8);
 	application.hideMouse();
 

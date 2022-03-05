@@ -19,7 +19,7 @@ public:
 	// 	init();
 	// }
 
-	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	{
 		init();
 	}
@@ -40,7 +40,7 @@ public:
 		int counter = 0;
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
+				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
 				if (color == BLACK) { field[counter] = EMPTY; }
 				if (color == YELLOW) { field[counter] = CONDUCTOR; }
 				if (color == BLUE) { field[counter] = HEAD;}
@@ -93,7 +93,7 @@ private:
 				//- HEAD -> TAIL
 				//- TAIL -> CONDUCTOR
 				//- CONDUCTOR: if 1 or 2 neighbours are HEAD -> HEAD
-				uint8_t current = field[pb::index(x,y,cols)];
+				uint8_t current = field[rt::index(x,y,cols)];
 				if (current == EMPTY) {
 					continue; // nothing to do, continue to next pixel
 				} else if (current == HEAD) {
@@ -108,18 +108,18 @@ private:
 							if (r == 0 && c == 0) {
 								// this is us
 							} else {
-								pb::vec2i n = pb::wrap(pb::vec2i(x+c, y+r), cols, rows);
-								if (field[pb::index(n.x,n.y,cols)] == HEAD) { nc++; }
+								rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
+								if (field[rt::index(n.x,n.y,cols)] == HEAD) { nc++; }
 							}
 						}
 					}
 					if (nc == 1 || nc == 2) { current = HEAD; }
 				}
-				next[pb::index(x,y,cols)] = current;
+				next[rt::index(x,y,cols)] = current;
 
 				// update pixelbuffer from (current) field
-				pb::RGBAColor color = BLACK;
-				int index = pb::index(x,y,cols);
+				rt::RGBAColor color = BLACK;
+				int index = rt::index(x,y,cols);
 				if (field[index] == CONDUCTOR) {
 					color = YELLOW;
 				} else if (field[index] == HEAD) {
@@ -156,7 +156,7 @@ private:
 
 int main( void )
 {
-	pb::PixelBuffer pixelbuffer("assets/wire01.pbf");
+	rt::PixelBuffer pixelbuffer("assets/wire01.pbf");
 	MyApp application(pixelbuffer, 8);
 
 	while (!application.quit())

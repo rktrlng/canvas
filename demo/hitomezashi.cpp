@@ -33,7 +33,7 @@ public:
 		hitomezashi();
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }

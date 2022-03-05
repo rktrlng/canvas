@@ -44,7 +44,7 @@ public:
 	// 	init();
 	// }
 
-	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	{
 		std::srand(std::time(nullptr));
 		initSolver();
@@ -78,7 +78,7 @@ public:
 				PCell* cell = new PCell();
 				cell->col = x;
 				cell->row = y;
-				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
+				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
 				// if (color == BLACK) { cell->wall = true; } // wall (default)
 				if (color == WHITE || color == ORANGE || color == GRAY) { cell->wall = false; } // empty solverfield
 				if (color == RED)   { cell->wall = false; start = cell; } // startpoint
@@ -139,22 +139,22 @@ private:
 		size_t index = 0;
 
 		// look right
-		index = pb::index(x+1,y,cols);
+		index = rt::index(x+1,y,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look left
-		index = pb::index(x-1,y,cols);
+		index = rt::index(x-1,y,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look down
-		index = pb::index(x,y+1,cols);
+		index = rt::index(x,y+1,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look up
-		index = pb::index(x,y-1,cols);
+		index = rt::index(x,y-1,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
@@ -209,8 +209,8 @@ private:
 
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				pb::RGBAColor color = BLACK;
-				int index = pb::index(x, y, cols);
+				rt::RGBAColor color = BLACK;
+				int index = rt::index(x, y, cols);
 				PCell* cell = solverfield[index];
 				if (cell->wall) {
 					color = BLACK;
@@ -220,14 +220,14 @@ private:
 				if (cell->visited) {
 					// color = GRAY;
 				}
-				pb::vec2i pos = pb::vec2i(x, y);
+				rt::vec2i pos = rt::vec2i(x, y);
 				pixelbuffer.setPixel(pos.x, pos.y, color);
 			}
 		}
 
 		// draw solution so far
 		for (size_t i = 0; i < solution.size(); i++) {
-			pixelbuffer[pb::index(solution[i]->col, solution[i]->row, cols)] = ORANGE;
+			pixelbuffer[rt::index(solution[i]->col, solution[i]->row, cols)] = ORANGE;
 		}
 
 		// draw start + end
@@ -268,7 +268,7 @@ int main(int argc, char *argv[])
 		filename = argv[1];
 	}
 
-	pb::PixelBuffer pixelbuffer(filename);
+	rt::PixelBuffer pixelbuffer(filename);
 	MyApp application(pixelbuffer, 8);
 	application.filename = filename;
 

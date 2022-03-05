@@ -21,7 +21,7 @@ public:
 		font();
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -50,7 +50,7 @@ public:
 	}
 
 private:
-	std::vector<pb::PixelBuffer> glyphs;
+	std::vector<rt::PixelBuffer> glyphs;
 	void font()
 	{
 		static bool cursor = true;
@@ -90,10 +90,10 @@ private:
 
 	void fillGlyphs()
 	{
-		pb::PixelBuffer font = pb::PixelBuffer("assets/applefont.pbf");
+		rt::PixelBuffer font = rt::PixelBuffer("assets/applefont.pbf");
 		for (size_t i = 0; i < 512; i += 6)
 		{
-			pb::PixelBuffer character = font.copy(i,0,6,8);
+			rt::PixelBuffer character = font.copy(i,0,6,8);
 			glyphs.push_back(character);
 		}
 		

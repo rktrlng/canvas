@@ -19,7 +19,7 @@ public:
 		std::srand(std::time(nullptr));
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -51,7 +51,7 @@ private:
 
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				pb::RGBAColor color = pb::RGBAColor(rand()%255, rand()%255, rand()%255, 255);
+				rt::RGBAColor color = rt::RGBAColor(rand()%255, rand()%255, rand()%255, 255);
 				pixelbuffer.setPixel(x, y, color);
 			}
 		}

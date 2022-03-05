@@ -22,7 +22,7 @@ public:
 		std::srand(std::time(nullptr));
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -113,20 +113,20 @@ private:
 
 		for (size_t y = 0; y < rows; y += gridsize) {
 			if (y%doublegrid == 0) {
-				pixelbuffer.drawLine(0, y, cols, y, pb::RGBAColor(light, alpha));
+				pixelbuffer.drawLine(0, y, cols, y, rt::RGBAColor(light, alpha));
 			} else {
-				pixelbuffer.drawLine(0, y, cols, y, pb::RGBAColor(dark, alpha));
+				pixelbuffer.drawLine(0, y, cols, y, rt::RGBAColor(dark, alpha));
 			}
 		}
 		for (size_t x = 0; x < cols; x += gridsize) {
 			if (x%doublegrid == 0) {
-				pixelbuffer.drawLine(x, 0, x, rows, pb::RGBAColor(light, alpha));
+				pixelbuffer.drawLine(x, 0, x, rows, rt::RGBAColor(light, alpha));
 			} else {
-				pixelbuffer.drawLine(x, 0, x, rows, pb::RGBAColor(dark, alpha));
+				pixelbuffer.drawLine(x, 0, x, rows, rt::RGBAColor(dark, alpha));
 			}
 		}
-		pixelbuffer.drawLine(cols-1, 0, cols-1, rows-1, pb::RGBAColor(light, alpha));
-		pixelbuffer.drawLine(0, rows-1, cols-1, rows-1, pb::RGBAColor(light, alpha));
+		pixelbuffer.drawLine(cols-1, 0, cols-1, rows-1, rt::RGBAColor(light, alpha));
+		pixelbuffer.drawLine(0, rows-1, cols-1, rows-1, rt::RGBAColor(light, alpha));
 
 		// ##############################################
 		layers[0]->lock();

@@ -15,7 +15,7 @@
 class MyApp : public cnv::Application
 {
 private:
-	pb::RGBAColor color = RED;
+	rt::RGBAColor color = RED;
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
 	{
@@ -23,7 +23,7 @@ public:
 		layers[0]->pixelbuffer.fill(BLACK);
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -42,7 +42,7 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			updatePixels();
-			color = pb::rotate(color, 0.005f);
+			color = rt::rotate(color, 0.005f);
 			frametime = 0.0f;
 		}
 	}
@@ -55,7 +55,7 @@ private:
 		size_t rows = pixelbuffer.header().height;
 
 		static float angle = 0.0f;
-		pb::vec2f pos = pb::vec2f(16, 0);
+		rt::vec2f pos = rt::vec2f(16, 0);
 		pos.rotate(angle);
 		angle += 0.05f;
 
@@ -65,7 +65,7 @@ private:
 		layers[0]->lock();
 	}
 
-	void drawCross(int x, int y, pb::RGBAColor color)
+	void drawCross(int x, int y, rt::RGBAColor color)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 

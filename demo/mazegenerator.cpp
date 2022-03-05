@@ -49,7 +49,7 @@ public:
 		initGenerator();
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -122,7 +122,7 @@ private:
 		int index = 0;
 
 		// look right
-		index = pb::index(x+1,y,WIDTH);
+		index = rt::index(x+1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x < WIDTH-1) {
 			if (!field[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
@@ -131,7 +131,7 @@ private:
 			}
 		}
 		// look left
-		index = pb::index(x-1,y,WIDTH);
+		index = rt::index(x-1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x > 0 ) {
 			if (!field[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
@@ -140,7 +140,7 @@ private:
 			}
 		}
 		// look down
-		index = pb::index(x,y+1,WIDTH);
+		index = rt::index(x,y+1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!field[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
@@ -149,7 +149,7 @@ private:
 			}
 		}
 		// look up
-		index = pb::index(x,y-1,WIDTH);
+		index = rt::index(x,y-1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!field[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
@@ -230,15 +230,15 @@ private:
 
 		for (size_t y = 0; y < HEIGHT*2; y+=2) {
 			for (size_t x = 0; x < WIDTH*2; x+=2) {
-				pb::RGBAColor color = BLACK;
-				int index = pb::index(x/2, y/2, WIDTH);
+				rt::RGBAColor color = BLACK;
+				int index = rt::index(x/2, y/2, WIDTH);
 				MCell* cell = field[index];
 				if (cell->visited) {
 					color = WHITE;
 				} else {
 					color = GRAY;
 				}
-				pb::vec2i pos = pb::vec2i(x+1, y+1);
+				rt::vec2i pos = rt::vec2i(x+1, y+1);
 				pixelbuffer.setPixel(pos.x, pos.y, color);
 
 				if (current == cell) {

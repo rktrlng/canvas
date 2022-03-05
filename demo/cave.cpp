@@ -20,7 +20,7 @@ public:
 	// 	init();
 	// }
 
-	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	{
 		init();
 	}
@@ -43,7 +43,7 @@ public:
 		int counter = 0;
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
+				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
 				if (color == BLACK) { field[counter] = 0; }
 				if (color == WHITE) { field[counter] = 1; }
 
@@ -101,23 +101,23 @@ private:
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
 				// Apply rules for each pixel:
-				int current = field[pb::index(x,y,cols)];
+				int current = field[rt::index(x,y,cols)];
 
 				// check 8 neighbours and count the ones that are a WALL (black)
 				int nc = 0; // number of neighbour cells
 				for (int r = -1; r < 2; r++) {
 					for (int c = -1; c < 2; c++) {
-						pb::vec2i n = pb::wrap(pb::vec2i(x+c, y+r), cols, rows);
-						if (field[pb::index(n.x,n.y,cols)] == 0) { nc++; }
+						rt::vec2i n = rt::wrap(rt::vec2i(x+c, y+r), cols, rows);
+						if (field[rt::index(n.x,n.y,cols)] == 0) { nc++; }
 					}
 				}
 				if (nc < 4) { current = 1; }
 				if (nc > 4) { current = 0; }
-				next[pb::index(x,y,cols)] = current;
+				next[rt::index(x,y,cols)] = current;
 
 				// update pixelbuffer from (current) field
-				pb::RGBAColor color;
-				int index = pb::index(x,y,cols);
+				rt::RGBAColor color;
+				int index = rt::index(x,y,cols);
 				if (field[index] == 0) {
 					color = BLACK;
 				} else {
@@ -156,7 +156,7 @@ private:
 
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				pb::RGBAColor color = BLACK;
+				rt::RGBAColor color = BLACK;
 				int value = rand()%100;
 				if (value < percentage) {
 					color = WHITE;
@@ -171,7 +171,7 @@ private:
 
 int main( void )
 {
-	pb::PixelBuffer pixelbuffer(160, 90, 8);
+	rt::PixelBuffer pixelbuffer(160, 90, 8);
 
 	MyApp application(pixelbuffer, 4);
 

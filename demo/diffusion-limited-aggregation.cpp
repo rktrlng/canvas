@@ -18,20 +18,20 @@ const int EDGE = 5; // save image if tree is EDGE pixels from edges
 
 struct Element
 {
-	pb::vec2i position;
-	pb::RGBAColor color;
+	rt::vec2i position;
+	rt::RGBAColor color;
 	bool fixed;
 
 	Element(int x, int y)
 	{
-		position = pb::vec2i(x, y);
+		position = rt::vec2i(x, y);
 		color = RED;
 		fixed = false;
 	}
 
 	void move()
 	{
-		pb::vec2i delta = pb::vec2i((rand()%3) - 1, (rand()%3) - 1);
+		rt::vec2i delta = rt::vec2i((rand()%3) - 1, (rand()%3) - 1);
 		position += delta;
 	}
 };
@@ -49,7 +49,7 @@ public:
 		init();
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -134,8 +134,8 @@ private:
 		{
 			int x = rand()%cols;
 			int y = rand()%rows;
-			// int x = pb::rand_bm() * cols;
-			// int y = pb::rand_bm() * rows;
+			// int x = rt::rand_bm() * cols;
+			// int y = rt::rand_bm() * rows;
 			elements.push_back(new Element(x, y));
 		}
 
@@ -192,12 +192,12 @@ private:
 			}
 
 			// Look around
-			pb::vec2i pos = elements[i]->position;
+			rt::vec2i pos = elements[i]->position;
 			for (int y = -1; y < 2; y++) {
 				for (int x = -1; x < 2; x++) {
 					if (y==0 && x==0) continue;
-					pb::vec2i neighbour = pb::vec2i(pos.x + x, pos.y + y);
-					pb::RGBAColor color = pixelbuffer.getPixel(neighbour.x, neighbour.y);
+					rt::vec2i neighbour = rt::vec2i(pos.x + x, pos.y + y);
+					rt::RGBAColor color = pixelbuffer.getPixel(neighbour.x, neighbour.y);
 					if (color != TRANSPARENT) {
 						// we found the tree
 						elements[i]->fixed = true;
@@ -227,7 +227,7 @@ private:
 			if (elements[i]->fixed) {
 				continue;
 			}
-			elements[i]->color = pb::rotate(elements[i]->color, ROT_SPEED);
+			elements[i]->color = rt::rotate(elements[i]->color, ROT_SPEED);
 		}
 	}
 

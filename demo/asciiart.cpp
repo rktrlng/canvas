@@ -12,7 +12,7 @@ int main(int argc, char *argv[])
 		filename = argv[1];
 	}
 
-	pb::PixelBuffer pb;
+	rt::PixelBuffer pb;
 	pb.read(filename);
 
 	std::string characters = " .-:+=*%#@";
@@ -27,9 +27,9 @@ int main(int argc, char *argv[])
 
 	for (size_t y = 0; y < rows; y++) {
 		for (size_t x = 0; x < cols; x++) {
-			pb::RGBAColor color = pb.getPixel(x, y);
+			rt::RGBAColor color = pb.getPixel(x, y);
 			int avg = (color.r + color.g + color.b) / 3;
-			size_t index = pb::map(avg, 0, 255, 0, step);
+			size_t index = rt::map(avg, 0, 255, 0, step);
 			std::cout << ramp[index];
 		}
 		std::cout << std::endl;

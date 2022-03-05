@@ -57,7 +57,7 @@ int main(int argc, char *argv[])
 	}
 
 	// read .pbf
-	pb::PixelBuffer pixelbuffer;
+	rt::PixelBuffer pixelbuffer;
 	pixelbuffer.read(filename);
 
 	int width = pixelbuffer.header().width;

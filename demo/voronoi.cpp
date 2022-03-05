@@ -13,8 +13,8 @@
 
 struct Agent
 {
-	pb::vec2i position;
-	pb::RGBAColor color;
+	rt::vec2i position;
+	rt::RGBAColor color;
 
 	Agent(int width, int height)
 	{
@@ -27,7 +27,7 @@ struct Agent
 
 	void move()
 	{
-		pb::vec2i delta((rand()%3)-1, (rand()%3)-1);
+		rt::vec2i delta((rand()%3)-1, (rand()%3)-1);
 		position += delta;
 	}
 };
@@ -48,7 +48,7 @@ public:
 		}
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -93,12 +93,12 @@ private:
 		size_t cols = pixelbuffer.header().width;
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				int max_distance = pb::vec2i(rows, cols).mag();
+				int max_distance = rt::vec2i(rows, cols).mag();
 				int min_distance = max_distance;
 				Agent* agent = agents[0];
 				for (size_t i = 0; i < agents.size(); i++)
 				{
-					pb::vec2i delta = pb::vec2i(x,y) - agents[i]->position;
+					rt::vec2i delta = rt::vec2i(x,y) - agents[i]->position;
 					int current_distance = delta.mag();
 					if (current_distance < min_distance)
 					{
@@ -108,8 +108,8 @@ private:
 				}
 				
 				// map min_distance to color
-				pb::RGBAColor color = agent->color;
-				// int value = pb::map(min_distance, 0, max_distance, 0, 255);
+				rt::RGBAColor color = agent->color;
+				// int value = rt::map(min_distance, 0, max_distance, 0, 255);
 				// color.r = value;
 				// color.g = value;
 				// color.b = value;

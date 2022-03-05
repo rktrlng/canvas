@@ -26,7 +26,7 @@ public:
 		}
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	//
 	// }
@@ -106,7 +106,7 @@ private:
 		// draw all the rows
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				pb::RGBAColor color = WHITE;
+				rt::RGBAColor color = WHITE;
 				if (row[x]) {
 					color = BLACK;
 				}

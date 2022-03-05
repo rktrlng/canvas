@@ -65,7 +65,7 @@ private:
 	PCell* start = nullptr;
 	PCell* end = nullptr;
 
-	std::vector<pb::RGBAColor> palette;
+	std::vector<rt::RGBAColor> palette;
 
 public:
 	MyApp(uint16_t width, uint16_t height, uint8_t bitdepth, uint8_t factor) : cnv::Application(width, height, bitdepth, factor)
@@ -75,7 +75,7 @@ public:
 		initGenerator();
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -245,15 +245,15 @@ private:
 
 		for (size_t y = 0; y < HEIGHT*2; y+=2) {
 			for (size_t x = 0; x < WIDTH*2; x+=2) {
-				pb::RGBAColor color = BLACK;
-				int index = pb::index(x/2, y/2, WIDTH);
+				rt::RGBAColor color = BLACK;
+				int index = rt::index(x/2, y/2, WIDTH);
 				MCell* cell = generatorfield[index];
 				if (cell->visited) {
 					color = WHITE;
 				} else {
 					color = GRAY;
 				}
-				pb::vec2i pos = pb::vec2i(x+1, y+1);
+				rt::vec2i pos = rt::vec2i(x+1, y+1);
 				pixelbuffer.setPixel(pos.x, pos.y, color);
 
 				if (gencurrent == cell) {
@@ -284,7 +284,7 @@ private:
 		int index = 0;
 
 		// look right
-		index = pb::index(x+1,y,WIDTH);
+		index = rt::index(x+1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x < WIDTH-1) {
 			if (!generatorfield[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
@@ -293,7 +293,7 @@ private:
 			}
 		}
 		// look left
-		index = pb::index(x-1,y,WIDTH);
+		index = rt::index(x-1,y,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 && x > 0 ) {
 			if (!generatorfield[index]->visited) {
 				for (size_t i = 0; i < hbias; i++) {
@@ -302,7 +302,7 @@ private:
 			}
 		}
 		// look down
-		index = pb::index(x,y+1,WIDTH);
+		index = rt::index(x,y+1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!generatorfield[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
@@ -311,7 +311,7 @@ private:
 			}
 		}
 		// look up
-		index = pb::index(x,y-1,WIDTH);
+		index = rt::index(x,y-1,WIDTH);
 		if( index < WIDTH*HEIGHT && index >= 0 ) {
 			if (!generatorfield[index]->visited) {
 				for (size_t i = 0; i < vbias; i++) {
@@ -382,7 +382,7 @@ private:
 				PCell* cell = new PCell();
 				cell->col = x;
 				cell->row = y;
-				pb::RGBAColor color = pixelbuffer.getPixel(x, y);
+				rt::RGBAColor color = pixelbuffer.getPixel(x, y);
 				// if (color == BLACK) { cell->wall = true; } // wall (default)
 				if (color == WHITE || color == ORANGE || color == GRAY) { cell->wall = false; } // empty solverfield
 				if (color == RED)   { cell->wall = false; start = cell; } // startpoint
@@ -394,11 +394,11 @@ private:
 		solution.push_back(seeker);
 
 		palette.clear();
-		pb::RGBAColor color = RED;
+		rt::RGBAColor color = RED;
 		size_t amount = 600;
 		for (size_t i = 0; i < amount; i++) {
 			palette.push_back(color);
-			color = pb::rotate(color, 1.0f / amount);
+			color = rt::rotate(color, 1.0f / amount);
 		}
 	}
 
@@ -473,8 +473,8 @@ private:
 
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				pb::RGBAColor color = BLACK;
-				int index = pb::index(x, y, cols);
+				rt::RGBAColor color = BLACK;
+				int index = rt::index(x, y, cols);
 				PCell* cell = solverfield[index];
 				if (cell->wall) {
 					color = BLACK;
@@ -484,22 +484,22 @@ private:
 				if (cell->visited) {
 					// color = GRAY;
 				}
-				pb::vec2i pos = pb::vec2i(x, y);
+				rt::vec2i pos = rt::vec2i(x, y);
 				pixelbuffer.setPixel(pos.x, pos.y, color);
 			}
 		}
 
 		// draw solution so far
 		for (size_t i = 0; i < solution.size(); i++) {
-			// pixelbuffer[pb::index(solution[i]->col, solution[i]->row, cols)] = ORANGE;
-			pb::RGBAColor color = palette[i % palette.size()];
-			pixelbuffer[pb::index(solution[i]->col, solution[i]->row, cols)] = color;
+			// pixelbuffer[rt::index(solution[i]->col, solution[i]->row, cols)] = ORANGE;
+			rt::RGBAColor color = palette[i % palette.size()];
+			pixelbuffer[rt::index(solution[i]->col, solution[i]->row, cols)] = color;
 		}
 
 		if (state == State::VICTORY) {
 			for (size_t i = 0; i < palette.size(); i++) {
-				pb::RGBAColor color = palette[i];
-				palette[i] = pb::rotate(color, 1.0f - deltatime);
+				rt::RGBAColor color = palette[i];
+				palette[i] = rt::rotate(color, 1.0f - deltatime);
 			}
 		}
 
@@ -520,22 +520,22 @@ private:
 		size_t index = 0;
 
 		// look right
-		index = pb::index(x+1,y,cols);
+		index = rt::index(x+1,y,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look left
-		index = pb::index(x-1,y,cols);
+		index = rt::index(x-1,y,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look down
-		index = pb::index(x,y+1,cols);
+		index = rt::index(x,y+1,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}
 		// look up
-		index = pb::index(x,y-1,cols);
+		index = rt::index(x,y-1,cols);
 		if (!solverfield[index]->wall && !solverfield[index]->visited) {
 			neighbours.push_back(solverfield[index]);
 		}

@@ -19,7 +19,7 @@ public:
 	// 
 	// }
 
-	MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor, bool locked) : cnv::Application(pixelbuffer, factor, locked)
+	MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor, bool locked) : cnv::Application(pixelbuffer, factor, locked)
 	{
 		luminance();
 		floyd_steinberg(1);
@@ -79,7 +79,7 @@ private:
 		// copy RGBA pixels to Color16 pixels
 		std::vector<Color16> values;
 		for (size_t i = 0; i < rows*cols; i++) {
-			pb::RGBAColor p = pixelbuffer[i];
+			rt::RGBAColor p = pixelbuffer[i];
 			Color16 c16 = { p.r, p.g, p.b, p.a };
 			values.push_back(c16);
 		}
@@ -89,7 +89,7 @@ private:
 		// 	for each x from left to right do
 		for (size_t y = 0; y < rows-1; y++) {
 			for (size_t x = 1; x < cols-1; x++) {
-				size_t index = pb::index(x, y, cols);
+				size_t index = rt::index(x, y, cols);
 				// oldpixel := pixels[x][y]
 				Color16 oldpixel = values[index];
 				// newpixel := find_closest_palette_color(oldpixel)
@@ -107,7 +107,7 @@ private:
 				float errorB = oldpixel.b - newpixel.b;
 
 				// pixels[x + 1][y    ] := pixels[x + 1][y    ] + quant_error × 7 / 16
-				index = pb::index(x+1, y, cols);
+				index = rt::index(x+1, y, cols);
 				Color16 east = values[index];
 				c16.r = round(east.r + errorR * (7.0 / 16.0));
 				c16.g = round(east.g + errorG * (7.0 / 16.0));
@@ -115,7 +115,7 @@ private:
 				values[index] = c16;
 				
 				// pixels[x - 1][y + 1] := pixels[x - 1][y + 1] + quant_error × 3 / 16
-				index = pb::index(x-1, y+1, cols);
+				index = rt::index(x-1, y+1, cols);
 				Color16 southwest = values[index];
 				c16.r = round(southwest.r + errorR * (3.0 / 16.0));
 				c16.g = round(southwest.g + errorG * (3.0 / 16.0));
@@ -123,7 +123,7 @@ private:
 				values[index] = c16;
 
 				// pixels[x    ][y + 1] := pixels[x    ][y + 1] + quant_error × 5 / 16
-				index = pb::index(x, y+1, cols);
+				index = rt::index(x, y+1, cols);
 				Color16 south = values[index];
 				c16.r = round(south.r + errorR * (5.0 / 16.0));
 				c16.g = round(south.g + errorG * (5.0 / 16.0));
@@ -131,7 +131,7 @@ private:
 				values[index] = c16;
 
 				// pixels[x + 1][y + 1] := pixels[x + 1][y + 1] + quant_error × 1 / 16
-				index = pb::index(x+1, y+1, cols);
+				index = rt::index(x+1, y+1, cols);
 				Color16 southeast = values[index];
 				c16.r = round(southeast.r + errorR * (1.0 / 16.0));
 				c16.g = round(southeast.g + errorG * (1.0 / 16.0));
@@ -146,7 +146,7 @@ private:
 			if (c16.r > 255) { c16.r = 255; } if (c16.r < 0) { c16.r = 0; }
 			if (c16.g > 255) { c16.g = 255; } if (c16.g < 0) { c16.g = 0; }
 			if (c16.b > 255) { c16.b = 255; } if (c16.b < 0) { c16.b = 0; }
-			pb::RGBAColor color;
+			rt::RGBAColor color;
 			color.r = static_cast<uint8_t>(c16.r);
 			color.g = static_cast<uint8_t>(c16.g);
 			color.b = static_cast<uint8_t>(c16.b);
@@ -159,7 +159,7 @@ private:
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		for (size_t i = 0; i < pixelbuffer.pixels().size(); i++) {
-			pixelbuffer.pixels()[i] = pb::luminance(pixelbuffer.pixels()[i]);
+			pixelbuffer.pixels()[i] = rt::luminance(pixelbuffer.pixels()[i]);
 		}
 	}
 
@@ -184,7 +184,7 @@ private:
 
 int main( void )
 {
-	pb::PixelBuffer pixelbuffer("assets/milkmaid.pbf");
+	rt::PixelBuffer pixelbuffer("assets/milkmaid.pbf");
 	MyApp application(pixelbuffer, 3, true);
 
 	while (!application.quit())

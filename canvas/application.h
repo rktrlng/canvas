@@ -22,7 +22,7 @@ class Application
 {
 public:
 	Application(uint16_t width, uint16_t height, uint8_t bitdepth = 24, uint8_t factor = 1);
-	Application(pb::PixelBuffer& pixelbuffer, uint8_t factor = 1, bool setlocked = false);
+	Application(rt::PixelBuffer& pixelbuffer, uint8_t factor = 1, bool setlocked = false);
 	virtual ~Application();
 
 	int quit();

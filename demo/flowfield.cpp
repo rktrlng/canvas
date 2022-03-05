@@ -17,8 +17,8 @@ class MyApp : public cnv::Application
 {
 private:
 	cnv::PerlinNoise pn;
-	std::vector<pb::vec2f> field;
-	std::deque<pb::vec2f> particles;
+	std::vector<rt::vec2f> field;
+	std::deque<rt::vec2f> particles;
 	size_t flowscale = 8;
 	const size_t maxparticles = 2500;
 	const double zspeed = 0.001; // z-noise change
@@ -39,12 +39,12 @@ public:
 
 		// fill list of particles half way
 		for (size_t i = 0; i < maxparticles/2; i++) {
-			pb::vec2f p = { pb::rand_float()*width, pb::rand_float()*height };
+			rt::vec2f p = { rt::rand_float()*width, rt::rand_float()*height };
 			particles.push_back(p);
 		}
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -85,7 +85,7 @@ private:
 		for (size_t i = 0; i < particles.size(); i++) {
 			auto& particle = particles[i];
 
-			int flowindex = pb::index(particle.x/flowscale, particle.y/flowscale, cols/flowscale);
+			int flowindex = rt::index(particle.x/flowscale, particle.y/flowscale, cols/flowscale);
 			particle.x += field[flowindex].x * deltatime * pspeed;
 			particle.y += field[flowindex].y * deltatime * pspeed;
 
@@ -97,15 +97,15 @@ private:
 
 		// draw particles
 		for (size_t i = 0; i < particles.size(); i++) {
-			pb::vec2f particle = particles[i];
+			rt::vec2f particle = particles[i];
 			pixelbuffer.setPixel(particle.x, particle.y, WHITE);
 		}
 
 		// handle number of particles
 		for (int i = 0; i < at_once; i++) {
-			pb::vec2f p = { pb::rand_float()*cols, pb::rand_float()*rows };
-			// pb::vec2f p = { pb::rand_bm()*cols, pb::rand_bm()*rows };
-			// pb::vec2f p = { (float)cols/2, (float)rows/2 };
+			rt::vec2f p = { rt::rand_float()*cols, rt::rand_float()*rows };
+			// rt::vec2f p = { rt::rand_bm()*cols, rt::rand_bm()*rows };
+			// rt::vec2f p = { (float)cols/2, (float)rows/2 };
 
 			particles.push_back(p);
 
@@ -118,10 +118,10 @@ private:
 
 		// Colorize
 		for (size_t i = 0; i < pixelbuffer.pixels().size(); i++) {
-			pb::HSVAColor hsva = pb::RGBA2HSVA(pixelbuffer[i]);
+			rt::HSVAColor hsva = rt::RGBA2HSVA(pixelbuffer[i]);
 			hsva.h = 0.999f - hsva.v;
 			hsva.s = 1;
-			pixelbuffer[i] = pb::HSVA2RGBA(hsva);
+			pixelbuffer[i] = rt::HSVA2RGBA(hsva);
 		}
 	}
 	
@@ -145,9 +145,9 @@ private:
 		// noise to field values
 		for (size_t y = 0; y < rows; y += flowscale) {
 			for (size_t x = 0; x < cols; x += flowscale) {
-				pb::RGBAColor color = pixelbuffer.getPixel(x+flowscale/2, y+flowscale/2);
-				float angle = pb::map(color.r, min, max, -3.1415926f*1.9f, 3.1415926f*1.9f);
-				pb::vec2f vec = pb::vec2f::fromAngle(angle);
+				rt::RGBAColor color = pixelbuffer.getPixel(x+flowscale/2, y+flowscale/2);
+				float angle = rt::map(color.r, min, max, -3.1415926f*1.9f, 3.1415926f*1.9f);
+				rt::vec2f vec = rt::vec2f::fromAngle(angle);
 				field.push_back(vec);
 			}
 		}
@@ -206,8 +206,8 @@ private:
 				// posterize
 				if (false) {
 					int numcolors = 9;
-					p = pb::map(p, 0, 255, 0, numcolors); // narrow down
-					p = pb::map(p, 0, numcolors, 0, 255); // stretch back
+					p = rt::map(p, 0, 255, 0, numcolors); // narrow down
+					p = rt::map(p, 0, numcolors, 0, 255); // stretch back
 				}
 
 				// Wood like structure
@@ -217,7 +217,7 @@ private:
 					p = 255 * n;
 				}
 
-				pb::RGBAColor color = pb::RGBAColor(p, p, p, 255);
+				rt::RGBAColor color = rt::RGBAColor(p, p, p, 255);
 				pixelbuffer.setPixel(j, i, color);
 			}
 		}

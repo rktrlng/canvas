@@ -26,7 +26,7 @@ public:
 		pn = cnv::PerlinNoise(seed);
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -111,7 +111,7 @@ private:
 					p = 255 * n;
 				}
 
-				pb::RGBAColor color = pb::RGBAColor(p, p, p, 255);
+				rt::RGBAColor color = rt::RGBAColor(p, p, p, 255);
 				pixelbuffer.setPixel(j, i, color);
 			}
 		}

@@ -22,7 +22,7 @@ class Canvas
 {
 	public:
 		Canvas(uint16_t width, uint16_t height, uint8_t bitdepth = 32, uint8_t scale = 1);
-		Canvas(const pb::PixelBuffer& pb);
+		Canvas(const rt::PixelBuffer& pb);
 		Canvas(const std::string& imagepath);
 		virtual ~Canvas();
 
@@ -36,9 +36,9 @@ class Canvas
 		GLuint generateTexture();
 		int generateGeometry(int width, int height);
 
-		pb::PixelBuffer pixelbuffer;
+		rt::PixelBuffer pixelbuffer;
 		uint8_t scale;
-		pb::vec2i position;
+		rt::vec2i position;
 
 		// lock regenerates the texture after you're done with the pixels for the renderer to keep drawing
 		void lock() { _locked = true; generateTexture(); generateGeometry(width(), height()); }

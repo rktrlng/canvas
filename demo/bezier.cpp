@@ -22,7 +22,7 @@ public:
 		init();
 	}
 
-	// MyApp(pb::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
+	// MyApp(rt::PixelBuffer& pixelbuffer, uint8_t factor) : cnv::Application(pixelbuffer, factor)
 	// {
 	// 
 	// }
@@ -46,15 +46,15 @@ public:
 	}
 
 private:
-	pb::BezierCubic curve;
+	rt::BezierCubic curve;
 
 	void init()
 	{
 		int height = layers[0]->height();
-		curve.start = pb::vec2f(30, rand()%height);
-		curve.control_start = pb::vec2f(80, rand()%height);
-		curve.control_end = pb::vec2f(240, rand()%height);
-		curve.end = pb::vec2f(290, rand()%height);
+		curve.start = rt::vec2f(30, rand()%height);
+		curve.control_start = rt::vec2f(80, rand()%height);
+		curve.control_end = rt::vec2f(240, rand()%height);
+		curve.end = rt::vec2f(290, rand()%height);
 	}
 
 	void updatePixels()
@@ -64,7 +64,7 @@ private:
 		layers[0]->lock();
 	}
 
-	void drawBezier(const pb::BezierCubic& bezier)
+	void drawBezier(const rt::BezierCubic& bezier)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 		// size_t rows = pixelbuffer.height();
@@ -72,13 +72,13 @@ private:
 
 		pixelbuffer.fill(TRANSPARENT);
 
-		pb::vec2f delta = bezier.end - bezier.start;
+		rt::vec2f delta = bezier.end - bezier.start;
 		int segmentlength = 3;
 		float steps = delta.mag()/segmentlength;
 
-		pb::vec2f prev = pb::vec2f(0, 0);
+		rt::vec2f prev = rt::vec2f(0, 0);
 		for (float t = 0; t <= 1.01f; t += 1.0f / steps) {
-			pb::vec2f point = bezier.point(t);
+			rt::vec2f point = bezier.point(t);
 			if (t != 0) {
 				pixelbuffer.drawLine(prev.x, prev.y, point.x, point.y, RED);
 			}
@@ -113,28 +113,28 @@ private:
 
 		if (input.getMouseDown(0) || input.getMouse(0)) {
 			// get mousepos and collission spheres on points
-			pb::vec2f mousepos  = pb::vec2f(input.getMouseX(), input.getMouseY());
+			rt::vec2f mousepos  = rt::vec2f(input.getMouseX(), input.getMouseY());
 
-			pb::Circlef start   = pb::Circlef(curve.start.x, curve.start.y, 3);
-			pb::Circlef start_c = pb::Circlef(curve.control_start.x, curve.control_start.y, 3);
-			pb::Circlef end     = pb::Circlef(curve.end.x, curve.end.y, 3);
-			pb::Circlef end_c   = pb::Circlef(curve.control_end.x, curve.control_end.y, 3);
+			rt::Circlef start   = rt::Circlef(curve.start.x, curve.start.y, 3);
+			rt::Circlef start_c = rt::Circlef(curve.control_start.x, curve.control_start.y, 3);
+			rt::Circlef end     = rt::Circlef(curve.end.x, curve.end.y, 3);
+			rt::Circlef end_c   = rt::Circlef(curve.control_end.x, curve.control_end.y, 3);
 
 			// vec from end points to their handlepoints (to move control points relative to end points)
-			pb::vec2f control_vec_start = curve.control_start - curve.start;
-			pb::vec2f control_vec_end   = curve.control_end - curve.end;
+			rt::vec2f control_vec_start = curve.control_start - curve.start;
+			rt::vec2f control_vec_end   = curve.control_end - curve.end;
 
 			if (input.getMouseDown(0)) {
-				if (pb::point2circle(mousepos, start)) {
+				if (rt::point2circle(mousepos, start)) {
 					stickystart = true;
 				}
-				if (pb::point2circle(mousepos, start_c)) {
+				if (rt::point2circle(mousepos, start_c)) {
 					stickystartc = true;
 				}
-				if (pb::point2circle(mousepos, end)) {
+				if (rt::point2circle(mousepos, end)) {
 					stickyend = true;
 				}
-				if (pb::point2circle(mousepos, end_c)) {
+				if (rt::point2circle(mousepos, end_c)) {
 					stickyendc = true;
 				}
 			}

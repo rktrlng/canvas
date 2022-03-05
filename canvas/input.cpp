@@ -1,7 +1,7 @@
 /**
  * @file input.cpp
  *
- * @brief rt::Input implementation
+ * @brief cnv::Input implementation
  *
  * Copyright 2015-2022 @rktrlng
  * https://github.com/rktrlng/canvas
