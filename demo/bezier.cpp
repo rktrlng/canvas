@@ -41,6 +41,8 @@ public:
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			updatePixels();
+			layers[0]->lock();
+
 			frametime = 0.0f;
 		}
 	}
@@ -60,8 +62,6 @@ private:
 	void updatePixels()
 	{
 		drawBezier(m_curve);
-
-		layers[0]->lock();
 	}
 
 	void drawBezier(const rt::BezierCubic& bezier)
