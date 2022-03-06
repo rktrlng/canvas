@@ -1,7 +1,7 @@
 /**
- * @file start.cpp
+ * @file bezier.cpp
  *
- * @brief start
+ * @brief draw bezier curve
  *
  * Copyright 2021-2022 @rktrlng
  * https://github.com/rktrlng/canvas
@@ -53,8 +53,8 @@ private:
 	void init()
 	{
 		int height = layers[0]->height();
-		m_curve.start = rt::vec2f(30, rand()%height);
-		m_curve.control_start = rt::vec2f(80, rand()%height);
+		m_curve.begin = rt::vec2f(30, rand()%height);
+		m_curve.control_begin = rt::vec2f(80, rand()%height);
 		m_curve.control_end = rt::vec2f(240, rand()%height);
 		m_curve.end = rt::vec2f(290, rand()%height);
 	}
@@ -72,7 +72,7 @@ private:
 
 		pixelbuffer.fill(TRANSPARENT);
 
-		rt::vec2f delta = bezier.end - bezier.start;
+		rt::vec2f delta = bezier.end - bezier.begin;
 		int segmentlength = 3;
 		float steps = delta.mag()/segmentlength;
 
@@ -86,27 +86,27 @@ private:
 		}
 
 		// draw control points and lines
-		pixelbuffer.drawCircle(bezier.control_start.x, bezier.control_start.y, 3, GREEN);
+		pixelbuffer.drawCircle(bezier.control_begin.x, bezier.control_begin.y, 3, GREEN);
 		pixelbuffer.drawCircle(bezier.control_end.x, bezier.control_end.y, 3, GREEN);
-		pixelbuffer.drawLine(bezier.start.x, bezier.start.y, bezier.control_start.x, bezier.control_start.y, YELLOW);
+		pixelbuffer.drawLine(bezier.begin.x, bezier.begin.y, bezier.control_begin.x, bezier.control_begin.y, YELLOW);
 		pixelbuffer.drawLine(bezier.control_end.x, bezier.control_end.y, bezier.end.x, bezier.end.y, YELLOW);
-		// draw start and end points
-		pixelbuffer.drawCircle(bezier.start.x, bezier.start.y, 3, GREEN);
+		// draw begin and end points
+		pixelbuffer.drawCircle(bezier.begin.x, bezier.begin.y, 3, GREEN);
 		pixelbuffer.drawCircle(bezier.end.x, bezier.end.y, 3, GREEN);
 
-		// pixelbuffer.drawLine(bezier.control_start.x, bezier.control_start.y, bezier.control_end.x, bezier.control_end.y, {255, 127, 0, 240});
+		// pixelbuffer.drawLine(bezier.control_begin.x, bezier.control_begin.y, bezier.control_end.x, bezier.control_end.y, {255, 127, 0, 240});
 	}
 
 	void handleInput()
 	{
-		static bool stickystart  = false;
-		static bool stickystartc = false;
+		static bool stickybegin  = false;
+		static bool stickybeginc = false;
 		static bool stickyend    = false;
 		static bool stickyendc   = false;
 
 		if (input.getMouseUp(0)) {
-			stickystart  = false;
-			stickystartc = false;
+			stickybegin  = false;
+			stickybeginc = false;
 			stickyend    = false;
 			stickyendc   = false;
 		}
@@ -115,21 +115,21 @@ private:
 			// get mousepos and collission spheres on points
 			rt::vec2f mousepos  = rt::vec2f(input.getMouseX(), input.getMouseY());
 
-			rt::Circlef start   = rt::Circlef(m_curve.start.x, m_curve.start.y, 3);
-			rt::Circlef start_c = rt::Circlef(m_curve.control_start.x, m_curve.control_start.y, 3);
+			rt::Circlef begin   = rt::Circlef(m_curve.begin.x, m_curve.begin.y, 3);
+			rt::Circlef begin_c = rt::Circlef(m_curve.control_begin.x, m_curve.control_begin.y, 3);
 			rt::Circlef end     = rt::Circlef(m_curve.end.x, m_curve.end.y, 3);
 			rt::Circlef end_c   = rt::Circlef(m_curve.control_end.x, m_curve.control_end.y, 3);
 
 			// vec from end points to their handlepoints (to move control points relative to end points)
-			rt::vec2f control_vec_start = m_curve.control_start - m_curve.start;
+			rt::vec2f control_vec_begin = m_curve.control_begin - m_curve.begin;
 			rt::vec2f control_vec_end   = m_curve.control_end - m_curve.end;
 
 			if (input.getMouseDown(0)) {
-				if (rt::point2circle(mousepos, start)) {
-					stickystart = true;
+				if (rt::point2circle(mousepos, begin)) {
+					stickybegin = true;
 				}
-				if (rt::point2circle(mousepos, start_c)) {
-					stickystartc = true;
+				if (rt::point2circle(mousepos, begin_c)) {
+					stickybeginc = true;
 				}
 				if (rt::point2circle(mousepos, end)) {
 					stickyend = true;
@@ -140,12 +140,12 @@ private:
 			}
 
 			if (input.getMouse(0)) {
-				if (stickystart) {
-					m_curve.start = mousepos;
-					m_curve.control_start = m_curve.start + control_vec_start;
+				if (stickybegin) {
+					m_curve.begin = mousepos;
+					m_curve.control_begin = m_curve.begin + control_vec_begin;
 				}
-				if (stickystartc) {
-					m_curve.control_start = mousepos;
+				if (stickybeginc) {
+					m_curve.control_begin = mousepos;
 				}
 				if (stickyend) {
 					m_curve.end = mousepos;
