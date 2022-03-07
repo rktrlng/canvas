@@ -1,5 +1,5 @@
 # CMake entry point
-cmake_minimum_required (VERSION 2.6)
+cmake_minimum_required (VERSION 3.0)
 project (Canvas)
 
 if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
