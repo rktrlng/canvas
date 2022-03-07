@@ -130,10 +130,8 @@ private:
 			int y = (int) input.getMouseY() - layers[0]->position.y / layers[0]->scale;
 			if (m_showMenu) {
 				m_fcolor = layers[1]->pixelbuffer.getPixel(x, y);
-				std::cout << "pick color: " << m_fcolor << std::endl;
 			} else {
 				layers[0]->pixelbuffer.setPixel(x, y, m_fcolor);
-				std::cout << "paint color: " << m_fcolor << std::endl;
 			}
 		}
 
