@@ -47,14 +47,7 @@ public:
 	}
 
 private:
-	struct Color16 {
-		int16_t r = 0;
-		int16_t g = 0;
-		int16_t b = 0;
-		int16_t a = 0; // transparent
-		Color16() : r(0), g(0), b(0), a(0) {}
-		Color16(int16_t _r, int16_t _g, int16_t _b, int16_t _a) : r(_r), g(_g), b(_b), a(_a) {}
-	};
+	typedef rt::vec4_t<int16_t> Color16;
 
 	Color16 quantize_16(Color16 rgba, int factor = 1)
 	{
