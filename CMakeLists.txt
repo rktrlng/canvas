@@ -310,3 +310,12 @@ target_link_libraries(bezier # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# nca
+add_executable(nca # g++ demo/nca.cpp -o nca
+	demo/nca.cpp
+)
+target_link_libraries(nca # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
