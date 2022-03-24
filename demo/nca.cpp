@@ -18,6 +18,7 @@ class Convolution
 public:
 	rt::mat3 filter;
 	virtual float activation(float x) = 0;
+	virtual float normalize(float x) = 0;
 };
 
 
@@ -39,6 +40,11 @@ public:
 		}
 		return 0.0f;
 	}
+
+	virtual float normalize(float x) override
+	{
+		return x; // already normalized
+	}
 };
 
 
@@ -55,6 +61,12 @@ public:
 	float activation(float x) override
 	{
 		return -1.0f/(0.89f*pow(x, 2.0f)+1.0f)+1.0f;
+	}
+
+	virtual float normalize(float x) override
+	{
+		float y = rt::map(x, -1.0f, 1.0f, 0.0f, 1.0f);
+		return y;
 	}
 	
 };
@@ -79,6 +91,11 @@ public:
 	float activation(float x) override
 	{
 		return gaussian(x, 3.5f);
+	}
+
+	virtual float normalize(float x) override
+	{
+		return x; // already normalized
 	}
 
 };
@@ -129,10 +146,12 @@ public:
 		handleInput();
 
 		static float frametime = 0.0f;
-		float maxtime = 0.2f - deltatime;
+		float maxtime = 0.1f - deltatime;
 		frametime += deltatime;
 		if (frametime >= maxtime) {
 			updatePixels(convolution);
+
+			layers[0]->lock();
 			frametime = 0.0f;
 		}
 	}
@@ -146,7 +165,7 @@ private:
 
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
-				// run filter on pixels
+				// run filter on values
 				float value = 0.0f;
 				for (int j = -1; j < 2; j++) {
 					for (int i = -1; i < 2; i++) {
@@ -156,13 +175,12 @@ private:
 					}
 				}
 
+				// activate and store
 				float new_value = convolution.activation(value);
+				new_value = convolution.normalize(new_value);
 				next.push_back(new_value);
 
-				// test
-				// size_t index = rt::index(x, y, cols);
-				// values[index] = new_value;
-
+				// map from 0-1 to 0-255
 				uint8_t gray = new_value * 255;
 				rt::RGBAColor color = {gray, gray, gray, 255};
 				
