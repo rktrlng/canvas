@@ -1,10 +1,7 @@
 /**
  * @file renderer.h
- *
  * @brief cnv::Renderer header
- *
- * Copyright 2015-2022 @rktrlng
- * https://github.com/rktrlng/canvas
+ * @see https://github.com/rktrlng/pixelbuffer
  */
 
 #ifndef RENDERER_H

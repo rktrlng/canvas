@@ -1,10 +1,7 @@
 /**
  * @file canvas.cpp
- *
  * @brief cnv::Canvas implementation
- *
- * Copyright 2021-2022 @rktrlng
- * https://github.com/rktrlng/canvas
+ * @see https://github.com/rktrlng/pixelbuffer
  */
 
 #include <iostream>

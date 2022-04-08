@@ -1,10 +1,7 @@
 /**
  * @file input.h
- *
  * @brief cnv::Input header
- *
- * Copyright 2015-2022 @rktrlng
- * https://github.com/rktrlng/canvas
+ * @see https://github.com/rktrlng/pixelbuffer
  */
 
 #ifndef INPUT_H

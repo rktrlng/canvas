@@ -1,10 +1,7 @@
 /**
  * @file application.h
- *
  * @brief cnv::Application header
- *
- * Copyright 2021-2022 @rktrlng
- * https://github.com/rktrlng/canvas
+ * @see https://github.com/rktrlng/pixelbuffer
  */
 
 #ifndef APPLICATION_H

@@ -1,10 +1,7 @@
 /**
  * @file application.cpp
- *
  * @brief cnv::Application implementation
- *
- * Copyright 2021-2022 @rktrlng
- * https://github.com/rktrlng/canvas
+ * @see https://github.com/rktrlng/pixelbuffer
  */
 
 #include <canvas/application.h>

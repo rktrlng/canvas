@@ -1,10 +1,7 @@
 /**
  * @file canvas.h
- *
  * @brief cnv::Canvas header
- *
- * Copyright 2021-2022 @rktrlng
- * https://github.com/rktrlng/canvas
+ * @see https://github.com/rktrlng/pixelbuffer
  */
 
 #ifndef CANVAS_H

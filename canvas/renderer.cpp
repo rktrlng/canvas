@@ -1,10 +1,7 @@
 /**
  * @file renderer.cpp
- *
  * @brief cnv::Renderer implementation
- *
- * Copyright 2015-2022 @rktrlng
- * https://github.com/rktrlng/canvas
+ * @see https://github.com/rktrlng/pixelbuffer
  */
 
 #include <cstdio>
