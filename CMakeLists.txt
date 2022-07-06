@@ -319,3 +319,12 @@ target_link_libraries(nca # g++ -lcanvas
 	canvas
 	${ALL_GRAPHICS_LIBS}
 )
+
+# line2line
+add_executable(line2line # g++ demo/line2line.cpp -o line2line
+	demo/line2line.cpp
+)
+target_link_libraries(line2line # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
