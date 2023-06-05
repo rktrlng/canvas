@@ -1,9 +1,9 @@
 # CMake entry point
-cmake_minimum_required (VERSION 3.0)
-project (Canvas)
+cmake_minimum_required (VERSION 3.1)
+project (CANVAS)
 
 if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
-	message( FATAL_ERROR "Please select another Build Directory ! (and give it a clever name, like 'build')" )
+	message( FATAL_ERROR "Please select another Build Directory (and give it a clever name, like 'build')." )
 endif()
 if( CMAKE_SOURCE_DIR MATCHES " " )
 	message( "Your Source Directory contains spaces. If you experience problems when compiling, this can be the cause." )
@@ -12,12 +12,15 @@ if( CMAKE_BINARY_DIR MATCHES " " )
 	message( "Your Build Directory contains spaces. If you experience problems when compiling, this can be the cause." )
 endif()
 
-# Compile external dependencies
+
 set(OpenGL_GL_PREFERENCE GLVND)
 find_package(OpenGL REQUIRED)
 
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED on)
+
 if(UNIX)
-	set(CMAKE_CXX_FLAGS "-Wall -Werror -std=c++11 -O2")
+	set(CMAKE_CXX_FLAGS "-Wall -Werror -O2")
 
 	# For leak-checking and profiling, add '-pg' to CXX flags
 	# set(CMAKE_CXX_FLAGS "-Wall -pg -std=c++11 -O2")
