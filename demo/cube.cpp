@@ -68,12 +68,13 @@ private:
 		// define transform for object
 		rt::vec4f scale = rt::vec4f(125.0f, 125.0f, 125.0f, 0.0f);
 		rt::vec4f rotation = rt::vec4f(angle, angle + M_PI/3, angle - M_PI/3, 0.0f);
-		rt::vec4f translation = rt::vec4f(pixelbuffer.width()/2, pixelbuffer.height()/2, 0.0f, 1.0f);
+		rt::vec4f translation = rt::vec4f(cols/2, rows/2, 0.0f, 0.0f);
 
 		// create modelmatrix
 		rt::mat4f model = rt::modelMatrix(translation, rotation, scale);
 		rt::mat4f view = rt::mat4f(); // identity for now...
-		rt::mat4f projection = rt::perspectiveMatrix(92.0f, cols/rows, 0.01f, 1000.0f);
+		// rt::mat4f projection = rt::perspectiveMatrix(92.0f, cols/rows, 0.01f, 1000.0f);
+		rt::mat4f projection = rt::mat4f();
 
 		// create mvp
 		rt::mat4f mvp = projection * view * model;
