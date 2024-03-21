@@ -1,5 +1,5 @@
 # CMake entry point
-cmake_minimum_required (VERSION 3.1)
+cmake_minimum_required (VERSION 3.12)
 project (CANVAS)
 
 if( CMAKE_BINARY_DIR STREQUAL CMAKE_SOURCE_DIR )
@@ -18,6 +18,7 @@ find_package(OpenGL REQUIRED)
 
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED on)
+set(DEFAULT_BUILD_TYPE "Release")
 
 if(UNIX)
 	set(CMAKE_CXX_FLAGS "-Wall -Werror -O2")
