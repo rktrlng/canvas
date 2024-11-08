@@ -85,8 +85,8 @@ private:
 		static double z = 0.0f;
 		z += 0.005f;
 
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
+		size_t rows = pixelbuffer.height();
+		size_t cols = pixelbuffer.width();
 		for (size_t i = 0; i < rows; i++) {
 			for (size_t j = 0; j < cols; j++) {
 				double x = (double)j/((double)cols);

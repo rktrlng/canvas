@@ -55,8 +55,8 @@ public:
 private:
 	void drawPixels() {
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		size_t cols = pixelbuffer.header().width;
-		size_t rows = pixelbuffer.header().height;
+		size_t cols = pixelbuffer.width();
+		size_t rows = pixelbuffer.height();
 		layers[0]->pixelbuffer.drawSquare(0, 0, cols-1, rows-1, {255, 255, 255, 64});
 	}
 

@@ -51,8 +51,8 @@ private:
 	void updatePixels()
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		size_t cols = pixelbuffer.header().width;
-		size_t rows = pixelbuffer.header().height;
+		size_t cols = pixelbuffer.width();
+		size_t rows = pixelbuffer.height();
 
 		static float angle = 0.0f;
 		rt::vec2f pos = rt::vec2f(16, 0);

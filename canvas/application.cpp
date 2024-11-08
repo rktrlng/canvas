@@ -16,12 +16,12 @@ Application::Application(uint16_t width, uint16_t height, uint8_t bitdepth, uint
 }
 
 Application::Application(rt::PixelBuffer& pixelbuffer, uint8_t factor, bool setlocked /* false */) :
-	renderer(pixelbuffer.header().width * factor, pixelbuffer.header().height * factor),
+	renderer(pixelbuffer.width() * factor, pixelbuffer.height() * factor),
 	input(renderer.window())
 {
-	uint16_t cols = pixelbuffer.header().width;
-	uint16_t rows = pixelbuffer.header().height;
-	layers.push_back( new cnv::Canvas(cols, rows, pixelbuffer.header().bitdepth, factor) );
+	uint16_t cols = pixelbuffer.width();
+	uint16_t rows = pixelbuffer.height();
+	layers.push_back( new cnv::Canvas(cols, rows, pixelbuffer.bitdepth(), factor) );
 	layers[0]->pixelbuffer = pixelbuffer;
 	if (setlocked)
 	{

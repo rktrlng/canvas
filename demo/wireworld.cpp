@@ -41,8 +41,8 @@ public:
 	void init()
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		uint16_t cols = pixelbuffer.header().width;
-		uint16_t rows = pixelbuffer.header().height;
+		uint16_t cols = pixelbuffer.width();
+		uint16_t rows = pixelbuffer.height();
 		
 		// fill m_field for wireworld
 		m_field = std::vector<uint8_t>(rows*cols, 0);
@@ -82,8 +82,8 @@ private:
 	{
 		// get pixelbuffer, rows and cols
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
+		size_t rows = pixelbuffer.height();
+		size_t cols = pixelbuffer.width();
 
 		// set the next state
 		std::vector<uint8_t> next = std::vector<uint8_t>(cols*rows, 0);

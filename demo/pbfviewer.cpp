@@ -60,8 +60,8 @@ int main(int argc, char *argv[])
 	rt::PixelBuffer pixelbuffer;
 	pixelbuffer.read(filename);
 
-	int width = pixelbuffer.header().width;
-	int height = pixelbuffer.header().height;
+	int width = pixelbuffer.width();
+	int height = pixelbuffer.height();
 
 	// Create Renderer BEFORE creating a Canvas
 	cnv::Renderer renderer = cnv::Renderer(width*factor, height*factor);

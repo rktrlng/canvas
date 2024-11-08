@@ -60,8 +60,8 @@ private:
 		angle += 1 * deltaTime;
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		float cols = (float) pixelbuffer.header().width;
-		float rows = (float) pixelbuffer.header().height;
+		float cols = (float) pixelbuffer.width();
+		float rows = (float) pixelbuffer.height();
 
 		pixelbuffer.fill(BLACK);
 

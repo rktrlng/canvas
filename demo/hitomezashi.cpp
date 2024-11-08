@@ -25,8 +25,8 @@ public:
 		std::srand(std::time(nullptr));
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		size_t cols = pixelbuffer.header().width;
-		size_t rows = pixelbuffer.header().height;
+		size_t cols = pixelbuffer.width();
+		size_t rows = pixelbuffer.height();
 		m_xstitch = randomSequence(cols/STEP);
 		m_ystitch = randomSequence(rows/STEP);
 
@@ -68,8 +68,8 @@ private:
 
 	std::vector<bool> repeatSequence(uint64_t value)
 	{
-		size_t amount_h = layers[0]->pixelbuffer.header().width / STEP;
-		size_t amount_v = layers[0]->pixelbuffer.header().height / STEP;
+		size_t amount_h = layers[0]->pixelbuffer.width() / STEP;
+		size_t amount_v = layers[0]->pixelbuffer.height() / STEP;
 		size_t amount = amount_h > amount_v ? amount_h : amount_v;
 		std::vector<bool> sequence;
 		size_t counter = 0;
@@ -90,8 +90,8 @@ private:
 		layers[0]->pixelbuffer.fill(WHITE);
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		size_t cols = pixelbuffer.header().width;
-		size_t rows = pixelbuffer.header().height;
+		size_t cols = pixelbuffer.width();
+		size_t rows = pixelbuffer.height();
 
 		// horizontal stitches
 		size_t ypos = 0;
@@ -139,8 +139,8 @@ private:
 		}
 
 		if (input.getKeyDown(cnv::KeyCode::R)) {
-			m_xstitch = randomSequence(layers[0]->pixelbuffer.header().width / STEP);
-			m_ystitch = randomSequence(layers[0]->pixelbuffer.header().height / STEP);
+			m_xstitch = randomSequence(layers[0]->pixelbuffer.width() / STEP);
+			m_ystitch = randomSequence(layers[0]->pixelbuffer.height() / STEP);
 		}
 
 		if (input.getKeyDown(cnv::KeyCode::M)) { // magic!

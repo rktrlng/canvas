@@ -27,8 +27,8 @@ class Canvas
 		GLuint vertexbuffer() { return _vertexbuffer; };
 		GLuint uvbuffer() { return _uvbuffer; };
 
-		uint16_t width() { return pixelbuffer.header().width; };
-		uint16_t height() { return pixelbuffer.header().height; };
+		uint16_t width() { return pixelbuffer.width(); };
+		uint16_t height() { return pixelbuffer.height(); };
 
 		GLuint generateTexture();
 		int generateGeometry(int width, int height);

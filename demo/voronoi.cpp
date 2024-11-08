@@ -89,8 +89,8 @@ private:
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
 
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
+		size_t rows = pixelbuffer.height();
+		size_t cols = pixelbuffer.width();
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {
 				int max_distance = rt::vec2i(rows, cols).mag();

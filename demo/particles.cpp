@@ -107,8 +107,8 @@ private:
 		frametime += deltaTime;
 		if (frametime >= maxtime) {
 			auto& pixelbuffer = layers[0]->pixelbuffer;
-			size_t rows = pixelbuffer.header().height;
-			size_t cols = pixelbuffer.header().width;
+			size_t rows = pixelbuffer.height();
+			size_t cols = pixelbuffer.width();
 
 			for (size_t i = 0; i < m_particles.size(); i++) {
 				pixelbuffer.setPixel(m_particles[i]->position.x, m_particles[i]->position.y, BLACK);

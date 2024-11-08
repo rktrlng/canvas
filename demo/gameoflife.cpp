@@ -34,8 +34,8 @@ public:
 		srand((unsigned)time(nullptr));
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		uint16_t cols = pixelbuffer.header().width;
-		uint16_t rows = pixelbuffer.header().height;
+		uint16_t cols = pixelbuffer.width();
+		uint16_t rows = pixelbuffer.height();
 		pixelbuffer.fill(BLACK);
 		
 		// fill field for game of life
@@ -74,7 +74,7 @@ private:
 	void pentomino(const rt::vec2i& pos, int dir = 0)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		int cols = pixelbuffer.header().width;
+		int cols = pixelbuffer.width();
 		// int rows = pixelbuffer.header().height;
 
 		int id = rt::index(pos.x, pos.y, cols);
@@ -96,8 +96,8 @@ private:
 	void agitator(const rt::vec2i& p)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		int cols = pixelbuffer.header().width;
-		int rows = pixelbuffer.header().height;
+		int cols = pixelbuffer.width();
+		int rows = pixelbuffer.height();
 		static rt::vec2i pos;
 		if (p != rt::vec2i(0, 0)) {
 			pos = p;
@@ -118,8 +118,8 @@ private:
 	{
 		// get pixelbuffer, rows and cols
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
+		size_t rows = pixelbuffer.height();
+		size_t cols = pixelbuffer.width();
 
 		// set the next state
 		std::vector<uint8_t> next = std::vector<uint8_t>(cols*rows, 0);

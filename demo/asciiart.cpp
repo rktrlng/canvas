@@ -22,8 +22,8 @@ int main(int argc, char *argv[])
 
 	size_t step = ramp.size()-1;
 
-	uint16_t cols = pb.header().width;
-	uint16_t rows = pb.header().height;
+	uint16_t cols = pb.width();
+	uint16_t rows = pb.height();
 
 	for (size_t y = 0; y < rows; y++) {
 		for (size_t x = 0; x < cols; x++) {

@@ -92,8 +92,8 @@ private:
 	void rule(uint8_t num, bool wr = false)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		const size_t rows = pixelbuffer.header().height;
-		const size_t cols = pixelbuffer.header().width;
+		const size_t rows = pixelbuffer.height();
+		const size_t cols = pixelbuffer.width();
 
 		// initialize first row
 		std::vector<bool> row(cols, 0);

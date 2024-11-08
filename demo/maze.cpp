@@ -373,8 +373,8 @@ private:
 		m_state = State::SEARCHING;
 
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		m_cols = pixelbuffer.header().width;
-		m_rows = pixelbuffer.header().height;
+		m_cols = pixelbuffer.width();
+		m_rows = pixelbuffer.height();
 
 		// new empty m_solverfield
 		for (size_t y = 0; y < m_rows; y++) {

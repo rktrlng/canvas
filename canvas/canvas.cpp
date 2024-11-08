@@ -27,14 +27,14 @@ Canvas::Canvas(uint16_t width, uint16_t height, uint8_t bitdepth /* = 32 */, uin
 Canvas::Canvas(const rt::PixelBuffer& pb) : pixelbuffer(pb)
 {
 	// pixelbuffer = pb;
-	generateGeometry(pixelbuffer.header().width, pixelbuffer.header().height); // _vertexbuffer & _uvbuffer
+	generateGeometry(pixelbuffer.width(), pixelbuffer.height()); // _vertexbuffer & _uvbuffer
 	generateTexture(); // _texture
 }
 
 Canvas::Canvas(const std::string& imagepath)
 {
 	pixelbuffer.read(imagepath);
-	generateGeometry(pixelbuffer.header().width, pixelbuffer.header().height); // _vertexbuffer & _uvbuffer
+	generateGeometry(pixelbuffer.width(), pixelbuffer.height()); // _vertexbuffer & _uvbuffer
 	generateTexture(); // _texture
 }
 
@@ -107,8 +107,8 @@ GLuint Canvas::generateTexture()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 
 	auto data = pixelbuffer.pixels();
-	size_t width = pixelbuffer.header().width;
-	size_t height = pixelbuffer.header().height;
+	size_t width = pixelbuffer.width();
+	size_t height = pixelbuffer.height();
 
 	// all our pixelbuffers are RGBA colors (so handle alpha)
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

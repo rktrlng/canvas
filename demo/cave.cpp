@@ -33,8 +33,8 @@ public:
 	void init()
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		uint16_t cols = pixelbuffer.header().width;
-		uint16_t rows = pixelbuffer.header().height;
+		uint16_t cols = pixelbuffer.width();
+		uint16_t rows = pixelbuffer.height();
 
 		std::srand(std::time(nullptr));
 		random(60);
@@ -85,8 +85,8 @@ private:
 	{
 		// get pixelbuffer, rows and cols
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
+		size_t rows = pixelbuffer.height();
+		size_t cols = pixelbuffer.width();
 
 		{
 			static int counter = 0;
@@ -151,8 +151,8 @@ private:
 	void random(int percentage = 50) {
 		// get pixelbuffer, rows and cols
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
+		size_t rows = pixelbuffer.height();
+		size_t cols = pixelbuffer.width();
 
 		for (size_t y = 0; y < rows; y++) {
 			for (size_t x = 0; x < cols; x++) {

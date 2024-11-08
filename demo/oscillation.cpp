@@ -71,8 +71,8 @@ private:
 	void updatePixels(int harmonics)
 	{
 		auto& pixelbuffer = layers[0]->pixelbuffer;
-		size_t rows = pixelbuffer.header().height;
-		size_t cols = pixelbuffer.header().width;
+		size_t rows = pixelbuffer.height();
+		size_t cols = pixelbuffer.width();
 
 		pixelbuffer.fill(TRANSPARENT);
 		size_t stop = cols-30;
