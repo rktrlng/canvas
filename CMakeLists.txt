@@ -85,6 +85,15 @@ add_executable(asciiart
 	demo/asciiart.cpp
 )
 
+# fredkin replicator
+add_executable(fredkinreplicator
+	demo/fredkinreplicator.cpp
+)
+target_link_libraries(fredkinreplicator # g++ -lcanvas
+	canvas
+	${ALL_GRAPHICS_LIBS}
+)
+
 # Start
 add_executable(start # g++ demo/start.cpp -o start
 	demo/start.cpp
